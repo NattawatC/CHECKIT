@@ -1,11 +1,7 @@
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
-
 export default function Home() {
   return (
-    <main className="text-red-500">
-      <p>hello world</p>
-    </main>
+    <div>
+      <h1 className="font-bold">Next.js + Tailwind CSS</h1>
+    </div>
   )
 }
