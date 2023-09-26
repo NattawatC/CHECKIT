@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import dataservices from '@/services/dataservices'
 import { loginFormSchema } from '@/types/user/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
@@ -30,8 +31,10 @@ export function LoginForm() {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+    // ✅ This will be type-safe and validated.a
+    dataservices.checkLogin(values)
+
+    //console.log(values)
   }
 
   return (
