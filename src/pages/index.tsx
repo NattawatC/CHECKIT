@@ -1,15 +1,12 @@
-import { MainLayout, Flex } from '@/components/layouts'
+import { Flex, MainLayout } from '@/components/layouts'
+import { Button } from '@/components/ui/button'
 
 export default function Home() {
   return (
     <MainLayout>
-      <Flex direction="col">
-        <h1 className="font-bold">Next.js + Tailwind CSS</h1>
-        <h1 className="font-bold">Next.js + Tailwind CSS</h1>
-        <h1 className="font-bold">Next.js + Tailwind CSS</h1>
-        <h1 className="font-bold">Next.js + Tailwind CSS</h1>
-        <h1 className="font-bold">Next.js + Tailwind CSS</h1>
-      </Flex>
+      <div>
+        Home page
+      </div>
     </MainLayout>
   )
 }
