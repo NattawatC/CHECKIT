@@ -1,5 +1,6 @@
 'use client'
-import { Flex, MainLayout } from '@/components/layouts'
+import Footer from '@/components/common/Footer'
+import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -37,12 +38,12 @@ export function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-        <div className="space-y-8 mt-12 mb-8">
+        <div className="flex flex-col gap-8">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="">
                 <FormLabel className="text-[18px]">Email</FormLabel>
                 <FormControl className="text-[18px]">
                   <Input placeholder="John@example.com" {...field} />
@@ -66,7 +67,7 @@ export function LoginForm() {
           />
         </div>
 
-        <p className="text-right text-sm text-gray-600">
+        <p className="text-right text-sm text-gray-600 mt-2">
           <Link className="hover:underline" href="">
             Forgot password?{' '}
           </Link>
@@ -75,18 +76,6 @@ export function LoginForm() {
         <Button className="py-3 px-4 w-full mt-6 text-[18px]" type="submit">
           Login
         </Button>
-
-        <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
-          {' '}
-          or{' '}
-        </div>
-
-        <p className="text-center text-sm text-gray-600 my-14">
-          Don&apos;t have an account?{' '}
-          <Link className="text-blue-500 hover:underline" href="/register">
-            Sign up
-          </Link>
-        </p>
       </form>
     </Form>
   )
@@ -94,17 +83,34 @@ export function LoginForm() {
 
 const Login: NextPage = () => {
   return (
-    <MainLayout>
-      <Flex direction="col" className="items-center">
-        <p className="font-semibold text-[32px]/[42px]">Welcome Back!</p>
-        <p className="font-normal text-[16px]/[21px]">
-          Please enter your details
+    <>
+      <MainLayout className="flex flex-col gap-16">
+        <div className="flex flex-col items-center justify-center">
+          <p className="font-semibold text-[32px]/[42px]">Welcome Back!</p>
+          <p className="font-normal text-[16px]/[21px]">
+            Please enter your details
+          </p>
+        </div>
+        <LoginForm />
+        <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
+          {' '}
+          or{' '}
+        </div>
+
+        <p className="text-center text-sm text-gray-600">
+          Don&apos;t have an account?{' '}
+          <Link className="text-blue-500 hover:underline" href="/register">
+            Sign up
+          </Link>
         </p>
-      </Flex>
-      <LoginForm />
-      
-    </MainLayout>
+      </MainLayout>
+      {/* <Image
+        src={loginPic}
+        sizes="(max-width: 100%), (max-width: 100%)"
+        alt="Login Footer Pic"
+      /> */}
+      <Footer />
+    </>
   )
 }
-
 export default Login
