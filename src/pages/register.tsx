@@ -37,7 +37,7 @@ export function RegisterForm(){
   return(
     <Form{...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className= "flex flex-col gap-12 w-full ">
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-8">
           <FormField
             control={form.control}
             name= "name"
