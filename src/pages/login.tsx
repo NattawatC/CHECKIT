@@ -105,6 +105,7 @@ const Login: NextPage = () => {
         </p>
       </Flex>
       <LoginForm />
+      
     </MainLayout>
   )
 }
