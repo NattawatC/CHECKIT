@@ -101,12 +101,13 @@ export function RegisterForm(){
 const Register: NextPage = () => {
   return (
     <MainLayout>
-      <Flex direction="col" className="items-center">
+      <Flex className="flex-col items-center">
         <p className="font-semibold text-[32px]/[42px]">Create an account</p>
         <p className="font-normal text-[16px]/[21px]">Start your journey today with CHECKIT!</p>
 
       </Flex>
       <RegisterForm />
+      
       
     </MainLayout>
   )
