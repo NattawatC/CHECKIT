@@ -9,17 +9,10 @@ const dataservices = {
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const mailPattern =
       /@(gmail\.com|hotmail\.com|yahoo\.com|kmitl.ac\.th|outlook\.com|icloud.\com)$/i
-    if (emailFormat.test(user.email)) {
-      //check mail format & pattern
-      if (mailPattern.test(user.email)) {
-        //check mail pattern
-        console.log('email format correct')
-        return true
-      } else {
-        //mail pattern incorrect
-        console.log('mail invalid incorrect')
-        return false
-      }
+    //check mail format & pattern
+    if (emailFormat.test(user.email) && mailPattern.test(user.email)) {
+      console.log('email format correct')
+      return true
     } else {
       //email format incorrect
       console.log('email format incorrect')
