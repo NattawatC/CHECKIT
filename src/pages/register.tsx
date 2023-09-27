@@ -1,4 +1,5 @@
 'use client'
+import Footer from "@/components/common/Footer"
 import { Flex,MainLayout } from "@/components/layouts"
 import { Button } from '@/components/ui/button'
 import {
@@ -35,8 +36,8 @@ export function RegisterForm(){
 
   return(
     <Form{...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className= "w-full">
-        <div className="space-y-8 mt-12 mb-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className= "flex flex-col gap-12 w-full ">
+        <div className="flex flex-col">
           <FormField
             control={form.control}
             name= "name"
@@ -76,19 +77,15 @@ export function RegisterForm(){
               </FormItem>
             )}
           />    
-
         </div>
-        <Button className="py-3 px-4 bg-[#F14C1B] w-full mt-6 text-[18px]" type="submit">
+
+        <Button className="py-3 px-4 bg-[#F14C1B] text-[18px]" type="submit">
         Start your journey
         </Button>
 
-        <p className="text-center text-sm text-gray-600 my-14">
-          Been here before?{' '}
-          <Link className="text-blue-500 hover:underline" href="/login">
-            Log in
-          </Link>
-        </p>
+        
       </form>
+
     </Form>
   )
   
@@ -100,16 +97,24 @@ export function RegisterForm(){
 
 const Register: NextPage = () => {
   return (
-    <MainLayout>
-      <Flex className="flex-col items-center">
-        <p className="font-semibold text-[32px]/[42px]">Create an account</p>
-        <p className="font-normal text-[16px]/[21px]">Start your journey today with CHECKIT!</p>
-
-      </Flex>
-      <RegisterForm />
+    <>
+      <MainLayout className="flex flex-col gap-12 items-center justify-center">
+        <div className="flex-col items-center justify-center">
+          <p className="font-semibold text-[32px]/[42px]">Create an account</p>
+          <p className="font-normal text-[16px]/[21px]">Start your journey today with CHECKIT!</p>
+        </div>
+        <RegisterForm />
+      <p className="text-center text-sm text-gray-600">
+          Been here before?{' '}
+          <Link className="text-blue-500 hover:underline" href="/login">
+            Log in
+          </Link>
+        </p>
+      </MainLayout>
+      <Footer />
+    </>
       
       
-    </MainLayout>
   )
 }
 
