@@ -34,10 +34,10 @@ const login = () => {
 export default function Home() {
   return (
     <>
-      <MainLayout className=" bg-black">
+      <MainLayout className="bg-custom-black">
         <div className=" flex flex-col items-center gap-9">
           <Image src={logoMobile} alt="logo mobile" />
-          <p className="text-white text-center">
+          <p className="text-custom-white text-center">
             Gorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
             turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
             nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
@@ -45,7 +45,7 @@ export default function Home() {
             feugiat lectus. Class aptent taciti sociosqu ad litora torquent per
             conubia nostra,
           </p>
-          <Button className="bg-orange-600 text-white" onClick={login}>Get Started</Button>
+          <Button className="bg-custom-orange text-custom-white" onClick={login}>Get Started</Button>
         </div>
       </MainLayout>
 
@@ -65,10 +65,10 @@ export default function Home() {
         </div>
       </section>
 
-      <MainLayout className=" bg-black">
+      <MainLayout className=" bg-custom-black">
         <div className=" flex flex-col items-center gap-9">
-          <p className="text-white text-center text-xl">How it works?</p>
-          <p className="text-white text-center text-base">
+          <p className="text-custom-white text-center text-xl">How it works?</p>
+          <p className="text-custom-white text-center text-base">
             Qorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
             turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
             nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
