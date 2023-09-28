@@ -1,3 +1,5 @@
+import { object } from 'zod'
+
 const dataservices = {
   //check email format
   checkMailFormat: (email: string) => {
@@ -14,6 +16,20 @@ const dataservices = {
       return false
     }
   },
+
+  //pading number
+  padTo2Digits: (number: number) => {
+    return number.toString().padStart(2, '0')
+  },
+  //date format
+  formatDate: (date: Date) => {
+    return [
+      dataservices.padTo2Digits(date.getDate()),
+      dataservices.padTo2Digits(date.getMonth() + 1),
+      date.getFullYear(),
+    ].join('/')
+  },
+
   //check user register
   //TODO: connect with database
   checkRegister: (user: {
@@ -45,6 +61,33 @@ const dataservices = {
       console.log('Email format is not correct')
       return false
     }
+  },
+
+  //get user info
+  getUserInfo: () => {
+    //get current date & time
+    let date = dataservices.formatDate(new Date())
+    let time = new Date().toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    })
+    //get user info from database
+    //TODO: fetch data from database
+    //query user info
+    const user_info = {
+      //mockup data
+      username: 'Test',
+      date: date,
+      time: time,
+      upcoming_task: [{ task: object }].length,
+      personal_task: [{ task: object }].length,
+      worker_task: [{ task: object }].length,
+      health_task: [{ task: object }].length,
+      others_task: [{ task: object }].length,
+    }
+    console.log(user_info)
+    return user_info
   },
 }
 export default dataservices
