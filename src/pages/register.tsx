@@ -1,4 +1,5 @@
 'use client'
+
 import Footer from "@/components/common/Footer"
 import { Flex,MainLayout } from "@/components/layouts"
 import { Button } from '@/components/ui/button'
@@ -82,7 +83,7 @@ export function RegisterForm(){
         <Button className="py-3 px-4 bg-[#F14C1B] text-[18px]" type="submit">
         Start your journey
         </Button>
-
+        
         
       </form>
 
