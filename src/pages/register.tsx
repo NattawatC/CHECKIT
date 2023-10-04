@@ -1,5 +1,5 @@
 'use client'
-import { Footer, NavBar } from '@/components/common'
+import { Footer } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import {
@@ -46,8 +46,8 @@ export function RegisterForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[18px]">Name</FormLabel>
-                <FormControl className="text-[18px]">
+                <FormLabel className="text-lg">Name</FormLabel>
+                <FormControl className="text-lg">
                   <Input placeholder="Jordani" {...field} />
                 </FormControl>
                 <FormMessage />
@@ -59,8 +59,8 @@ export function RegisterForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[18px]">Email</FormLabel>
-                <FormControl className="text-[18px]">
+                <FormLabel className="text-lg">Email</FormLabel>
+                <FormControl className="text-lg">
                   <Input placeholder="John@example.com" {...field} />
                 </FormControl>
                 <FormMessage />
@@ -72,8 +72,8 @@ export function RegisterForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[18px]">Password</FormLabel>
-                <FormControl className="text-[18px]">
+                <FormLabel className="text-lg">Password</FormLabel>
+                <FormControl className="text-lg">
                   <Input placeholder="********" type="password" {...field} />
                 </FormControl>
                 <FormMessage />
@@ -83,7 +83,7 @@ export function RegisterForm() {
         </div>
 
         <Button
-          className="py-3 px-4 bg-[#F14C1B] text-[18px] inline-flex"
+          className="py-3 px-4 bg-custom-orange text-lg inline-flex"
           type="submit"
         >
           Start your journey
@@ -97,21 +97,20 @@ const Register: NextPage = () => {
   return (
     <>
       <MainLayout className="flex flex-col gap-12">
-        <NavBar />
         <div className="flex flex-col items-center justify-center">
           <p className="font-semibold text-[32px]/[42px]">Create an account</p>
-          <p className="font-normal text-[16px]/[21px]">
+          <p className="font-normal text-base">
             Start your journey today with CHECKIT!
           </p>
         </div>
         <RegisterForm />
-        <p className="text-center text-sm text-gray-600">
-          Been here before?{' '}
-          <Link className="text-custom-orange hover:underline" href="/login">
-            Log in
-          </Link>
-        </p>
       </MainLayout>
+      <p className="text-center text-sm text-custom-gray">
+        Been here before?{' '}
+        <Link className="text-custom-orange hover:underline" href="/login">
+          Log in
+        </Link>
+      </p>
       <Footer />
     </>
   )

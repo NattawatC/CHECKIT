@@ -88,7 +88,6 @@ const Login: NextPage = () => {
   return (
     <>
       <MainLayout className="flex flex-col gap-16">
-        <NavBar />
         <div className="flex flex-col items-center justify-center">
           <p className="font-semibold text-[32px]">Welcome Back!</p>
           <p className="font-normal text-base">
