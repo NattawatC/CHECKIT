@@ -48,7 +48,7 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel className="text-lg">Name</FormLabel>
                 <FormControl className="text-lg">
-                  <Input placeholder="Jordani" {...field} />
+                  <Input placeholder="John" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
