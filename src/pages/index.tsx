@@ -1,4 +1,4 @@
-import Footer from '@/components/common/Footer'
+// import Footer from '@/components/common/Footer'
 import Card from '@/components/home/Card'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
@@ -95,7 +95,7 @@ export default function Home() {
           </div>
         </div>
       </MainLayout>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }
