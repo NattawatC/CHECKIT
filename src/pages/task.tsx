@@ -1,10 +1,10 @@
 import { NavBar } from '@/components/common'
 import React from 'react'
 
-const Dashboard = () => {
+const Task = () => {
   return (
     <NavBar/>
   )
 }
 
-export default Dashboard
+export default Task
