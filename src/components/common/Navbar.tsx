@@ -1,55 +1,49 @@
-'use client'
-
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { NavItem } from './NavItem'
 
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
+const navItems = [
+  { text: 'Dashboard', href: '/dashboard' },
+  { text: 'Task', href: '/task' },
+  { text: 'Team', href: '/team' },
+  { text: 'Profile', href: '/profile' },
+]
 
-export function NavigationMenuDemo() {
+export const NavBar: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState(-1) // Initialize activeIndex state
+  const router = useRouter()
+
+  useEffect(() => {
+    // Update the activeIndex state when the route changes
+    const currentIndex = navItems.findIndex(
+      (item) => item.href === router.pathname
+    )
+
+    if (currentIndex !== -1) {
+      setActiveIndex(currentIndex)
+    }
+  }, [router.pathname])
+
+  const handleNavItemClick = (index: number) => {
+    setActiveIndex(index) // Set the active index when a NavItem is clicked
+  }
+
   return (
-    <div className="w-auto">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <Link href="/dashboard" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Dashboard
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/task" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Task
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/team" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Team
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/profile" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Profile
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+    <div className="flex flex-row justify-between">
+      {navItems.map((item, index) => (
+        <div onClick={() => handleNavItemClick(index)} key={index}>
+          <NavItem
+            href={item.href}
+            text={item.text}
+            active={
+              activeIndex === index
+                ? 'bg-custom-orange'
+                : 'bg-custom-gray hover:bg-custom-orange'
+            }
+          />
+        </div>
+      ))}
     </div>
   )
-}
-
-export const Navbar: React.FunctionComponent = () => {
-  return <NavigationMenuDemo />
 }
