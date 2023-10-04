@@ -1,12 +1,12 @@
-// import Footer from '@/components/common/Footer'
+import { Footer } from '@/components/common/Footer'
 import Card from '@/components/home/Card'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { FaGithubSquare } from 'react-icons/fa'
-import logoMobile from 'src/assets/logoMobile.png'
-import { FaSquareEnvelope } from 'react-icons/fa6'
 import Link from 'next/link'
+import { FaGithubSquare } from 'react-icons/fa'
+import { FaSquareEnvelope } from 'react-icons/fa6'
+import logoMobile from 'src/assets/logoMobile.png'
 
 const features = [
   {
@@ -95,7 +95,7 @@ export default function Home() {
           </div>
         </div>
       </MainLayout>
-      {/* <Footer /> */}
+      <Footer />
     </>
   )
 }
