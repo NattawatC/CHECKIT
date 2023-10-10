@@ -80,11 +80,11 @@ const dataservices = {
       username: 'Test',
       date: date,
       time: time,
-      upcoming_task: [{ task: object }].length,
-      personal_task: [{ task: object }].length,
-      worker_task: [{ task: object }].length,
-      health_task: [{ task: object }].length,
-      others_task: [{ task: object }].length,
+      upcoming_task: [{ task: object }],
+      personal_task: [{ task: object }],
+      worker_task: [{ task: object }],
+      health_task: [{ task: object }],
+      others_task: [{ task: object }],
     }
     console.log(user_info)
     return user_info
