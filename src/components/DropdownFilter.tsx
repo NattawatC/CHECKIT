@@ -3,7 +3,7 @@ import { Checkbox } from "./ui/checkbox"
 
 export const DropdownFilter: React.FunctionComponent = () => {
     return (
-        //no font apply yet
+        
       <div className="bg-custom-white w-full h-full border-radius: 0.5rem; flex-col p-2 justify-center items-start gap-1 inline-flex ">
 
         <div className= "self-stretch justify-start gap-2.5 inline-flex items-center">
