@@ -118,7 +118,11 @@ class dataservices {
   //get user info
   getUserInfo() {
     //get current date & time
-    let date = this.formatDate(new Date())
+    let date = new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+    })
     let time = new Date().toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric',
@@ -202,7 +206,14 @@ class dataservices {
   //filter by date
   //TODO: get data from database
   // filterByDate() {
+  //   const date = this.formatDate(new Date())
   //   const task = this.all_task
+  //   const filteredTasks = this.all_task.filter((task) => {
+  //     const taskDateStart = task.date_start
+  //     const taskDateEnd = task.date_end
+  //     return date >= taskDateStart && date <= taskDateEnd
+  //   })
+  //   return filteredTasks
   // }
 }
 export default dataservices
