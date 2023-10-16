@@ -88,6 +88,8 @@ export function RegisterForm() {
         >
           Start your journey
         </Button>
+
+        
       </form>
     </Form>
   )
