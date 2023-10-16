@@ -54,11 +54,25 @@ class dataservices {
     role: ['Personal'],
     category: 'Others',
   }
+  task_info5 = {
+    //mockup data
+    id: '4',
+    title: 'HereGong',
+    note: 'Bull shit guy',
+    date_start: '16/10/2023',
+    date_end: '17/10/2023',
+    time_start: '9:00 AM',
+    time_end: '9:00 PM',
+    priority: 'high',
+    role: ['Personal'],
+    category: 'Personal',
+  }
   all_task = [
     this.task_info1,
     this.task_info2,
     this.task_info3,
     this.task_info4,
+    this.task_info5,
   ]
   //check email format
   checkMailFormat(email: string) {
@@ -190,7 +204,7 @@ class dataservices {
   //TODO: get all task data from database
   getAllTaskByCategory(category: string) {
     //find category in all task
-    const result = this.all_task.find((task) => task.category === category)
+    const result = this.all_task.filter((task) => task.category === category)
     return [result]
   }
 
