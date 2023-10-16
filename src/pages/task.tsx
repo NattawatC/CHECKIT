@@ -4,6 +4,7 @@ import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import dataservices from '@/services/dataservices'
 import { useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { IoFilter } from 'react-icons/io5'
@@ -31,6 +32,10 @@ const taskItem = [
     time: '10:00 - 11:00',
   },
 ]
+
+//Apply Non's Function
+const data = new dataservices()
+const all_task = data.all_task
 
 export default function Task() {
   const [isFilter, setIsFilter] = useState(false)
@@ -74,14 +79,16 @@ export default function Task() {
             </div>
 
             <div className="flex flex-col gap-4 p-4 bg-custom-white rounded-lg">
-              {taskItem.map((item) => (
+              {all_task.map((item) => (
                 <TaskItem
                   key={item.title}
                   priority={item.priority}
                   title={item.title}
-                  date={item.date}
+                  date_start={item.date_start}
+                  date_end={item.date_end}
                   note={item.note}
-                  time={item.time}
+                  time_start={item.time_start}
+                  time_end={item.time_end}
                 />
               ))}
             </div>
