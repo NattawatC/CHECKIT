@@ -95,7 +95,8 @@ export default function Home() {
           </div>
         </div>
       </MainLayout>
-      <Footer />
+      <Footer 
+      className='text-custom-black'/>
     </>
   )
 }

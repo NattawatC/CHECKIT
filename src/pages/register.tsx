@@ -113,7 +113,7 @@ const Register: NextPage = () => {
           Log in
         </Link>
       </p>
-      <Footer />
+      <Footer className='text-custom-black'/>
     </>
   )
 }
