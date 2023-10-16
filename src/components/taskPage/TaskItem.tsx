@@ -5,16 +5,20 @@ import { Checkbox } from '../ui/checkbox'
 interface TaskProps {
   priority: string // Create Priority function
   title: string
-  date: string
-  time: string
-  note: string[]
+  date_start: string
+  date_end: string
+  time_start: string
+  time_end: string
+  note: string
 }
 
 const TaskItem: React.FunctionComponent<TaskProps> = ({
   priority,
   title,
-  date,
-  time,
+  date_start,
+  date_end,
+  time_start,
+  time_end,
   note,
 }) => {
   const [isChecked, setIsChecked] = useState(false)
@@ -60,13 +64,11 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
             </span>
           )}
           <div className="flex flex-col rounded-2xl text-left">
-            <p className="text-custom-black text-sm">{date}</p>
-            <p className="text-custom-black text-sm">{time}</p>
-            {note.map((noteItem, index) => (
-              <p key={index} className="text-custom-black text-sm">
-                {noteItem}
+            <p className="text-custom-black text-sm">{date_start} - {date_end}</p>
+            <p className="text-custom-black text-sm">{time_start} - {time_end}</p>
+              <p className="text-custom-black text-sm">
+                {note}
               </p>
-            ))}
             <p className="text-custom-black text-sm"></p>
           </div>
         </div>
