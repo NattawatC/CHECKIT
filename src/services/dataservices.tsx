@@ -189,10 +189,17 @@ class dataservices {
 
   //get all task by category
   //TODO: get all task data from database
-  getAllTask(category: string) {
+  getAllTaskByCategory(category: string) {
     //find category in all task
     const task = this.all_task.find((task) => task.category === category)
     console.log(task)
+    return task
+  }
+
+  //get all task of user
+  //TODO: get all task data from database
+  getAllTask() {
+    const task = this.all_task
     return task
   }
 
@@ -205,15 +212,45 @@ class dataservices {
 
   //filter by date
   //TODO: get data from database
-  // filterByDate() {
-  //   const date = this.formatDate(new Date())
-  //   const task = this.all_task
-  //   const filteredTasks = this.all_task.filter((task) => {
-  //     const taskDateStart = task.date_start
-  //     const taskDateEnd = task.date_end
-  //     return date >= taskDateStart && date <= taskDateEnd
-  //   })
-  //   return filteredTasks
-  // }
+  filterByDate() {
+    const date = this.formatDate(new Date())
+    const task_info = this.all_task
+    const filteredTasks = task_info.filter((task) => {
+      const taskDateStart = task.date_start
+      const taskDateEnd = task.date_end
+      return date >= taskDateStart && date <= taskDateEnd
+    })
+    return filteredTasks
+  }
+
+  //filter by priority hight-> medium -> low
+  //TODO: get data from database
+  filterByPriority() {
+    const task_info = this.all_task
+    const filteredTasksHigh = task_info.filter((task) => {
+      const taskPriority = task.priority
+      return taskPriority === 'high'
+    })
+    const filteredTasksMedium = task_info.filter((task) => {
+      const taskPriority = task.priority
+      return taskPriority === 'medium'
+    })
+    const filteredTasksLow = task_info.filter((task) => {
+      const taskPriority = task.priority
+      return taskPriority === 'low'
+    })
+    return [filteredTasksHigh, filteredTasksMedium, filteredTasksLow]
+  }
+
+  //filter by category
+  //TODO: get data from database
+  filterByCategory(category: string) {
+    const task_info = this.all_task
+    const filteredTasks = task_info.filter((task) => {
+      const taskCategory = task.category
+      return taskCategory === category
+    })
+    return filteredTasks
+  }
 }
 export default dataservices
