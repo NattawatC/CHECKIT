@@ -1,24 +1,24 @@
-import { PiSuitcaseSimpleLight } from 'react-icons/pi'
 import React from 'react'
 
 interface CategoryProps{
-    icon?: string
+    Icon: React.ElementType
     title: string
-    taskNum: string
+    taskNum: number
 }
 
-const CategoryItem: React.FunctionComponent<CategoryProps> = ({icon,title,taskNum}) => {
+const CategoryItem: React.FunctionComponent<CategoryProps> = ({Icon,title,taskNum}) => {
     return(    
         <div className="flex-col flex w-full">
-            <div className="bg-custom-gray rounded-t-lg text-custom-white w-[164px] h-[62px]">
-               Icon
+            <div className="bg-custom-gray rounded-t-lg text-custom-white px-3 py-2">
+               {Icon && <Icon className="h-10 w-9" />}
             </div>
-            <div className="bg-custom-white rounded-b-lg w-[164px] h-[102px] relative">
-                <p className="text-custom-black text-xl">{title}</p>
-                <div className="absolute bottom-0 right-2">
+            <div className="flex flex-col bg-custom-white rounded-b-lg p-3 gap-6">
+                <div className='text-left'>
+                    <p className="text-custom-black text-xl">{title}</p>
+                </div>
+                <div className="text-right">
                  <p className="text-custom-black text-xl">{taskNum}</p>
                 </div>
-
             </div>
         </div>
             
