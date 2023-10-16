@@ -54,9 +54,9 @@ class dataservices {
     role: ['Personal'],
     category: 'Others',
   }
-  task_info5= {
+  task_info5 = {
     //mockup data
-    id: '3',
+    id: '4',
     title: 'HereGong',
     note: 'Bull shit guy',
     date_start: '16/10/2023',
@@ -204,7 +204,7 @@ class dataservices {
   //TODO: get all task data from database
   getAllTaskByCategory(category: string) {
     //find category in all task
-    const result = this.all_task.find((task) => task.category === category)
+    const result = this.all_task.filter((task) => task.category === category)
     return [result]
   }
 
