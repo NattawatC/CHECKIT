@@ -15,8 +15,12 @@ import { loginFormSchema } from '@/types/user/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
 import Link from 'next/link'
+import router from 'next/router'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import dataservices from '@/services/dataservices'
+
+const data = new dataservices()
 
 export function LoginForm() {
   // 1. Define your form.
@@ -28,13 +32,15 @@ export function LoginForm() {
     },
   })
 
-  // 2. Define a submit handler.
+  // 2. Redefine a submit handler.
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.a
-    // dataservices.checkLogin(values)
-
-    //console.log(values)
+    let isValid = data.checkLogin(values)
+    if (isValid) {
+      // Redirect to /index
+      router.push('/register')
+    }
   }
 
   return (
