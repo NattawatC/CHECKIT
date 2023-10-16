@@ -1,6 +1,7 @@
 'use client'
 import CategoryItem from "@/components/CategoryItem";
 import { UpcomingTask } from "@/components/UpcomingTask";
+import { Footer, NavBar } from "@/components/common";
 import { MainLayout } from "@/components/layouts";
 import { NextPage } from "next";
 
@@ -26,8 +27,10 @@ const categories = [
 const Dashboard: NextPage= () => {
     return(
         <div className="bg-custom-black">
+            
             <MainLayout>
                 <div className="flex-col flex gap-8">
+                    <NavBar />  
 
                     <div className="flex-col justify-center flex text-custom-white font-medium gap-1">
                         <p className="text-xs">Wednesday,Sep 13</p>
@@ -51,8 +54,12 @@ const Dashboard: NextPage= () => {
                 
 
                 
-                                 
+                   
             </MainLayout>
+            <div className="text-white">
+                    <Footer />
+            </div>   
+            
         </div>
     )
 }
