@@ -1,5 +1,5 @@
 'use client'
-import Footer from '@/components/common/Footer'
+import { NavBar, Footer } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import {
@@ -71,12 +71,12 @@ export function LoginForm() {
         </div>
 
         <p className="text-right text-sm text-gray-600 mt-2">
-          <Link className="hover:underline" href="">
+          <Link className="hover:underline hover:text-custom-orangeHover" href="">
             Forgot password?{' '}
           </Link>
         </p>
 
-        <Button className="py-3 px-4 w-full mt-6 text-[18px]" type="submit">
+        <Button className="py-3 px-4 w-full mt-6 text-[18px] inline-flex" type="submit">
           Login
         </Button>
       </form>
@@ -89,8 +89,8 @@ const Login: NextPage = () => {
     <>
       <MainLayout className="flex flex-col gap-16">
         <div className="flex flex-col items-center justify-center">
-          <p className="font-semibold text-[32px]/[42px]">Welcome Back!</p>
-          <p className="font-normal text-[16px]/[21px]">
+          <p className="font-semibold text-[32px]">Welcome Back!</p>
+          <p className="font-normal text-base">
             Please enter your details
           </p>
         </div>
@@ -102,9 +102,7 @@ const Login: NextPage = () => {
 
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{' '}
-          <Link className="text-blue-500 hover:underline" href="/register">
-            Sign up
-          </Link>
+          <Link href={'/register'} className='hover:underline text-custom-orange'>Sign up</Link>
         </p>
       </MainLayout>
       {/* <Image
