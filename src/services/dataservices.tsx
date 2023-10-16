@@ -183,17 +183,15 @@ class dataservices {
   //TODO: get data from database
   getTaskInfo(id: string) {
     const result = this.all_task.find((task_data) => task_data.id === id)
-    console.log(result)
-    return result
+    return [result]
   }
 
   //get all task by category
   //TODO: get all task data from database
   getAllTaskByCategory(category: string) {
     //find category in all task
-    const task = this.all_task.find((task) => task.category === category)
-    console.log(task)
-    return task
+    const result = this.all_task.find((task) => task.category === category)
+    return [result]
   }
 
   //get all task of user
@@ -220,7 +218,7 @@ class dataservices {
       const taskDateEnd = task.date_end
       return date >= taskDateStart && date <= taskDateEnd
     })
-    return filteredTasks
+    return [filteredTasks]
   }
 
   //filter by priority hight-> medium -> low
@@ -250,7 +248,18 @@ class dataservices {
       const taskCategory = task.category
       return taskCategory === category
     })
-    return filteredTasks
+    return [filteredTasks]
+  }
+
+  //searchParam task by title
+  //TODO: get data from database
+  searchTask(searchParam: string) {
+    const task_info = this.all_task
+    const filteredTasks = task_info.filter((task) => {
+      const taskTitle = task.title
+      return taskTitle.includes(searchParam)
+    })
+    return [filteredTasks]
   }
 }
 export default dataservices
