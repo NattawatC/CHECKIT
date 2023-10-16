@@ -13,8 +13,6 @@ import Link from "next/link";
 const data = new dataservices()
 const taskNum = data.getUserInfo()
 
-
-
 const categories = [
     {
         icon: BsPerson,
@@ -24,7 +22,7 @@ const categories = [
     {
         icon: PiSuitcaseSimpleLight,
         title: 'Work',
-        taskNum: taskNum.worker_task.length,
+        taskNum: taskNum.work_task.length,
     },
     {
         icon: BsHeartPulse,
