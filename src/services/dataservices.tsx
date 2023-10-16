@@ -135,7 +135,7 @@ class dataservices {
       time: time,
       upcoming_task: [{ task: object }],
       personal_task: [{ task: object }],
-      worker_task: [{ task: object }],
+      work_task: [{ task: object }],
       health_task: [{ task: object }],
       others_task: [{ task: object }],
     }
@@ -198,5 +198,11 @@ class dataservices {
     const result = this.all_task.find((task_data) => task_data.id === id)
     return true
   }
+
+  //filter by date
+  //TODO: get data from database
+  // filterByDate() {
+  //   const task = this.all_task
+  // }
 }
 export default dataservices
