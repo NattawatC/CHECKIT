@@ -110,7 +110,7 @@ const Login: NextPage = () => {
         sizes="(max-width: 100%), (max-width: 100%)"
         alt="Login Footer Pic"
       /> */}
-      <Footer />
+      <Footer className='text-custom-black'/>
     </>
   )
 }
