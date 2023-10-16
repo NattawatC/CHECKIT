@@ -1,6 +1,6 @@
 'use client'
-import Footer from "@/components/common/Footer"
-import { Flex,MainLayout } from "@/components/layouts"
+import { Footer } from '@/components/common'
+import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -18,11 +18,11 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-export function RegisterForm(){
+export function RegisterForm() {
   //1. Define your form.
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
-    defaultValues:{
+    defaultValues: {
       name: '',
       email: '',
       password: '',
@@ -30,22 +30,25 @@ export function RegisterForm(){
   })
 
   //2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof registerFormSchema>){
+  function onSubmit(values: z.infer<typeof registerFormSchema>) {
     console.log(values)
   }
 
-  return(
-    <Form{...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className= "flex flex-col gap-12 w-full ">
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-12 w-full "
+      >
         <div className="flex flex-col gap-8">
           <FormField
             control={form.control}
-            name= "name"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[18px]">Name</FormLabel>
-                <FormControl className="text-[18]">
-                  <Input placeholder="Jordani"{...field}/>
+                <FormLabel className="text-lg">Name</FormLabel>
+                <FormControl className="text-lg">
+                  <Input placeholder="John" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -56,8 +59,8 @@ export function RegisterForm(){
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[18px]">Email</FormLabel>
-                <FormControl className="text-[18px]">
+                <FormLabel className="text-lg">Email</FormLabel>
+                <FormControl className="text-lg">
                   <Input placeholder="John@example.com" {...field} />
                 </FormControl>
                 <FormMessage />
@@ -69,52 +72,47 @@ export function RegisterForm(){
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[18px]">Password</FormLabel>
-                <FormControl className="text-[18px]">
+                <FormLabel className="text-lg">Password</FormLabel>
+                <FormControl className="text-lg">
                   <Input placeholder="********" type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          />    
+          />
         </div>
 
-        <Button className="py-3 px-4 bg-[#F14C1B] text-[18px]" type="submit">
-        Start your journey
+        <Button
+          className="py-3 px-4 bg-custom-orange text-lg inline-flex"
+          type="submit"
+        >
+          Start your journey
         </Button>
-
-        
       </form>
-
     </Form>
   )
-  
 }
-
-
-
-
 
 const Register: NextPage = () => {
   return (
     <>
-      <MainLayout className="flex flex-col gap-12 items-center justify-center">
-        <div className="flex-col items-center justify-center">
+      <MainLayout className="flex flex-col gap-12">
+        <div className="flex flex-col items-center justify-center">
           <p className="font-semibold text-[32px]/[42px]">Create an account</p>
-          <p className="font-normal text-[16px]/[21px]">Start your journey today with CHECKIT!</p>
+          <p className="font-normal text-base">
+            Start your journey today with CHECKIT!
+          </p>
         </div>
         <RegisterForm />
-      <p className="text-center text-sm text-gray-600">
-          Been here before?{' '}
-          <Link className="text-blue-500 hover:underline" href="/login">
-            Log in
-          </Link>
-        </p>
       </MainLayout>
-      <Footer />
+      <p className="text-center text-sm text-custom-gray">
+        Been here before?{' '}
+        <Link className="text-custom-orange hover:underline" href="/login">
+          Log in
+        </Link>
+      </p>
+      <Footer className='text-custom-black'/>
     </>
-      
-      
   )
 }
 
