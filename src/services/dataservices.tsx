@@ -65,13 +65,13 @@ class dataservices {
     role: ['Personal'],
     category: 'Personal',
   }
- 
+
   all_task = [
     this.task_info1,
     this.task_info2,
     this.task_info3,
     this.task_info4,
-    this.task_info5
+    this.task_info5,
   ]
   //check email format
   checkMailFormat(email: string) {
@@ -102,9 +102,19 @@ class dataservices {
   //check user register
   //TODO: connect with database
   checkRegister(user: { username: string; email: string; password: string }) {
+    //user info
+    const user_info = {
+      email: user.email,
+      name: user.username,
+      password: user.password,
+    }
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
+      apiService.post(
+        'http://ict11.ce.kmitl.ac.th:9080/docs#/Authentication/register_register_post',
+        user_info
+      )
       return true
     } else {
       //email format is not correct
@@ -156,6 +166,7 @@ class dataservices {
     const user_info = {
       //mockup data
       username: 'Test',
+      email: 'kuygong@gmail.com',
       date: date,
       time: time,
       upcoming_task: upcoming_task,
