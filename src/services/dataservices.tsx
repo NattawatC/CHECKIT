@@ -203,9 +203,11 @@ class dataservices {
   //get all task by category
   //TODO: get all task data from database
   getAllTaskByCategory(category: string) {
-    //find category in all task
-    const result = this.all_task.filter((task) => task.category === category)
-    return [result]
+    const result = this.all_task.filter(
+      (task_data) => task_data.category === category
+    )
+    console.log(result)
+    return result
   }
 
   //get all task of user
