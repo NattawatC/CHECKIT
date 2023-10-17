@@ -45,7 +45,7 @@ const Dashboard: NextPage = () => {
         <div className="flex-col flex gap-8">
           <NavBar />
 
-          <div className="flex-col justify-center flex text-custom-white font-medium gap-1">
+          <div className="flex flex-col gap-1 text-custom-white font-medium">
             <p className="text-xs">{data.getUserInfo().date}</p>
             <p className="text-xl">Welcome, {data.getUserInfo().username}</p>
           </div>
