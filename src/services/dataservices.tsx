@@ -65,14 +65,44 @@ class dataservices {
     role: ['Personal'],
     category: 'Personal',
   }
- 
+
   all_task = [
     this.task_info1,
     this.task_info2,
     this.task_info3,
     this.task_info4,
-    this.task_info5
+    this.task_info5,
   ]
+
+  //mock member data
+  team_member_1 = {
+    name: 'Non',
+    status: 'padding',
+  }
+  team_member_2 = {
+    name: 'Vega',
+    status: 'padding',
+  }
+  team_member_3 = {
+    name: 'Jimmy',
+    status: 'padding',
+  }
+  //mock team data
+  team_info1 = {
+    id: '1',
+    name: 'team1',
+    owner: 'Test1',
+    member: [this.team_member_1, this.team_member_2, this.team_member_3],
+  }
+  team_info2 = {
+    id: '1',
+    name: 'team2',
+    owner: 'Test1',
+    member: [this.team_member_1, this.team_member_2, this.team_member_3],
+  }
+
+  //mock team data
+  all_team = [this.team_info1, this.team_info2]
   //check email format
   checkMailFormat(email: string) {
     //mail format
@@ -102,9 +132,19 @@ class dataservices {
   //check user register
   //TODO: connect with database
   checkRegister(user: { username: string; email: string; password: string }) {
+    //user info
+    const user_info = {
+      email: user.email,
+      name: user.username,
+      password: user.password,
+    }
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
+      apiService.post(
+        'http://ict11.ce.kmitl.ac.th:9080/docs#/Authentication/register_register_post',
+        user_info
+      )
       return true
     } else {
       //email format is not correct
@@ -156,6 +196,7 @@ class dataservices {
     const user_info = {
       //mockup data
       username: 'Test',
+      email: 'kuygong@gmail.com',
       date: date,
       time: time,
       upcoming_task: upcoming_task,
@@ -288,6 +329,64 @@ class dataservices {
       return taskTitle.includes(searchParam)
     })
     return filteredTasks
+  }
+
+  //create team
+  //TODO: post data to database
+  createTeam(team: { name: string; member: [string] }) {}
+
+  //get team info by id
+  //TODO: get data from database
+  getTeamInfo(id: string) {
+    const team_info = this.all_team
+    const result = team_info.find((team_data) => team_data.id === id)
+    return result
+  }
+
+  //get all team of user
+  //TODO: get data from database
+  getAllTeamOfUser() {
+    const team_info = this.all_team
+    return team_info
+  }
+
+  //get all team
+  //TODO: get data from database
+  getAllTeam() {
+    const team_info = this.all_team
+    return team_info
+  }
+
+  //get team member by id
+  //TODO: get data from database
+  getTeamMember(id: string) {
+    const team_info = this.all_team
+    const result = team_info.find((team_data) => team_data.id === id)
+    return result?.member
+  }
+
+  //add member to team
+  //TODO: post data to database
+  addMemberToTeam(id: string, member: { name: string; status: string }) {
+    const team_info = this.all_team
+    const result = team_info.find((team_data) => team_data.id === id)
+    result?.member.push(member)
+    return true
+  }
+
+  //edit team  info by id
+  //TODO: post data to database
+  editTeamInfo(
+    id: string,
+    team: { name: string; member: [{ name: string; status: string }] }
+  ) {
+    return true
+  }
+
+  //delete team by id
+  //TODO: delete team request to database
+  deleteTeam(id: string) {
+    return true
   }
 }
 export default dataservices
