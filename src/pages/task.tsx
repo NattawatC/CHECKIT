@@ -23,9 +23,9 @@ export default function Task() {
             </div>
 
             <div className="flex flex-col gap-4 p-4 bg-custom-white rounded-lg">
-              {all_task.map((item) => (
+              {all_task.map((item, index) => (
                 <TaskItem
-                  key={item.title}
+                  key={index}
                   priority={item.priority}
                   title={item.title}
                   date_start={item.date_start}

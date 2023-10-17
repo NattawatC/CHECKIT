@@ -6,11 +6,10 @@ import dataservices from "@/services/dataservices"
 import { NextPage } from "next"
 
 const data = new dataservices()
-const personal_task = data.getAllTaskByCategory('Personal')
-const personal_task_length = personal_task.length
+const others_task = data.getAllTaskByCategory('Others')
+const others_task_length = others_task.length
 
-
-const Personal: NextPage = () => {
+const Others: NextPage = () => {
     return(
         <>
         <div className="bg-custom-black">
@@ -20,15 +19,15 @@ const Personal: NextPage = () => {
                         <NavBar />
                         <SearchBar />
                     </div>
+
                     <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
-                        <p className="text-xl">Personal</p>
-                        <p className="text-base">{personal_task_length} Task</p>
+                        <p className="text-xl">Others</p>
+                        <p className="text-base">{others_task_length} Task</p>
                     </div>
 
-                    
                     <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
-
-                        {personal_task.map((item,index) => (
+                            
+                        {others_task.map((item,index) => (
                             <TaskItem
                             key={index}
                             priority={item.priority}
@@ -40,13 +39,16 @@ const Personal: NextPage = () => {
                             time_end={item.time_end}
                             />
                             ))}
+
                     </div>
-                    
+
+
                 </div>
             </MainLayout>
             <Footer className="text-custom-white"/>
+
         </div>
         </>
     )
 }
-export default Personal    
+export default Others

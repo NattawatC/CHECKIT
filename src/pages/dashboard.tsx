@@ -16,21 +16,25 @@ const categories = [
     icon: BsPerson,
     title: 'Personal',
     taskNum: taskNum.personal_task.length,
+    href: '/personal',
   },
   {
     icon: PiSuitcaseSimpleLight,
     title: 'Work',
     taskNum: taskNum.work_task.length,
+    href: '/works',
   },
   {
     icon: BsHeartPulse,
     title: 'Health',
     taskNum: taskNum.health_task.length,
+    href: '/health',
   },
   {
     icon: PiDotsThreeCircleLight,
     title: 'Others',
     taskNum: taskNum.others_task.length,
+    href: '/others',
   },
 ]
 
@@ -48,12 +52,13 @@ const Dashboard: NextPage = () => {
           <UpcomingTask taskNum={taskNum.upcoming_task.length} />
 
           <div className="grid grid-cols-2 gap-4">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <CategoryItem
-                key={category.title}
+                key={index}
                 Icon={category.icon}
                 title={category.title}
                 taskNum={category.taskNum}
+                href={category.href}
               />
             ))}
           </div>
