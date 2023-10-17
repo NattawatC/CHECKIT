@@ -82,7 +82,7 @@ class dataservices {
   }
   team_member_2 = {
     name: 'Vega',
-    status: 'Pending',
+    status: 'Member',
   }
   team_member_3 = {
     name: 'Jimmy',
