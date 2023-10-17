@@ -54,7 +54,7 @@ class dataservices {
   }
   task_info5 = {
     //mockup data
-    id: '4',
+    id: '5',
     title: 'HereGong',
     note: 'Bull shit guy',
     date_start: '16/10/2023',
@@ -65,12 +65,13 @@ class dataservices {
     role: ['Personal'],
     category: 'Personal',
   }
+ 
   all_task = [
     this.task_info1,
     this.task_info2,
     this.task_info3,
     this.task_info4,
-    this.task_info5,
+    this.task_info5
   ]
   //check email format
   checkMailFormat(email: string) {
