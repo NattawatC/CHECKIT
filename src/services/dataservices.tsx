@@ -1,5 +1,3 @@
-import { object } from 'zod'
-
 class dataservices {
   user = { email: '', password: '' }
   task_info1 = {
@@ -145,17 +143,26 @@ class dataservices {
     //get user info from database
     let info = this.user
     //TODO: fetch data from database
+    const all_task = this.all_task
+    const upcoming_task = all_task.filter((task) => {
+      const taskDateStart = task.date_start
+      return date < taskDateStart
+    })
+    const personal_task = this.getAllTaskByCategory('Personal')
+    const work_task = this.getAllTaskByCategory('Work')
+    const health_task = this.getAllTaskByCategory('Health')
+    const others_task = this.getAllTaskByCategory('Others')
     //query user info
     const user_info = {
       //mockup data
       username: 'Test',
       date: date,
       time: time,
-      upcoming_task: [{ task: object }],
-      personal_task: [{ task: object }],
-      work_task: [{ task: object }],
-      health_task: [{ task: object }],
-      others_task: [{ task: object }],
+      upcoming_task: upcoming_task,
+      personal_task: personal_task,
+      work_task: work_task,
+      health_task: health_task,
+      others_task: others_task,
     }
     return user_info
   }
@@ -203,8 +210,10 @@ class dataservices {
   //get all task by category
   //TODO: get all task data from database
   getAllTaskByCategory(category: string) {
-    //find category in all task
-    const result = this.all_task.filter((task) => task.category === category)
+    const result = this.all_task.filter(
+      (task_data) => task_data.category === category
+    )
+    console.log(result)
     return result
   }
 
@@ -232,13 +241,14 @@ class dataservices {
       const taskDateEnd = task.date_end
       return date >= taskDateStart && date <= taskDateEnd
     })
-    return [filteredTasks]
+    return filteredTasks
   }
 
   //filter by priority hight-> medium -> low
   //TODO: get data from database
   filterByPriority() {
     const task_info = this.all_task
+    const result = []
     const filteredTasksHigh = task_info.filter((task) => {
       const taskPriority = task.priority
       return taskPriority === 'high'
@@ -251,7 +261,12 @@ class dataservices {
       const taskPriority = task.priority
       return taskPriority === 'low'
     })
-    return [filteredTasksHigh, filteredTasksMedium, filteredTasksLow]
+    result.push(
+      ...filteredTasksHigh,
+      ...filteredTasksMedium,
+      ...filteredTasksLow
+    )
+    return result
   }
 
   //filter by category
@@ -262,7 +277,7 @@ class dataservices {
       const taskCategory = task.category
       return taskCategory === category
     })
-    return [filteredTasks]
+    return filteredTasks
   }
 
   //searchParam task by title
@@ -273,7 +288,7 @@ class dataservices {
       const taskTitle = task.title
       return taskTitle.includes(searchParam)
     })
-    return [filteredTasks]
+    return filteredTasks
   }
 }
 export default dataservices
