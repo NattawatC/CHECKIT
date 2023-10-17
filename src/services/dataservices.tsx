@@ -144,10 +144,9 @@ class dataservices {
     let info = this.user
     //TODO: fetch data from database
     const all_task = this.all_task
-    const upcoming_task = all_task.filter((task) => {
-      const taskDateStart = task.date_start
-      return date < taskDateStart
-    })
+    const upcoming_task = all_task.filter(
+      (task_data) => task_data.priority === 'high'
+    )
     const personal_task = this.getAllTaskByCategory('Personal')
     const work_task = this.getAllTaskByCategory('Work')
     const health_task = this.getAllTaskByCategory('Health')
@@ -213,7 +212,6 @@ class dataservices {
     const result = this.all_task.filter(
       (task_data) => task_data.category === category
     )
-    console.log(result)
     return result
   }
 
