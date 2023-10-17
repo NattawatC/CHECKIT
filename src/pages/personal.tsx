@@ -7,7 +7,6 @@ import { NextPage } from "next"
 
 const data = new dataservices()
 const personal_task = data.getAllTaskByCategory('Personal')
-const personal_task_length = personal_task.length
 
 
 const Personal: NextPage = () => {
@@ -22,7 +21,7 @@ const Personal: NextPage = () => {
                     </div>
                     <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
                         <p className="text-xl">Personal</p>
-                        <p className="text-base">{personal_task_length} Task</p>
+                        <p className="text-base">{personal_task.length} Task</p>
                     </div>
 
                     
