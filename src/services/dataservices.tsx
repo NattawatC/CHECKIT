@@ -1,3 +1,4 @@
+const axios = require('axios')
 class dataservices {
   user = { email: '', password: '' }
   task_info1 = {
@@ -111,11 +112,14 @@ class dataservices {
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
-      apiService.post(
-        'http://ict11.ce.kmitl.ac.th:9080/docs#/Authentication/register_register_post',
-        user_info
-      )
-      return true
+      axios.post('http://ict11.ce.kmitl.ac.th:9080/register', {
+        params: user_info,
+      }).then((response: { status: number; data: any }) => {
+        if (response.status == 200 ) {
+          // Request was successful (status code in the 200 range)
+          console.log('Success:', response.data);
+          return true
+        });
     } else {
       //email format is not correct
       console.log('Email format is not correct')
@@ -130,6 +134,7 @@ class dataservices {
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
       this.user = user
+      apiService.post('http://ict11.ce.kmitl.ac.th:9080/login', user)
       return true
     } else {
       //email format is not correct
