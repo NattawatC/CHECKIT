@@ -1,3 +1,4 @@
+const axios = require('axios')
 class dataservices {
   user = { email: '', password: '' }
   task_info1 = {
@@ -77,28 +78,28 @@ class dataservices {
   //mock member data
   team_member_1 = {
     name: 'Non',
-    status: 'padding',
+    status: 'Pending',
   }
   team_member_2 = {
     name: 'Vega',
-    status: 'padding',
+    status: 'Pending',
   }
   team_member_3 = {
     name: 'Jimmy',
-    status: 'padding',
+    status: 'Pending',
   }
   //mock team data
   team_info1 = {
     id: '1',
-    name: 'team1',
+    name: 'Team 1',
     owner: 'Test1',
-    member: [this.team_member_1, this.team_member_2, this.team_member_3],
+    members: [this.team_member_1, this.team_member_2, this.team_member_3],
   }
   team_info2 = {
-    id: '1',
-    name: 'team2',
+    id: '2',
+    name: 'Team 2',
     owner: 'Test1',
-    member: [this.team_member_1, this.team_member_2, this.team_member_3],
+    members: [this.team_member_1, this.team_member_2, this.team_member_3],
   }
 
   //mock team data
@@ -141,10 +142,6 @@ class dataservices {
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
-      apiService.post(
-        'http://ict11.ce.kmitl.ac.th:9080/docs#/Authentication/register_register_post',
-        user_info
-      )
       return true
     } else {
       //email format is not correct
