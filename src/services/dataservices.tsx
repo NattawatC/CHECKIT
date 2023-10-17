@@ -359,7 +359,7 @@ class dataservices {
   getTeamMember(id: string) {
     const team_info = this.all_team
     const result = team_info.find((team_data) => team_data.id === id)
-    return result?.member
+    return result?.members
   }
 
   //add member to team
@@ -367,7 +367,7 @@ class dataservices {
   addMemberToTeam(id: string, member: { name: string; status: string }) {
     const team_info = this.all_team
     const result = team_info.find((team_data) => team_data.id === id)
-    result?.member.push(member)
+    result?.members.push(member)
     return true
   }
 
