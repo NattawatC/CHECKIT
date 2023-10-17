@@ -1,6 +1,8 @@
 // const axios = require('axios')
 class dataservices {
   user = { email: '', password: '' }
+  priority = ['High', 'Medium', 'Low']
+  category = ['Personal', 'Work', 'Health', 'Others']
   task_info1 = {
     //mockup data
     id: '1',
@@ -10,7 +12,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'High',
     role: ['Personal'],
     category: 'Personal',
   }
@@ -23,7 +25,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'Medium',
     role: ['Personal'],
     category: 'Work',
   }
@@ -36,7 +38,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'Low',
     role: ['Personal'],
     category: 'Health',
   }
@@ -49,7 +51,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'High',
     role: ['Personal'],
     category: 'Others',
   }
@@ -62,7 +64,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'Medium',
     role: ['Personal'],
     category: 'Personal',
   }
@@ -131,7 +133,6 @@ class dataservices {
   }
 
   //check user register
-  //TODO: connect with database
   checkRegister(user: { username: string; email: string; password: string }) {
     //user info
     const user_info = {
@@ -142,6 +143,18 @@ class dataservices {
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
+      apiService
+        .post('http://ict11.ce.kmitl.ac.th:9080/register', user_info)
+        .then((res) => {
+          //check response status
+          if (res.status === 200) {
+            console.log('Register success')
+            return true
+          } else {
+            console.log('Register failed')
+            return false
+          }
+        })
       return true
     } else {
       //email format is not correct
@@ -185,10 +198,10 @@ class dataservices {
     const upcoming_task = all_task.filter(
       (task_data) => task_data.priority === 'high'
     )
-    const personal_task = this.getAllTaskByCategory('Personal')
-    const work_task = this.getAllTaskByCategory('Work')
-    const health_task = this.getAllTaskByCategory('Health')
-    const others_task = this.getAllTaskByCategory('Others')
+    const personal_task = this.getAllTaskByValue('Personal')
+    const work_task = this.getAllTaskByValue('Work')
+    const health_task = this.getAllTaskByValue('Health')
+    const others_task = this.getAllTaskByValue('Others')
     //query user info
     const user_info = {
       //mockup data
@@ -247,11 +260,19 @@ class dataservices {
 
   //get all task by category
   //TODO: get all task data from database
-  getAllTaskByCategory(category: string) {
-    const result = this.all_task.filter(
-      (task_data) => task_data.category === category
-    )
-    return result
+  getAllTaskByValue(value: string) {
+    //check value with priority
+    if (value in this.priority) {
+      const result = this.all_task.filter(
+        (task_data) => task_data.priority === value
+      )
+      return result
+    } else if (value in this.category) {
+      const result = this.all_task.filter(
+        (task_data) => task_data.category === value
+      )
+      return result
+    }
   }
 
   //get all task of user
