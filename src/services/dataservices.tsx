@@ -1,4 +1,5 @@
 import axios from 'axios'
+import apiService from './apiService'
 class dataservices {
   static getUserInfo() {
     throw new Error('Method not implemented.')

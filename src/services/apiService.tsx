@@ -12,3 +12,4 @@ const apiService = {
     return searchParams.toString()
   },
 }
+export default apiService
