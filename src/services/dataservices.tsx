@@ -1,4 +1,4 @@
-// const axios = require('axios')
+import axios from 'axios'
 class dataservices {
   user = { email: '', password: '' }
   priority = ['High', 'Medium', 'Low']
@@ -106,6 +106,18 @@ class dataservices {
 
   //mock team data
   all_team = [this.team_info1, this.team_info2]
+
+  //get current date & time
+  date = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  })
+  time = new Date().toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  })
   //check email format
   checkMailFormat(email: string) {
     //mail format
@@ -133,29 +145,23 @@ class dataservices {
   }
 
   //check user register
-  checkRegister(user: { username: string; email: string; password: string }) {
-    //user info
-    const user_info = {
-      email: user.email,
-      name: user.username,
-      password: user.password,
-    }
+  async checkRegister(user: {
+    username: string
+    email: string
+    password: string
+  }) {
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
-      apiService
-        .post('http://ict11.ce.kmitl.ac.th:9080/register', user_info)
-        .then((res) => {
-          //check response status
-          if (res.status === 200) {
-            console.log('Register success')
-            return true
-          } else {
-            console.log('Register failed')
-            return false
-          }
-        })
-      return true
+      const res = await axios.post(
+        '/register',
+        apiService.bodyToQueryFormat(user)
+      )
+      if (res.status === 201) {
+        return true
+      } else if (res.status === 400) {
+        return false
+      }
     } else {
       //email format is not correct
       console.log('Email format is not correct')
@@ -179,36 +185,31 @@ class dataservices {
   }
 
   //get user info
-  getUserInfo() {
-    //get current date & time
-    let date = new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'short',
-      day: 'numeric',
-    })
-    let time = new Date().toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    })
-    //get user info from database
-    let info = this.user
-    //TODO: fetch data from database
-    const all_task = this.all_task
-    const upcoming_task = all_task.filter(
-      (task_data) => task_data.priority === 'high'
+  async getUserInfo() {
+    //convert user email to query format
+    const user_email = apiService.bodyToQueryFormat(this.user.email)
+
+    //get user info
+    const user_info = (await axios.get('/user/profile?' + user_email)).data
+
+    //get user task
+    const data = (
+      await axios.get('/user/task/getAllTasksForUser?' + user_email)
+    ).data
+
+    const upcoming_task = data.filter(
+      (task_data: any) => task_data.priority === 'High'
     )
     const personal_task = this.getAllTaskByValue('Personal')
     const work_task = this.getAllTaskByValue('Work')
     const health_task = this.getAllTaskByValue('Health')
     const others_task = this.getAllTaskByValue('Others')
     //query user info
-    const user_info = {
-      //mockup data
-      username: 'Test',
-      email: 'kuygong@gmail.com',
-      date: date,
-      time: time,
+    const info = {
+      username: user_info.name,
+      email: user_info.email,
+      date: this.date,
+      time: this.time,
       upcoming_task: upcoming_task,
       personal_task: personal_task,
       work_task: work_task,
