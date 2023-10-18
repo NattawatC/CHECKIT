@@ -1,27 +1,14 @@
 const apiService = {
-  //TODO: add ERROR handling
-  get: (endpoint: string) => fetch(endpoint).then((res) => res.json()),
+  // Function to convert from body format to query format
+  bodyToQueryFormat: (bodyData: any) => {
+    const searchParams = new URLSearchParams()
 
-  post: (endpoint: string, body: any) =>
-    fetch(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }),
+    for (const key in bodyData) {
+      if (bodyData.hasOwnProperty(key)) {
+        searchParams.append(key, bodyData[key])
+      }
+    }
 
-  put: (endpoint: string, body: any) =>
-    fetch(endpoint, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }),
-
-  delete: (endpoint: string) =>
-    fetch(endpoint, {
-      method: 'DELETE',
-    }),
+    return searchParams.toString()
+  },
 }
