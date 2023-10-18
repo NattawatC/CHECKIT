@@ -9,7 +9,7 @@ import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
 
 const data = new dataservices()
-const taskNum = data.getUserInfo()
+const taskNum = await data.getUserInfo()
 
 const categories = [
   {
@@ -46,8 +46,8 @@ const Dashboard: NextPage = () => {
           <NavBar />
 
           <div className="flex flex-col gap-1 text-custom-white font-medium">
-            <p className="text-xs">{data.getUserInfo().date}</p>
-            <p className="text-xl">Welcome, {data.getUserInfo().username}</p>
+            <p className="text-xs">{taskNum.date}</p>
+            <p className="text-xl">Welcome, {taskNum.username}</p>
           </div>
           <UpcomingTask taskNum={taskNum.upcoming_task.length} />
 
