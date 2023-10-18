@@ -32,11 +32,11 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
   // Determine the content to display for the priority
   function getPriorityContent(priority: string): string {
     switch (priority) {
-      case 'high' || 'High':
+      case ('High') || ('high'):
         return '!!!'
-      case 'medium' || 'Medium':
+      case ('Medium') || ('medium'):
         return '!!'
-      case 'low' || 'Low':
+      case ('Low') || ('low'):
         return '!'
       default:
         return priority
