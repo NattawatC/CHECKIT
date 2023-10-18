@@ -1,5 +1,12 @@
+import axios from 'axios'
+import apiService from './apiService'
 class dataservices {
-  user = { email: '', password: '' }
+  static getUserInfo() {
+    throw new Error('Method not implemented.')
+  }
+  user = { email: 'example@gmail.com', password: '' }
+  priority = ['High', 'Medium', 'Low']
+  category = ['Personal', 'Work', 'Health', 'Others']
   task_info1 = {
     //mockup data
     id: '1',
@@ -9,7 +16,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'High',
     role: ['Personal'],
     category: 'Personal',
   }
@@ -22,7 +29,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'Medium',
     role: ['Personal'],
     category: 'Work',
   }
@@ -35,7 +42,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'Low',
     role: ['Personal'],
     category: 'Health',
   }
@@ -48,7 +55,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'High',
     role: ['Personal'],
     category: 'Others',
   }
@@ -61,7 +68,7 @@ class dataservices {
     date_end: '17/10/2023',
     time_start: '9:00 AM',
     time_end: '9:00 PM',
-    priority: 'high',
+    priority: 'Medium',
     role: ['Personal'],
     category: 'Personal',
   }
@@ -77,32 +84,44 @@ class dataservices {
   //mock member data
   team_member_1 = {
     name: 'Non',
-    status: 'padding',
+    status: 'Pending',
   }
   team_member_2 = {
     name: 'Vega',
-    status: 'padding',
+    status: 'Member',
   }
   team_member_3 = {
     name: 'Jimmy',
-    status: 'padding',
+    status: 'Pending',
   }
   //mock team data
   team_info1 = {
     id: '1',
-    name: 'team1',
+    name: 'Team 1',
     owner: 'Test1',
-    member: [this.team_member_1, this.team_member_2, this.team_member_3],
+    members: [this.team_member_1, this.team_member_2, this.team_member_3],
   }
   team_info2 = {
-    id: '1',
-    name: 'team2',
+    id: '2',
+    name: 'Team 2',
     owner: 'Test1',
-    member: [this.team_member_1, this.team_member_2, this.team_member_3],
+    members: [this.team_member_1, this.team_member_2, this.team_member_3],
   }
 
   //mock team data
   all_team = [this.team_info1, this.team_info2]
+
+  //get current date & time
+  date = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  })
+  time = new Date().toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  })
   //check email format
   checkMailFormat(email: string) {
     //mail format
@@ -130,22 +149,23 @@ class dataservices {
   }
 
   //check user register
-  //TODO: connect with database
-  checkRegister(user: { username: string; email: string; password: string }) {
-    //user info
-    const user_info = {
-      email: user.email,
-      name: user.username,
-      password: user.password,
-    }
+  async checkRegister(user: {
+    username: string
+    email: string
+    password: string
+  }) {
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
-      apiService.post(
-        'http://ict11.ce.kmitl.ac.th:9080/docs#/Authentication/register_register_post',
-        user_info
+      const res = await axios.post(
+        '/register',
+        apiService.bodyToQueryFormat(user)
       )
-      return true
+      if (res.status === 201) {
+        return true
+      } else if (res.status === 400) {
+        return false
+      }
     } else {
       //email format is not correct
       console.log('Email format is not correct')
@@ -169,58 +189,99 @@ class dataservices {
   }
 
   //get user info
-  getUserInfo() {
-    //get current date & time
-    let date = new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'short',
-      day: 'numeric',
-    })
-    let time = new Date().toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    })
-    //get user info from database
-    let info = this.user
-    //TODO: fetch data from database
-    const all_task = this.all_task
-    const upcoming_task = all_task.filter(
-      (task_data) => task_data.priority === 'high'
-    )
-    const personal_task = this.getAllTaskByCategory('Personal')
-    const work_task = this.getAllTaskByCategory('Work')
-    const health_task = this.getAllTaskByCategory('Health')
-    const others_task = this.getAllTaskByCategory('Others')
-    //query user info
-    const user_info = {
-      //mockup data
-      username: 'Test',
-      email: 'kuygong@gmail.com',
-      date: date,
-      time: time,
-      upcoming_task: upcoming_task,
-      personal_task: personal_task,
-      work_task: work_task,
-      health_task: health_task,
-      others_task: others_task,
+  //convert user email to query format
+  // const user_email = apiService.bodyToQueryFormat(this.user.email)
+
+  // //get user info
+  // const user_info = axios('/user/profile?' + user_email).then((res) => {
+  //   return res.data
+  // })
+  // const upcoming_task = this.getAllTaskByValue('High')
+  // const personal_task = this.getAllTaskByValue('Personal')
+  // const work_task = this.getAllTaskByValue('Work')
+  // const health_task = this.getAllTaskByValue('Health')
+  // const others_task = this.getAllTaskByValue('Others')
+  // Promise.all([user_info])
+  //   .then(([user_info]) => {
+  //     const result = {
+  //       username: user_info.name,
+  //       email: user_info.email,
+  //       date: this.date,
+  //       time: this.time,
+  //       upcoming_task: upcoming_task,
+  //       personal_task: personal_task,
+  //       work_task: work_task,
+  //       health_task: health_task,
+  //       others_task: others_task,
+  //     }
+  //   })
+  //   .then((result) => {
+  //     return result
+  //   })
+  async getUserInfo() {
+    try {
+      const user_email = apiService.bodyToQueryFormat(this.user.email)
+      // Fetch user information from an API or database
+      const user_info = await axios.get('/user/profile?' + user_email)
+      const user_task = await axios.get(
+        'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser?' +
+          user_email
+      )
+
+      const result = {
+        username: user_info.data.name,
+        email: user_info.data.email,
+        date: this.date,
+        time: this.time,
+        upcoming_task: this.getAllTaskByPriority('High'),
+        personal_task: this.filterByCategory('Personal'),
+        work_task: this.filterByCategory('Work'),
+        health_task: this.filterByCategory('Health'),
+        others_task: this.filterByCategory('Others'),
+      }
+      return result
+    } catch (error) {
+      const result = {
+        username: '',
+        email: '',
+        date: '',
+        time: '',
+        upcoming_task: '',
+        personal_task: '',
+        work_task: '',
+        health_task: '',
+        others_task: '',
+      }
+      console.log(error)
+      return result
     }
-    return user_info
   }
 
   //create task
-  //TODO: post data to database
   createUserTask(task: {
     title: string
     note: string
     date_start: Date
     date_end: Date
-    time_start: string
+    time_start: Date
     time_end: string
     priority: string
     role: [string]
     category: string
   }) {
+    const info = {
+      title: task.title,
+      note: task.note,
+      start: Date,
+      end: Date,
+      priority: task.priority,
+      category: task.category,
+    }
+    const user_email = apiService.bodyToQueryFormat(this.user.email)
+    const task_info = axios.post(
+      '/user/task/createTaskForUser' + user_email,
+      apiService.bodyToQueryFormat(task)
+    )
     return true
   }
 
@@ -248,13 +309,23 @@ class dataservices {
     return [result]
   }
 
-  //get all task by category
-  //TODO: get all task data from database
-  getAllTaskByCategory(category: string) {
-    const result = this.all_task.filter(
-      (task_data) => task_data.category === category
-    )
-    return result
+  //get all task of user
+  getAllTaskOfUser() {
+    //get user email
+    const user_email = apiService.bodyToQueryFormat(this.user.email)
+    const task_info = axios.get('/user/task/getAllTasksForUser' + user_email)
+    return task_info
+  }
+
+  //getAllTask by priority
+  getAllTaskByPriority(priority: string) {
+    const user_email = apiService.bodyToQueryFormat(this.user.email)
+    const task_info = axios.get('/user/task/getAllTasksForUser' + user_email)
+    if (Array.isArray(task_info)) {
+      return task_info.filter((task) => task.priority === priority)
+    } else {
+      return []
+    }
   }
 
   //get all task of user
@@ -285,39 +356,36 @@ class dataservices {
   }
 
   //filter by priority hight-> medium -> low
-  //TODO: get data from database
   filterByPriority() {
-    const task_info = this.all_task
+    const task_info = this.getAllTaskOfUser()
     const result = []
-    const filteredTasksHigh = task_info.filter((task) => {
-      const taskPriority = task.priority
-      return taskPriority === 'high'
-    })
-    const filteredTasksMedium = task_info.filter((task) => {
-      const taskPriority = task.priority
-      return taskPriority === 'medium'
-    })
-    const filteredTasksLow = task_info.filter((task) => {
-      const taskPriority = task.priority
-      return taskPriority === 'low'
-    })
-    result.push(
-      ...filteredTasksHigh,
-      ...filteredTasksMedium,
-      ...filteredTasksLow
-    )
+    if (Array.isArray(task_info)) {
+      const filteredTasksHigh = task_info.filter((task) => {
+        return task.priority === 'high'
+      })
+      const filteredTasksMedium = task_info.filter((task) => {
+        return task.priority === 'medium'
+      })
+      const filteredTasksLow = task_info.filter((task) => {
+        return task.priority === 'low'
+      })
+      result.push(
+        ...filteredTasksHigh,
+        ...filteredTasksMedium,
+        ...filteredTasksLow
+      )
+    }
     return result
   }
 
   //filter by category
-  //TODO: get data from database
   filterByCategory(category: string) {
-    const task_info = this.all_task
-    const filteredTasks = task_info.filter((task) => {
-      const taskCategory = task.category
-      return taskCategory === category
-    })
-    return filteredTasks
+    const task_info = this.getAllTaskOfUser()
+    if (Array.isArray(task_info)) {
+      return task_info.filter((task) => task.category === category)
+    } else {
+      return []
+    }
   }
 
   //searchParam task by title
@@ -362,7 +430,7 @@ class dataservices {
   getTeamMember(id: string) {
     const team_info = this.all_team
     const result = team_info.find((team_data) => team_data.id === id)
-    return result?.member
+    return result?.members
   }
 
   //add member to team
@@ -370,7 +438,7 @@ class dataservices {
   addMemberToTeam(id: string, member: { name: string; status: string }) {
     const team_info = this.all_team
     const result = team_info.find((team_data) => team_data.id === id)
-    result?.member.push(member)
+    result?.members.push(member)
     return true
   }
 

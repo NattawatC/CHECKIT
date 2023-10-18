@@ -8,9 +8,11 @@ import { NextPage } from 'next'
 import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
 
+// Fetch user information and task data
 const data = new dataservices()
-const taskNum = data.getUserInfo()
+const taskNum = await data.getUserInfo()
 
+// Define categories with taskNum properties
 const categories = [
   {
     icon: BsPerson,
@@ -37,7 +39,6 @@ const categories = [
     href: '/others',
   },
 ]
-
 const Dashboard: NextPage = () => {
   return (
     <div className="bg-custom-black">
@@ -45,9 +46,9 @@ const Dashboard: NextPage = () => {
         <div className="flex-col flex gap-8">
           <NavBar />
 
-          <div className="flex-col justify-center flex text-custom-white font-medium gap-1">
-            <p className="text-xs">{data.getUserInfo().date}</p>
-            <p className="text-xl">Welcome, {data.getUserInfo().username}</p>
+          <div className="flex flex-col gap-1 text-custom-white font-medium">
+            <p className="text-xs">{taskNum.date}</p>
+            <p className="text-xl">Welcome, {taskNum.username}</p>
           </div>
           <UpcomingTask taskNum={taskNum.upcoming_task.length} />
 
@@ -68,4 +69,5 @@ const Dashboard: NextPage = () => {
     </div>
   )
 }
+
 export default Dashboard
