@@ -1,4 +1,5 @@
 import axios from 'axios'
+import apiService from './apiService'
 class dataservices {
   static getUserInfo() {
     throw new Error('Method not implemented.')
@@ -218,26 +219,42 @@ class dataservices {
   //     return result
   //   })
   async getUserInfo() {
-    const user_email = apiService.bodyToQueryFormat(this.user.email)
-    // Fetch user information from an API or database
-    const user_info = await axios.get('/user/profile?' + user_email)
-    const user_task = await axios.get(
-      'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser?' +
-        user_email
-    )
+    try {
+      const user_email = apiService.bodyToQueryFormat(this.user.email)
+      // Fetch user information from an API or database
+      const user_info = await axios.get('/user/profile?' + user_email)
+      const user_task = await axios.get(
+        'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser?' +
+          user_email
+      )
 
-    const result = {
-      username: user_info.data.name,
-      email: user_info.data.email,
-      date: this.date,
-      time: this.time,
-      upcoming_task: this.getAllTaskByPriority('High'),
-      personal_task: this.filterByCategory('Personal'),
-      work_task: this.filterByCategory('Work'),
-      health_task: this.filterByCategory('Health'),
-      others_task: this.filterByCategory('Others'),
+      const result = {
+        username: user_info.data.name,
+        email: user_info.data.email,
+        date: this.date,
+        time: this.time,
+        upcoming_task: this.getAllTaskByPriority('High'),
+        personal_task: this.filterByCategory('Personal'),
+        work_task: this.filterByCategory('Work'),
+        health_task: this.filterByCategory('Health'),
+        others_task: this.filterByCategory('Others'),
+      }
+      return result
+    } catch (error) {
+      const result = {
+        username: '',
+        email: '',
+        date: '',
+        time: '',
+        upcoming_task: '',
+        personal_task: '',
+        work_task: '',
+        health_task: '',
+        others_task: '',
+      }
+      console.log(error)
+      return result
     }
-    return result
   }
 
   //create task
@@ -246,12 +263,20 @@ class dataservices {
     note: string
     date_start: Date
     date_end: Date
-    time_start: string
+    time_start: Date
     time_end: string
     priority: string
     role: [string]
     category: string
   }) {
+    const info = {
+      title: task.title,
+      note: task.note,
+      start: Date,
+      end: Date,
+      priority: task.priority,
+      category: task.category,
+    }
     const user_email = apiService.bodyToQueryFormat(this.user.email)
     const task_info = axios.post(
       '/user/task/createTaskForUser' + user_email,
