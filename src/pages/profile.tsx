@@ -3,12 +3,16 @@ import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import dataservices from '@/services/dataservices'
 import { IoIosInformationCircle } from 'react-icons/io'
+import React, { useState } from 'react';
+
 
 const data = new dataservices()
 
 
-
 const Profile = () => {
+  const [isHovering, setIsHovering] = useState(false)
+  const onMouseEnter = () => setIsHovering(true);
+  const onMouseLeave = () => setIsHovering(false);
   return (
     <>
     <div className="bg-custom-black">
@@ -39,7 +43,15 @@ const Profile = () => {
           <div className="flex flex-col gap-3">
             <div className="flex flex-row gap-3 items-center">
               <p className="text-custom-white text-base font-medium">Done</p>
-              <p className="text-custom-white"><IoIosInformationCircle /></p>
+              <p className="flex flex-row text-custom-white hover:text-custom-orange cursor-pointer items-center gap-2" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+                <IoIosInformationCircle />
+                {isHovering ? (
+                  <p className="text-xs font-medium">This will be delete after 7 days</p>
+                ):(
+                  <p className="text-custom-black">hidden</p>
+                )}
+              </p>
+              
             </div>
             <div className="flex flex-col rounded-lg gap-2 bg-custom-gray">
               <p>deleted task</p>
