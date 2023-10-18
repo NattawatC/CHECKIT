@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import dataservices from '@/services/dataservices'
 import { IoIosInformationCircle } from 'react-icons/io'
 import React, { useState } from 'react';
+import ChangeName from '@/components/ChangeName'
 
 
 const data = new dataservices()
@@ -39,6 +40,7 @@ const Profile = () => {
             </div>
             <Button className="px-2 py-1 text-xs h-fit bg-custom-gray">Edit</Button>
           </div>
+          
 
           <div className="flex flex-col gap-3">
             <div className="flex flex-row gap-3 items-center">
@@ -46,9 +48,9 @@ const Profile = () => {
               <p className="flex flex-row text-custom-white hover:text-custom-orange cursor-pointer items-center gap-2" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 <IoIosInformationCircle />
                 {isHovering ? (
-                  <p className="text-xs font-medium">This will be delete after 7 days</p>
+                  <span className="text-xs font-medium">This will be delete after 7 days</span>
                 ):(
-                  <p className="text-custom-black">hidden</p>
+                  <span className="text-custom-black">hidden</span>
                 )}
               </p>
               
@@ -59,7 +61,9 @@ const Profile = () => {
             </div>
           </div>
             
+        <ChangeName />
         </div>
+        
       </MainLayout>
       <Footer className="text-custom-white"/>
     </div>
