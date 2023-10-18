@@ -1,5 +1,5 @@
 'use client'
-import { Footer } from '@/components/common'
+import { Footer, Hamburger } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import dataservices from '@/services/dataservices'
 import { loginFormSchema } from '@/types/user/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
@@ -18,7 +19,6 @@ import Link from 'next/link'
 import router from 'next/router'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import dataservices from '@/services/dataservices'
 
 const data = new dataservices()
 
@@ -98,6 +98,9 @@ export function LoginForm() {
 const Login: NextPage = () => {
   return (
     <>
+      <div className='px-4 py-2 float-right'>
+        <Hamburger className="text-custom-black" />
+      </div>
       <MainLayout className="flex flex-col gap-16">
         <div className="flex flex-col items-center justify-center">
           <p className="font-semibold text-[32px]">Welcome Back!</p>
