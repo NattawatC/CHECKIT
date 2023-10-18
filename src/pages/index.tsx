@@ -3,10 +3,10 @@ import Card from '@/components/home/Card'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { FaGithubSquare } from 'react-icons/fa'
-import logoMobile from 'src/assets/logoMobile.png'
-import { FaSquareEnvelope} from 'react-icons/fa6'
 import Link from 'next/link'
+import { FaGithubSquare } from 'react-icons/fa'
+import { FaSquareEnvelope } from 'react-icons/fa6'
+import logoMobile from 'src/assets/logoMobile.png'
 
 const features = [
   {
@@ -45,7 +45,12 @@ export default function Home() {
             feugiat lectus. Class aptent taciti sociosqu ad litora torquent per
             conubia nostra,
           </p>
-          <Button className="bg-custom-orange text-custom-white" onClick={login}>Get Started</Button>
+          <Button
+            className="bg-custom-orange text-custom-white"
+            onClick={login}
+          >
+            Get Started
+          </Button>
         </div>
       </MainLayout>
 
@@ -88,7 +93,7 @@ export default function Home() {
           </p>
           <div className="flex flex-row gap-4">
             <Link href="https://github.com/NattawatC/checkit">
-            <FaGithubSquare className="w-12 h-12" />
+              <FaGithubSquare className="w-12 h-12" />
             </Link>
             <FaSquareEnvelope className="w-12 h-12" />
             <FaGithubSquare className="w-12 h-12" />
