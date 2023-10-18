@@ -8,9 +8,11 @@ import { NextPage } from 'next'
 import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
 
+// Fetch user information and task data
 const data = new dataservices()
 const taskNum = await data.getUserInfo()
 
+// Define categories with taskNum properties
 const categories = [
   {
     icon: BsPerson,
@@ -37,7 +39,6 @@ const categories = [
     href: '/others',
   },
 ]
-
 const Dashboard: NextPage = () => {
   return (
     <div className="bg-custom-black">
@@ -68,4 +69,5 @@ const Dashboard: NextPage = () => {
     </div>
   )
 }
+
 export default Dashboard
