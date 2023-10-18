@@ -28,8 +28,8 @@ export const Hamburger: React.FunctionComponent<hamburgerProps> = ({
   return (
     <>
       <Sheet>
-        <SheetTrigger asChild>
-          <RxHamburgerMenu size={30} classname={`${className}`} />
+        <SheetTrigger asChild className={`${className}`}>
+          <RxHamburgerMenu size={30}/>
         </SheetTrigger>
           <SheetContent side={'right'} className='flex flex-col gap-4'>
             <SheetHeader>
