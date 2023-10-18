@@ -37,7 +37,12 @@ export const NavBar: React.FC = () => {
             href={item.href}
             text={item.text}
             active={
-              activeIndex === index
+              activeIndex === index ||
+              ((router.pathname === '/personal' ||
+                router.pathname === '/health' ||
+                router.pathname === '/work' ||
+                router.pathname === '/others') &&
+                index === 0)
                 ? 'bg-custom-orange'
                 : 'bg-custom-gray hover:bg-custom-orange'
             }
