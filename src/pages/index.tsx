@@ -1,4 +1,4 @@
-import Footer from '@/components/common/Footer'
+import { Footer } from '@/components/common/Footer'
 import Card from '@/components/home/Card'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
@@ -27,10 +27,6 @@ const features = [
   },
 ]
 
-const login = () => {
-  window.location.href = '/login'
-}
-
 export default function Home() {
   return (
     <>
@@ -45,12 +41,11 @@ export default function Home() {
             feugiat lectus. Class aptent taciti sociosqu ad litora torquent per
             conubia nostra,
           </p>
-          <Button
-            className="bg-custom-orange text-custom-white"
-            onClick={login}
-          >
-            Get Started
-          </Button>
+          <Link href="/login">
+            <Button className="bg-custom-orange text-custom-white">
+              Get Started
+            </Button>
+          </Link>
         </div>
       </MainLayout>
 
@@ -100,7 +95,8 @@ export default function Home() {
           </div>
         </div>
       </MainLayout>
-      <Footer />
+      <Footer 
+      className='text-custom-black'/>
     </>
   )
 }
