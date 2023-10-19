@@ -1,3 +1,4 @@
+import { Hamburger } from '@/components/common'
 import { Footer } from '@/components/common/Footer'
 import Card from '@/components/home/Card'
 import { MainLayout } from '@/components/layouts'
@@ -30,6 +31,9 @@ const features = [
 export default function Home() {
   return (
     <>
+      <div className="px-4 py-2 float-right">
+        <Hamburger className="text-custom-white" />
+      </div>
       <MainLayout className="bg-custom-black">
         <div className=" flex flex-col items-center gap-9">
           <Image src={logoMobile} alt="logo mobile" />
@@ -95,8 +99,7 @@ export default function Home() {
           </div>
         </div>
       </MainLayout>
-      <Footer 
-      className='text-custom-black'/>
+      <Footer className="text-custom-black" />
     </>
   )
 }

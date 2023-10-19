@@ -220,7 +220,7 @@ class dataservices {
   //   })
   async getUserInfo() {
     try {
-      const user_email = apiService.bodyToQueryFormat(this.user.email)
+      const user_email = apiService.bodyToQueryFormat('example@gmail.com')
       // Fetch user information from an API or database
       const user_info = await axios.get('/user/profile?' + user_email)
       const user_task = await axios.get(
