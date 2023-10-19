@@ -1,5 +1,5 @@
 'use client'
-import { Footer } from '@/components/common'
+import { Footer, Hamburger } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
 import {
@@ -88,8 +88,6 @@ export function RegisterForm() {
         >
           Start your journey
         </Button>
-
-        
       </form>
     </Form>
   )
@@ -98,6 +96,9 @@ export function RegisterForm() {
 const Register: NextPage = () => {
   return (
     <>
+      <div className="px-4 py-2 float-right">
+        <Hamburger className="text-custom-black" />
+      </div>
       <MainLayout className="flex flex-col gap-12">
         <div className="flex flex-col items-center justify-center">
           <p className="font-semibold text-[32px]/[42px]">Create an account</p>
@@ -107,13 +108,15 @@ const Register: NextPage = () => {
         </div>
         <RegisterForm />
       </MainLayout>
+      <div className='flex flex-col gap-14'>
       <p className="text-center text-sm text-custom-gray">
         Been here before?{' '}
         <Link className="text-custom-orange hover:underline" href="/login">
           Log in
         </Link>
       </p>
-      <Footer className='text-custom-black'/>
+      <Footer className="text-custom-black" />
+      </div>
     </>
   )
 }
