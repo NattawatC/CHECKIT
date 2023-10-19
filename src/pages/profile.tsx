@@ -57,7 +57,7 @@ const Profile = () => {
               </p>
               
             </div>
-            <div className="flex flex-col rounded-lg gap-1.5 bg-custom-gray text-custom-white px-2 py-1">
+            <div className="flex flex-col rounded-lg gap-2 bg-custom-gray text-custom-white p-4">
               <p>deleted task</p>
               <p>deleted task</p>
             </div>
