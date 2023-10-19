@@ -18,7 +18,7 @@ const Profile = () => {
   const onMouseLeave = () => setIsHovering(false);
   return (
     <>
-    <div className="bg-custom-black">
+    <div className="flex flex-col bg-custom-black min-h-screen">
       <MainLayout>
         <div className="flex flex-col gap-8">
           <NavBar />
