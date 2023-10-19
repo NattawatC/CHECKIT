@@ -1,10 +1,9 @@
 import axios from 'axios'
-import apiService from './apiService'
 class dataservices {
   static getUserInfo() {
     throw new Error('Method not implemented.')
   }
-  user = { email: 'example@gmail.com', password: '' }
+  user = { username: 'Test', email: 'example@gmail.com' }
   priority = ['High', 'Medium', 'Low']
   category = ['Personal', 'Work', 'Health', 'Others']
   task_info1 = {
@@ -149,21 +148,28 @@ class dataservices {
     email: string
     password: string
   }) {
-    //check email format
-    if (this.checkMailFormat(user.email)) {
-      console.log('Email format is correct')
-      const res = await axios.post(
-        '/register',
-        apiService.bodyToQueryFormat(user)
-      )
-      if (res.status === 201) {
-        return true
-      } else if (res.status === 400) {
+    try {
+      //check email format
+      if (this.checkMailFormat(user.email)) {
+        console.log('Email format is correct')
+        const res = await axios.post(
+          'http://ict11.ce.kmitl.ac.th:9080/register',
+          user
+        )
+        if (res.status === 201) {
+          this.user = user
+          return res.data
+        } else if (res.status === 400) {
+          console.log('Email is already exist')
+          return false
+        }
+      } else {
+        //email format is not correct
+        console.log('Email format is not correct')
         return false
       }
-    } else {
-      //email format is not correct
-      console.log('Email format is not correct')
+    } catch (error) {
+      console.log(error)
       return false
     }
   }
@@ -174,7 +180,7 @@ class dataservices {
     //check email format
     if (this.checkMailFormat(user.email)) {
       console.log('Email format is correct')
-      this.user = user
+      this.user.email = user.email
       return true
     } else {
       //email format is not correct
@@ -191,19 +197,9 @@ class dataservices {
         month: 'short',
         day: 'numeric',
       })
-      // Fetch user information from an API or database
-      const user_info = await axios
-        .get('http://ict11.ce.kmitl.ac.th:9080/user/profile', {
-          params: { email: this.user.email },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            return res.data
-          }
-        })
       const result = {
-        username: user_info.name,
-        email: user_info.email,
+        username: this.user.username,
+        email: this.user.email,
         date: current_date,
         time: 'this.time',
         upcoming_task: await this.getAllTaskByPriority('High'),
@@ -215,9 +211,9 @@ class dataservices {
       return result
     } catch (error) {
       const result = {
-        username: '',
+        username: 'Error',
         email: '',
-        date: 'error',
+        date: 'Error',
         time: '',
         upcoming_task: '',
         personal_task: '',
@@ -231,47 +227,64 @@ class dataservices {
   }
 
   //create task
-  createUserTask(task: {
+  async createUserTask(task: {
     title: string
     note: string
     date_start: Date
     date_end: Date
-    time_start: Date
-    time_end: string
+    time_start: any
+    time_end: any
     priority: string
     role: [string]
     category: string
   }) {
     const info = {
       title: task.title,
-      note: task.note,
+      description: task.note,
       start: Date,
       end: Date,
       priority: task.priority,
       category: task.category,
+      status: true,
+      task_id: 0,
     }
-    const user_email = apiService.bodyToQueryFormat(this.user.email)
-    const task_info = axios.post(
-      '/user/task/createTaskForUser' + user_email,
-      apiService.bodyToQueryFormat(task)
-    )
-    return true
+    try {
+      const task_info = await axios.post(
+        'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
+        info,
+        {
+          params: { email: this.user.email },
+        }
+      )
+      if (task.role[0] !== 'Personal') {
+        const team_task_info = await axios.post(
+          'http://ict11.ce.kmitl.ac.th:9080/user/team/addTask',
+          {
+            params: { team_id: '', task_id: task_info.data.task_id },
+          }
+        )
+      }
+    } catch (error) {
+      console.log(error)
+      return false
+    }
   }
 
   //edit task by id
   //TODO: post data to database
-  editTask(task: {
-    id: string
-    title: string
-    note: string
-    date_start: Date
-    date_end: Date
-    time_start: string
-    time_end: string
-    priority: string
-    role: [string]
-    category: string
-  }) {
+  editTask(
+    id: number,
+    task: {
+      title: string
+      note: string
+      date_start: Date
+      date_end: Date
+      time_start: any
+      time_end: any
+      priority: string
+      category: string
+    }
+  ) {
     return true
   }
 
@@ -294,22 +307,13 @@ class dataservices {
 
   //getAllTask by priority
   async getAllTaskByPriority(priority: string) {
-    try {
-      const response = await axios.get(
-        'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser',
-        { params: { email: this.user.email } }
+    const response = await this.getAllTaskOfUser()
+    if (Array.isArray(response.data)) {
+      const filteredTasks = response.data.filter(
+        (task) => task.priority === priority
       )
-
-      if (Array.isArray(response.data)) {
-        const filteredTasks = response.data.filter(
-          (task) => task.priority === priority
-        )
-        return filteredTasks
-      } else {
-        return []
-      }
-    } catch (error) {
-      console.error('Error fetching tasks:', error)
+      return filteredTasks
+    } else {
       return []
     }
   }
@@ -342,8 +346,8 @@ class dataservices {
   }
 
   //filter by priority hight-> medium -> low
-  filterByPriority() {
-    const task_info = this.getAllTaskOfUser()
+  async filterByPriority() {
+    const task_info = await this.getAllTaskOfUser()
     const result = []
     if (Array.isArray(task_info)) {
       const filteredTasksHigh = task_info.filter((task) => {
@@ -366,22 +370,13 @@ class dataservices {
 
   //filter by category
   async filterByCategory(category: string) {
-    try {
-      const response = await axios.get(
-        'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser',
-        { params: { email: this.user.email } }
+    const response = await this.getAllTaskOfUser()
+    if (Array.isArray(response.data)) {
+      const filteredTasks = response.data.filter(
+        (task) => task.category === category
       )
-
-      if (Array.isArray(response.data)) {
-        const filteredTasks = response.data.filter(
-          (task) => task.category === category
-        )
-        return filteredTasks
-      } else {
-        return []
-      }
-    } catch (error) {
-      console.error('Error fetching tasks:', error)
+      return filteredTasks
+    } else {
       return []
     }
   }
