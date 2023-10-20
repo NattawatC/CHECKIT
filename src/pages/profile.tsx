@@ -45,7 +45,7 @@ const Profile = () => {
           
 
           <div className="flex flex-col gap-3">
-            <div className="flex flex-row gap-3 items-center">
+            <div className="flex flex-row gap-4 items-center">
               <p className="text-custom-white text-base font-medium">Done</p>
               <p className="flex flex-row text-custom-white hover:text-custom-orange cursor-pointer items-center gap-2" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 <IoIosInformationCircle />
@@ -62,7 +62,6 @@ const Profile = () => {
               <p>deleted task</p>
             </div>
           </div>
-            
         
         </div>
         
