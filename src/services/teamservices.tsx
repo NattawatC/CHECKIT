@@ -1,30 +1,24 @@
-import axios from 'axios';
-import userservices from './userservices';
+import axios from 'axios'
+import userservices from './userservices'
 class teamServices {
   services = new userservices()
   //create team
   async createTeam(team: { name: string; member: [string] }) {
     try {
       //send request to create team
-      const create_team = await axios.post(
-        'http://ict11.ce.kmitl.ac.th:9080/user/team/create',
-        {
-          params: {
-            name: team.name,
-            owner: this.services.user.email,
-            team_id: 0,
-          },
-        }
-      )
+      const create_team = await axios.post('user/team/create', {
+        params: {
+          name: team.name,
+          owner: this.services.user.email,
+          team_id: 0,
+        },
+      })
       for (const memberEmail of team.member) {
         //send request to invite member
-        const invite_member = await axios.post(
-          'http://ict11.ce.kmitl.ac.th:9080/user/team/inviteUser',
-          {
-            email: memberEmail,
-            team_id: create_team.data.team_id,
-          }
-        )
+        const invite_member = await axios.post('user/team/inviteUser', {
+          email: memberEmail,
+          team_id: create_team.data.team_id,
+        })
       }
       return true
     } catch (error) {
@@ -35,12 +29,7 @@ class teamServices {
 
   //checkTeamUserStatus
   //TODO: get data from database
-  checkTeamUserStatus(team_id: number) {
-    try {
-        const team_info = await axios.get('')
-    }
-  }
-
+  checkTeamStatus(team_id: number) {}
 
   //get team info by id
   async getTeamInfo(id: string) {
@@ -64,10 +53,9 @@ class teamServices {
   async getAllTeamOfUser() {
     try {
       //get user email
-      const task_info = await axios.get(
-        'http://ict11.ce.kmitl.ac.th:9080/user/task/getTasks',
-        { params: { email: this.services.user.email } }
-      )
+      const task_info = await axios.get('user/task/getTasks', {
+        params: { email: this.services.user.email },
+      })
       return task_info
     } catch (error) {
       console.log(error)
@@ -78,9 +66,7 @@ class teamServices {
   //get all team
   async getAllTeam() {
     try {
-      const team_info = await axios.get(
-        'http://ict11.ce.kmitl.ac.th:9080/user/team/getAllTeams'
-      )
+      const team_info = await axios.get('user/team/getAllTeams')
       if (Array.isArray(team_info.data)) {
         return team_info.data
       }
@@ -101,8 +87,16 @@ class teamServices {
 
   //add member to team
   //TODO: post data to database
-  addMemberToTeam(team_id: number) {
-    return true
+  async addMemberToTeam(team_id: number) {
+    try {
+      const invite_member = await axios.put('user/team/addUser', {
+        params: { team_id: team_id, email: this.services.user.email },
+      })
+      return true
+    } catch (error) {
+      console.log(error)
+      return false
+    }
   }
 
   //edit team  info by id
