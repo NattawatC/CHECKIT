@@ -4,6 +4,7 @@ import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
 import dataservices from '@/services/dataservices'
 import { useState } from 'react'
+import { Input } from '@/components/ui/input'
 
 import {
   Dialog,
@@ -89,9 +90,9 @@ export default function Task() {
               </Button>
             </DialogTrigger>
             //Add Scroll Area
-            <DialogContent className="w-auto mx-auto max-w-md px-4 py-10 md:py-10 flex flex-col gap-5 bg-custom-black h-[700px] overflow-y-auto">
+            <DialogContent className="w-auto mx-auto max-w-md px-4 pt-16 pb-5 md:pb-5 md:pt-12 flex flex-col gap-8 bg-custom-black h-[700px] overflow-y-auto">
               <div className="flex flex-col items-center gap-4">
-                <input
+                <Input
                   className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white "
                   type="text"
                   placeholder="Title"
@@ -104,34 +105,32 @@ export default function Task() {
               <div className="flex flex-col gap-3">
                 <label className="text-custom-white">Date</label>
                 <div className="flex flex-row w-full justify-between">
-                  <input
+                  <Input
                     className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="date"
-                    placeholder="2023-09-20"
-                    defaultValue="2023-09-20"
+                    defaultValue="2023-11-20"
                   />
                   <label className="text-custom-white">_</label>
-                  <input
+                  <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg"
                     type="date"
-                    placeholder="21/09/2023"
-                    defaultValue="21/09/2023"
+                    defaultValue="2023-12-20"
                   />
                 </div>
               </div>
               <div className="flex flex-col gap-3">
                 <label className="text-custom-white">Time</label>
                 <div className="flex flex-row gap-3">
-                  <input
+                  <Input
                     className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="time"
-                    placeholder="12:00"
+                    defaultValue="12:00"
                   />
                   <label className="text-custom-white">_</label>
-                  <input
+                  <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg"
                     type="time"
-                    placeholder="13:00"
+                    defaultValue="13:00"
                   />
                 </div>
               </div>
@@ -294,7 +293,7 @@ export default function Task() {
               <DialogFooter className="flex flex-row gap-8 justify-between">
                 <Button
                   type="submit"
-                  className="bg-custom-gray text-custom-white w-full h-auto"
+                  className="bg-custom-gray text-custom-white w-full h-auto text-base hover:bg-custom-orangeHover"
                 >
                   Add Task
                 </Button>
