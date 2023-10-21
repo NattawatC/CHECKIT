@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Input } from '../ui/input'
 
 const TaskItem: React.FunctionComponent<TaskProps> = ({
   id,
@@ -122,9 +123,9 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
             Edit
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-auto mx-auto max-w-md px-4 py-12 md:py-12 flex flex-col gap-5 bg-custom-black">
+        <DialogContent className="w-auto mx-auto max-w-md px-4 pt-16 pb-5 md:pb-5 md:pt-12 flex flex-col gap-5 bg-custom-black">
           <div className="flex flex-col items-center gap-4">
-            <input
+            <Input
               className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white "
               type="text"
               placeholder="Title"
@@ -139,37 +140,33 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
           <div className="flex flex-col gap-3">
             <label className="text-custom-white">Date</label>
             <div className="flex flex-row w-full justify-between">
-              <input
+              <Input
                 className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg"
                 type="date"
-                placeholder="2023-09-20"
                 defaultValue="2023-09-20"
               />
               {/* <p className='text-custom-white'> {date_start}</p> */}
               <label className="text-custom-white">_</label>
-              <input
+              <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg"
                 type="date"
-                placeholder="21/09/2023"
-                defaultValue={date_end}
+                defaultValue="2023-09-21"
               />
             </div>
           </div>
           <div className="flex flex-col gap-3">
             <label className="text-custom-white">Time</label>
             <div className="flex flex-row gap-3">
-              <input
+              <Input
                 className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg"
                 type="time"
-                placeholder="20/09/2023"
-                defaultValue={time_start}
+                defaultValue="10:00"
               />
               <label className="text-custom-white">_</label>
-              <input
+              <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg"
                 type="time"
-                placeholder="21/09/2023"
-                defaultValue={time_end}
+                defaultValue="13:00"
               />
             </div>
           </div>
@@ -273,13 +270,13 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
           <DialogFooter className="flex flex-row gap-8 justify-between">
             <Button
               type="submit"
-              className="bg-custom-gray text-custom-white w-full"
+              className="bg-custom-gray text-custom-white w-full hover:bg-custom-orangeHover "
             >
               Delete
             </Button>
             <Button
               type="submit"
-              className="bg-custom-purple text-custom-white w-full"
+              className="bg-custom-purple text-custom-white w-full hover:bg-custom-purpleHover "
             >
               Save changes
             </Button>

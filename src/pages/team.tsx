@@ -4,6 +4,7 @@ import TeamItem from '@/components/teamPage/TeamItem'
 import { Button } from '@/components/ui/button'
 import dataservices from '@/services/dataservices'
 import { NextPage } from 'next'
+import { Input } from '@/components/ui/input'
 
 import {
   Dialog,
@@ -72,8 +73,8 @@ const Team: NextPage = () => {
               </DialogHeader>
               <div className="flex flex-col gap-5">
                 <label className="text-custom-white">Team Name</label>
-                <input
-                  className="bg-custom-black p-2 w-full h-auto text-custom-white outline-none border-b"
+                <Input
+                  className="bg-custom-black p-2 w-full h-auto text-custom-white outline-none border-b border-x-0 border-t-0 rounded-none"
                   type="text"
                   placeholder="Placeholder text"
                 />
@@ -81,12 +82,12 @@ const Team: NextPage = () => {
               <div className="flex flex-col gap-4 w-full">
                 <label className="text-custom-white">Email</label>
                 <div className="flex flex-row gap-5">
-                  <input
-                    className="bg-custom-black p-2 w-full h-auto text-custom-white outline-none border-b"
+                  <Input
+                    className="bg-custom-black p-2 w-full h-auto text-custom-white outline-none border-b border-x-0 border-t-0 rounded-none"
                     type="text"
                     placeholder="abc@gmail.com"
                   />
-                  <Button className="rounded-lg text-custom-white border-custom-orange py-1 px-4 bg-custom-orange inline-flex">
+                  <Button className="rounded-lg text-custom-white border-custom-orange py-1 px-4 bg-custom-orange hover:bg-custom-orangeHover inline-flex">
                     Add
                   </Button>
                 </div>
@@ -96,7 +97,7 @@ const Team: NextPage = () => {
                   <MemberItem key={feature.email} email={feature.email} />
                 ))}
               </div>
-              <Button className="rounded-lg text-custom-white w-full bg-custom-gray inline-flex">
+              <Button className="rounded-lg text-custom-white w-full bg-custom-gray inline-flex hover:bg-custom-orangeHover">
                 Finish Construct
               </Button>
             </DialogContent>
