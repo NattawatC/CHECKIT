@@ -1,10 +1,10 @@
 import axios from 'axios'
-import userservices from './userServices'
+import userServices from './userServices'
 
 class taskServices {
   priority = ['High', 'Medium', 'Low']
   category = ['Personal', 'Work', 'Health', 'Others']
-  services = new userservices()
+  services = new userServices()
   task_info1 = {
     //mockup data
     id: '1',

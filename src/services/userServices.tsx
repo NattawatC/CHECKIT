@@ -1,11 +1,11 @@
 import axios from 'axios'
-import taskservices from './taskServices'
+import taskServices from './taskServices'
 class dataServices {
   static getUserInfo() {
     throw new Error('Method not implemented.')
   }
   user = { username: 'Test', email: 'example@gmail.com' }
-  data = new taskservices()
+  data = new taskServices()
   //mock member data
 
   //check email format

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import userservices from './userServices'
+import userServices from './userServices'
 class teamServices {
-  services = new userservices()
+  services = new userServices()
   //create team
   async createTeam(team: { name: string; member: [string] }) {
     try {
