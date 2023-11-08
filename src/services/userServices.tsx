@@ -1,6 +1,8 @@
 import axios from 'axios'
+import converter from './converter'
 import dateTimeServices from './dataTimeServices'
 import taskServices from './taskServices'
+import teamServices from './teamServices'
 class userServices {
   static getUserInfo() {
     throw new Error('Method not implemented.')
@@ -8,6 +10,8 @@ class userServices {
   user = { username: 'Test', email: 'example@gmail.com' }
   data = new taskServices()
   date_time_services = new dateTimeServices()
+  team_data = new teamServices()
+  converter = new converter()
 
   //check email format
   checkMailFormat(email: string) {
@@ -107,22 +111,7 @@ class userServices {
   }
   //create task for both personal and team
   async createUserTask(task: Task) {
-    const info = {
-      title: task.title,
-      description: task.note,
-      start: this.date_time_services.formatDateTimeForDB(
-        task.date_start,
-        task.time_start
-      ),
-      end: this.date_time_services.formatDateTimeForDB(
-        task.date_end,
-        task.time_end
-      ),
-      priority: task.priority,
-      category: task.category,
-      status: true,
-      task_id: 0,
-    }
+    const info = this.converter.convertTaskToDB(task, 0)
     try {
       const task_info = await axios.post(
         'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
@@ -136,15 +125,18 @@ class userServices {
           'http://ict11.ce.kmitl.ac.th:9080/user/getTeam',
           { params: { email: this.user.email } }
         )
-        const team_task_info = await axios.post(
-          'http://ict11.ce.kmitl.ac.th:9080/user/team/addTask',
-          {
-            params: {
-              team_id: team_info.data.team_id,
-              task_id: task_info.data.task_id,
-            },
-          }
-        )
+        // loop task.role array
+        for (let i = 0; i < task.role.length; i++) {
+          const team_task_info = await axios.post(
+            'http://ict11.ce.kmitl.ac.th:9080/user/team/addTask',
+            {
+              params: {
+                team_id: task.role[i],
+                task_id: task_info.data.task_id,
+              },
+            }
+          )
+        }
       }
     } catch (error) {
       console.log(error)
@@ -152,14 +144,17 @@ class userServices {
     }
   }
   //get all task of user
-  getAllTaskOfUser() {
+  async getAllTaskOfUser() {
     try {
       //get user email
-      const task_info = axios.get(
+      const task_info = await axios.get(
         'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser',
         { params: { email: this.user.email } }
       )
-      return task_info
+      for (let i = 0; i < task_info.data.length; i++) {
+        task_info.data[i] = this.converter.convertTaskFromDB(task_info.data[i])
+      }
+      return task_info.data
     } catch (error) {
       console.log(error)
       return false
@@ -195,6 +190,12 @@ class userServices {
   async filterByDate() {
     const task_info = await this.getAllTaskOfUser()
     const result = await this.data.filterByDate(task_info)
+    return result
+  }
+
+  async createTeam(team: { name: string; member: [string] }) {
+    const user_info = this.user.email
+    const result = await this.team_data.createTeam(team, user_info)
     return result
   }
 }

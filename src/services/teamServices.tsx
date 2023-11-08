@@ -3,13 +3,13 @@ import userServices from './userServices'
 class teamServices {
   services = new userServices()
   //create team
-  async createTeam(team: { name: string; member: [string] }) {
+  async createTeam(team: { name: string; member: [string] }, user: string) {
     try {
       //send request to create team
       const create_team = await axios.post('user/team/create', {
         params: {
           name: team.name,
-          owner: this.services.user.email,
+          owner: user,
           team_id: 0,
         },
       })
@@ -27,7 +27,7 @@ class teamServices {
     }
   }
 
-  //checkTeamUserStatus
+  //check peing team of user
   //TODO: get data from database
   checkTeamStatus(team_id: number) {}
 

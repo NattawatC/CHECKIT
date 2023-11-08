@@ -1,9 +1,11 @@
 import axios from 'axios'
+import converter from './converter'
 import dateTimeServices from './dataTimeServices'
 class taskServices {
   priority = ['High', 'Medium', 'Low']
   category = ['Personal', 'Work', 'Health', 'Others']
   date_time_services = new dateTimeServices()
+  converter = new converter()
   task_info1 = {
     //mockup data
     id: '1',
@@ -80,22 +82,7 @@ class taskServices {
 
   //edit task by id
   async editTask(id: number, task: Task) {
-    const info = {
-      title: task.title,
-      description: task.note,
-      start: this.date_time_services.formatDateTimeForDB(
-        task.date_start,
-        task.time_start
-      ),
-      end: this.date_time_services.formatDateTimeForDB(
-        task.date_end,
-        task.time_end
-      ),
-      priority: task.priority,
-      category: task.category,
-      status: true,
-      task_id: id,
-    }
+    const info = this.converter.convertTaskToDB(task, id)
     try {
       const respond = await axios.put(
         'http://ict11.ce.kmitl.ac.th:9080/user/task/edit',
@@ -117,23 +104,7 @@ class taskServices {
       const all_task = await this.getAllTask()
       if (Array.isArray(all_task)) {
         const task_info = all_task.find((task: any) => task.task_id === id)
-        const task = {
-          title: task_info.title,
-          note: task_info.description,
-          date_start: this.date_time_services.formatDateTimeFromDB(
-            task_info.start
-          ).date,
-          date_end: this.date_time_services.formatDateTimeFromDB(task_info.end)
-            .date,
-          time_start: this.date_time_services.formatDateTimeFromDB(
-            task_info.start
-          ).time,
-          time_end: this.date_time_services.formatDateTimeFromDB(task_info.end)
-            .time,
-          priority: task_info.priority,
-          category: task_info.category,
-          status: task_info.status,
-        }
+        const task = this.converter.convertTaskFromDB(task_info)
         return task
       }
     } catch (error) {
