@@ -1,40 +1,31 @@
-import dateTimeServices from './dataTimeServices'
-class converter {
-  date_time_services = new dateTimeServices()
-  convertTaskFromDB(task: any) {
-    const result = {
-      title: task.title,
-      note: task.description,
-      date_start: this.date_time_services.formatDateTimeFromDB(task.start).date,
-      date_end: this.date_time_services.formatDateTimeFromDB(task.end).date,
-      time_start: this.date_time_services.formatDateTimeFromDB(task.start).time,
-      time_end: this.date_time_services.formatDateTimeFromDB(task.end).time,
-      priority: task.priority,
-      category: task.category,
-      status: task.status,
-      task_id: task.task_id,
-    }
-    return result
+import { formatDateTimeForDB, formatDateTimeFromDB } from './dataTimeServices'
+function convertTaskFromDB(task: any) {
+  const result = {
+    title: task.title,
+    note: task.description,
+    date_start: formatDateTimeFromDB(task.start).date,
+    date_end: formatDateTimeFromDB(task.end).date,
+    time_start: formatDateTimeFromDB(task.start).time,
+    time_end: formatDateTimeFromDB(task.end).time,
+    priority: task.priority,
+    category: task.category,
+    status: task.status,
+    task_id: task.task_id,
   }
-
-  convertTaskToDB(task: any, id: number) {
-    const result = {
-      title: task.title,
-      description: task.note,
-      start: this.date_time_services.formatDateTimeForDB(
-        task.date_start,
-        task.time_start
-      ),
-      end: this.date_time_services.formatDateTimeForDB(
-        task.date_end,
-        task.time_end
-      ),
-      priority: task.priority,
-      category: task.category,
-      status: true,
-      task_id: id,
-    }
-    return result
-  }
+  return result
 }
-export default converter
+
+function convertTaskToDB(task: any, id: number) {
+  const result = {
+    title: task.title,
+    description: task.note,
+    start: formatDateTimeForDB(task.date_start, task.time_start),
+    end: formatDateTimeForDB(task.date_end, task.time_end),
+    priority: task.priority,
+    category: task.category,
+    status: true,
+    task_id: id,
+  }
+  return result
+}
+export { convertTaskFromDB, convertTaskToDB }
