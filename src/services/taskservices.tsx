@@ -103,39 +103,50 @@ class taskServices {
     return formattedDateTime
   }
 
-  //pading number
-  padTo2Digits(number: number) {
-    return number.toString().padStart(2, '0')
-  }
-
   //format date for display
   formatDateForDisplay(date: Date) {
+    const padTo2Digits = (number: number) => {
+      return number.toString().padStart(2, '0')
+    }
     //date format
     return [
       date.getFullYear(),
-      this.padTo2Digits(date.getMonth() + 1),
-      this.padTo2Digits(date.getDate()),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
     ].join('-')
   }
 
   //format date from DB
-  formatDateFromDB(d: string) {
+  // formatDateFromDB(d: string) {
+  //   const date = new Date(d)
+  //   const year = date.getFullYear()
+  //   const month = String(date.getMonth() + 1).padStart(2, '0')
+  //   const day = String(date.getDate()).padStart(2, '0')
+  //   return `${year}-${month}-${day}`
+  // }
+
+  //format time from DB
+  // formatTimeFromDB(d: string) {
+  //   const date = new Date(d)
+  //   const hour = String(date.getHours()).padStart(2, '0')
+  //   const minute = String(date.getMinutes()).padStart(2, '0')
+  //   return `${hour}:${minute}`
+  // }
+
+  formatDateTimeFromDB(d: string) {
     const date = new Date(d)
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const day = String(date.getDate()).padStart(2, '0')
-    return `${year}-${month}-${day}`
-  }
-
-  //format time from DB
-  formatTimeFromDB(d: string) {
-    const date = new Date(d)
     const hour = String(date.getHours()).padStart(2, '0')
     const minute = String(date.getMinutes()).padStart(2, '0')
-    return `${hour}:${minute}`
+    return {
+      time: `${hour}:${minute}`,
+      date: `${year}-${month}-${day}`,
+    }
   }
 
-  //create task
+  //create task for both personal and team
   async createUserTask(task: {
     title: string
     note: string
@@ -187,19 +198,7 @@ class taskServices {
   }
 
   //edit task by id
-  async editTask(
-    id: number,
-    task: {
-      title: string
-      note: string
-      date_start: string
-      date_end: string
-      time_start: any
-      time_end: any
-      priority: string
-      category: string
-    }
-  ) {
+  async editTask(id: number, task: Task) {
     const info = {
       title: task.title,
       description: task.note,
@@ -234,10 +233,10 @@ class taskServices {
         const task = {
           title: task_info.title,
           note: task_info.description,
-          date_start: this.formatDateFromDB(task_info.start),
-          date_end: this.formatDateFromDB(task_info.end),
-          time_start: this.formatTimeFromDB(task_info.start),
-          time_end: this.formatTimeFromDB(task_info.end),
+          date_start: this.formatDateTimeFromDB(task_info.start).date,
+          date_end: this.formatDateTimeFromDB(task_info.end).date,
+          time_start: this.formatDateTimeFromDB(task_info.start).time,
+          time_end: this.formatDateTimeFromDB(task_info.end).time,
           priority: task_info.priority,
           category: task_info.category,
           status: task_info.status,
@@ -315,7 +314,7 @@ class taskServices {
     const task_info = await this.getAllTaskOfUser()
     if (Array.isArray(task_info)) {
       const filteredTasks = task_info.filter((task) => {
-        const taskDate = this.formatDateFromDB(task.end)
+        const taskDate = this.formatDateTimeFromDB(task.end).date
         //filter from today to future
         return taskDate >= date
       })

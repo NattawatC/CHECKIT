@@ -50,6 +50,7 @@ class teamServices {
   }
 
   //get all team of user
+  //TODO: wrong endpoint
   async getAllTeamOfUser() {
     try {
       //get user email
@@ -76,6 +77,7 @@ class teamServices {
     }
   }
 
+  //TODO: getTeamUser instead
   //get team member by id
   getTeamMember(id: string) {
     const team_info = this.getAllTeam()
