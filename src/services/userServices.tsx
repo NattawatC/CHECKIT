@@ -167,79 +167,35 @@ class userServices {
   }
   //getAllTask of User by priority
   async getAllTaskByPriority(priority: string) {
-    const response = await this.getAllTaskOfUser()
-    if (Array.isArray(response)) {
-      const filteredTasks = response.filter(
-        (task) => task.priority === priority
-      )
-      return filteredTasks
-    } else {
-      return []
-    }
+    const task_info = await this.getAllTaskOfUser()
+    const result = await this.data.getAllTaskByPriority(priority, task_info)
+    return result
   }
   //filter by priority hight-> medium -> low
   async filterByPriority() {
     const task_info = await this.getAllTaskOfUser()
-    const result = []
-    if (Array.isArray(task_info)) {
-      const filteredTasksHigh = task_info.filter((task) => {
-        return task.priority === 'high'
-      })
-      const filteredTasksMedium = task_info.filter((task) => {
-        return task.priority === 'medium'
-      })
-      const filteredTasksLow = task_info.filter((task) => {
-        return task.priority === 'low'
-      })
-      result.push(
-        ...filteredTasksHigh,
-        ...filteredTasksMedium,
-        ...filteredTasksLow
-      )
-    }
+    const result = await this.data.filterByPriority(task_info)
     return result
   }
 
   //filter by category
   async filterByCategory(category: string) {
-    const response = await this.getAllTaskOfUser()
-    if (Array.isArray(response)) {
-      const filteredTasks = response.filter(
-        (task) => task.category === category
-      )
-      return filteredTasks
-    } else {
-      return []
-    }
+    const task_info = await this.getAllTaskOfUser()
+    const result = await this.data.filterByCategory(category, task_info)
+    return result
   }
 
   //searchParam task by title
   async searchTask(searchParam: string) {
     const task_info = await this.getAllTaskOfUser()
-    if (Array.isArray(task_info)) {
-      const filteredTasks = task_info.filter((task) => {
-        const taskTitle = task.title
-        return taskTitle.toLowerCase().startsWith(searchParam.toLowerCase())
-      })
-      return filteredTasks
-    } else {
-      return []
-    }
+    const result = await this.data.searchTask(searchParam, task_info)
+    return result
   }
   //filter by date
   async filterByDate() {
-    const date = this.date_time_services.formatDateForDisplay(new Date())
     const task_info = await this.getAllTaskOfUser()
-    if (Array.isArray(task_info)) {
-      const filteredTasks = task_info.filter((task) => {
-        const taskDate = this.date_time_services.formatDateTimeFromDB(
-          task.end
-        ).date
-        //filter from today to future
-        return taskDate >= date
-      })
-      return filteredTasks
-    }
+    const result = await this.data.filterByDate(task_info)
+    return result
   }
 }
 export default userServices

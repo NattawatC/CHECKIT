@@ -172,5 +172,81 @@ class taskServices {
       return false
     }
   }
+  //getAllTask of User by priority
+  async getAllTaskByPriority(priority: string, task: any) {
+    const response = task
+    if (Array.isArray(response)) {
+      const filteredTasks = response.filter(
+        (task) => task.priority === priority
+      )
+      return filteredTasks
+    } else {
+      return []
+    }
+  }
+  //filter by priority hight-> medium -> low
+  async filterByPriority(task: any) {
+    const task_info = task
+    const result = []
+    if (Array.isArray(task_info)) {
+      const filteredTasksHigh = task_info.filter((task) => {
+        return task.priority === 'high'
+      })
+      const filteredTasksMedium = task_info.filter((task) => {
+        return task.priority === 'medium'
+      })
+      const filteredTasksLow = task_info.filter((task) => {
+        return task.priority === 'low'
+      })
+      result.push(
+        ...filteredTasksHigh,
+        ...filteredTasksMedium,
+        ...filteredTasksLow
+      )
+    }
+    return result
+  }
+
+  //filter by category
+  async filterByCategory(category: string, task: any) {
+    const response = task
+    if (Array.isArray(response)) {
+      const filteredTasks = response.filter(
+        (task) => task.category === category
+      )
+      return filteredTasks
+    } else {
+      return []
+    }
+  }
+
+  //searchParam task by title
+  async searchTask(searchParam: string, task: any) {
+    const task_info = task
+    if (Array.isArray(task_info)) {
+      const filteredTasks = task_info.filter((task) => {
+        const taskTitle = task.title
+        return taskTitle.toLowerCase().startsWith(searchParam.toLowerCase())
+      })
+      return filteredTasks
+    } else {
+      return []
+    }
+  }
+  //filter by date
+  async filterByDate(task: any) {
+    const date = this.date_time_services.formatDateForDisplay(new Date())
+    const task_info = task
+    if (Array.isArray(task_info)) {
+      const filteredTasks = task_info.filter((task) => {
+        const taskDate = this.date_time_services.formatDateTimeFromDB(
+          task.end
+        ).date
+        //filter from today to future
+        return taskDate >= date
+      })
+      return filteredTasks
+    }
+  }
 }
 export default taskServices
