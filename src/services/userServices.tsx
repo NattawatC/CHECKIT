@@ -1,12 +1,13 @@
 import axios from 'axios'
+import dateTimeServices from './dataTimeServices'
 import taskServices from './taskServices'
-class dataServices {
+class userServices {
   static getUserInfo() {
     throw new Error('Method not implemented.')
   }
   user = { username: 'Test', email: 'example@gmail.com' }
   data = new taskServices()
-  //mock member data
+  date_time_services = new dateTimeServices()
 
   //check email format
   checkMailFormat(email: string) {
@@ -81,11 +82,11 @@ class dataServices {
         email: this.user.email,
         date: current_date,
         time: 'this.time',
-        upcoming_task: await this.data.getAllTaskByPriority('High'),
-        personal_task: await this.data.filterByCategory('Personal'),
-        work_task: await this.data.filterByCategory('Work'),
-        health_task: await this.data.filterByCategory('Health'),
-        others_task: await this.data.filterByCategory('Others'),
+        upcoming_task: await this.getAllTaskByPriority('High'),
+        personal_task: await this.filterByCategory('Personal'),
+        work_task: await this.filterByCategory('Work'),
+        health_task: await this.filterByCategory('Health'),
+        others_task: await this.filterByCategory('Others'),
       }
       return result
     } catch (error) {
@@ -104,5 +105,141 @@ class dataServices {
       return result
     }
   }
+  //create task for both personal and team
+  async createUserTask(task: Task) {
+    const info = {
+      title: task.title,
+      description: task.note,
+      start: this.date_time_services.formatDateTimeForDB(
+        task.date_start,
+        task.time_start
+      ),
+      end: this.date_time_services.formatDateTimeForDB(
+        task.date_end,
+        task.time_end
+      ),
+      priority: task.priority,
+      category: task.category,
+      status: true,
+      task_id: 0,
+    }
+    try {
+      const task_info = await axios.post(
+        'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
+        info,
+        {
+          params: { email: this.user.email },
+        }
+      )
+      if (task.role[0] !== 'Personal') {
+        const team_info = await axios.get(
+          'http://ict11.ce.kmitl.ac.th:9080/user/getTeam',
+          { params: { email: this.user.email } }
+        )
+        const team_task_info = await axios.post(
+          'http://ict11.ce.kmitl.ac.th:9080/user/team/addTask',
+          {
+            params: {
+              team_id: team_info.data.team_id,
+              task_id: task_info.data.task_id,
+            },
+          }
+        )
+      }
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  }
+  //get all task of user
+  getAllTaskOfUser() {
+    try {
+      //get user email
+      const task_info = axios.get(
+        'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser',
+        { params: { email: this.user.email } }
+      )
+      return task_info
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  }
+  //getAllTask of User by priority
+  async getAllTaskByPriority(priority: string) {
+    const response = await this.getAllTaskOfUser()
+    if (Array.isArray(response)) {
+      const filteredTasks = response.filter(
+        (task) => task.priority === priority
+      )
+      return filteredTasks
+    } else {
+      return []
+    }
+  }
+  //filter by priority hight-> medium -> low
+  async filterByPriority() {
+    const task_info = await this.getAllTaskOfUser()
+    const result = []
+    if (Array.isArray(task_info)) {
+      const filteredTasksHigh = task_info.filter((task) => {
+        return task.priority === 'high'
+      })
+      const filteredTasksMedium = task_info.filter((task) => {
+        return task.priority === 'medium'
+      })
+      const filteredTasksLow = task_info.filter((task) => {
+        return task.priority === 'low'
+      })
+      result.push(
+        ...filteredTasksHigh,
+        ...filteredTasksMedium,
+        ...filteredTasksLow
+      )
+    }
+    return result
+  }
+
+  //filter by category
+  async filterByCategory(category: string) {
+    const response = await this.getAllTaskOfUser()
+    if (Array.isArray(response)) {
+      const filteredTasks = response.filter(
+        (task) => task.category === category
+      )
+      return filteredTasks
+    } else {
+      return []
+    }
+  }
+
+  //searchParam task by title
+  async searchTask(searchParam: string) {
+    const task_info = await this.getAllTaskOfUser()
+    if (Array.isArray(task_info)) {
+      const filteredTasks = task_info.filter((task) => {
+        const taskTitle = task.title
+        return taskTitle.toLowerCase().startsWith(searchParam.toLowerCase())
+      })
+      return filteredTasks
+    } else {
+      return []
+    }
+  }
+  //filter by date
+  async filterByDate() {
+    const date = this.date_time_services.formatDateForDisplay(new Date())
+    const task_info = await this.getAllTaskOfUser()
+    if (Array.isArray(task_info)) {
+      const filteredTasks = task_info.filter((task) => {
+        const taskDate = this.date_time_services.formatDateTimeFromDB(
+          task.end
+        ).date
+        //filter from today to future
+        return taskDate >= date
+      })
+      return filteredTasks
+    }
+  }
 }
-export default dataServices
+export default userServices
