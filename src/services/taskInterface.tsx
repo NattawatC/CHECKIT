@@ -6,5 +6,6 @@ interface Task {
   time_start: ''
   time_end: ''
   priority: ''
+  role: ''
   category: ''
 }

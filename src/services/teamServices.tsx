@@ -80,7 +80,7 @@ class teamServices {
   //TODO: getTeamUser instead
   //get team member by id
   getTeamMember(id: string) {
-    const team_info = this.getAllTeam()
+    const team_info = this.getAllTeamOfUser()
     if (Array.isArray(team_info)) {
       const result = team_info.find((team_data) => team_data.id === id)
       return result?.members
