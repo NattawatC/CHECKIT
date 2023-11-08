@@ -150,7 +150,7 @@ class taskServices {
       const filteredTasks = response.filter(
         (task) => task.priority === priority
       )
-      return filteredTasks
+      return this.converter.convertTaskFromDB(filteredTasks)
     } else {
       return []
     }
@@ -163,12 +163,15 @@ class taskServices {
       const filteredTasksHigh = task_info.filter((task) => {
         return task.priority === 'high'
       })
+      this.converter.convertTaskFromDB(filteredTasksHigh)
       const filteredTasksMedium = task_info.filter((task) => {
         return task.priority === 'medium'
       })
+      this.converter.convertTaskFromDB(filteredTasksMedium)
       const filteredTasksLow = task_info.filter((task) => {
         return task.priority === 'low'
       })
+      this.converter.convertTaskFromDB(filteredTasksLow)
       result.push(
         ...filteredTasksHigh,
         ...filteredTasksMedium,
