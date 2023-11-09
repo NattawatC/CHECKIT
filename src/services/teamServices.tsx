@@ -29,9 +29,18 @@ async function createUserTeam(
   }
 }
 
-//check peing team of user
-//TODO: get data from database
-function checkTeamStatus(team_id: number) {}
+//check pending team of user
+async function checkTeamStatus(team_id: number) {
+  try {
+    const team_info = await axios.get('user/getPendingTeam', {
+      params: { email: getUserEmail() },
+    })
+    //TODO: return team in format for front-end
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
 
 //get team info by id
 async function getTeamInfo(id: string) {
@@ -52,11 +61,10 @@ async function getTeamInfo(id: string) {
 }
 
 //get all team of user
-//TODO: wrong endpoint
 async function getAllTeamOfUser() {
   try {
     //get user email
-    const task_info = await axios.get('user/task/getTasks', {
+    const task_info = await axios.get('user/getTeam', {
       params: { email: getUserEmail() },
     })
     return task_info
@@ -89,7 +97,6 @@ async function getTeamMember(id: string) {
 }
 
 //add member to team
-//TODO: post data to database
 async function addMemberToTeam(team_id: number) {
   try {
     const invite_member = await axios.put('user/team/addUser', {
@@ -112,8 +119,19 @@ function editTeamInfo(
 }
 
 //delete team by id
-//TODO: delete team request to database
-function deleteTeam(id: string) {
+async function deleteTeam(id: string) {
+  try {
+    const respond = await axios.delete('user/team/delete', {
+      params: { team_id: id },
+    })
+    if (respond.status === 204) {
+      return true
+    }
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+
   return true
 }
 export {

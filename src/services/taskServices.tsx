@@ -1,8 +1,6 @@
 import axios from 'axios'
 import { convertTaskFromDB, convertTaskToDB } from './converter'
 import { formatDateForDisplay, formatDateTimeFromDB } from './dataTimeServices'
-const priority = ['High', 'Medium', 'Low']
-const category = ['Personal', 'Work', 'Health', 'Others']
 //edit task by id
 async function editTask(id: number, task: Task) {
   const info = convertTaskToDB(task, id)
