@@ -28,4 +28,13 @@ function convertTaskToDB(task: any, id: number) {
   }
   return result
 }
-export { convertTaskFromDB, convertTaskToDB }
+function convertTeamToDB(team: any) {
+  const result = {
+    team_id: team.team_id,
+    name: team.name,
+    owner: team.owner,
+  }
+  return result
+}
+
+export { convertTaskFromDB, convertTaskToDB, convertTeamToDB }
