@@ -20,7 +20,7 @@ async function editTask(id: number, task: Task) {
 }
 
 //get task info by id
-async function getTaskInfo(id: string) {
+async function getTaskInfo(id: number) {
   try {
     const all_task = await getAllTask()
     if (Array.isArray(all_task)) {
@@ -50,15 +50,13 @@ async function getAllTask() {
 }
 
 //delete task by id
-async function deleteTask(id: string) {
+async function deleteTask(id: number) {
   try {
     const respond = await axios.delete(
       'http://ict11.ce.kmitl.ac.th:9080/user/task/delete',
       { params: { task_id: id } }
     )
-    if (respond.status === 202) {
-      return true
-    }
+    return true
   } catch (error) {
     console.log(error)
     return false

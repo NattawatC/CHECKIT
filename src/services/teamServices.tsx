@@ -43,7 +43,7 @@ async function checkTeamStatus(team_id: number) {
 }
 
 //get team info by id
-async function getTeamInfo(id: string) {
+async function getTeamInfo(id: number) {
   try {
     //get all team from database
     const team_info = await getAllTeam()
@@ -88,7 +88,7 @@ async function getAllTeam() {
 }
 
 //get team member by id
-async function getTeamMember(id: string) {
+async function getTeamMember(id: number) {
   const team_info = getAllTeamOfUser()
   if (Array.isArray(team_info)) {
     const result = team_info.find((team_data) => team_data.id === id)
@@ -119,7 +119,7 @@ function editTeamInfo(
 }
 
 //delete team by id
-async function deleteTeam(id: string) {
+async function deleteTeam(id: number) {
   try {
     const respond = await axios.delete('user/team/delete', {
       params: { team_id: id },
@@ -140,4 +140,5 @@ export {
   getAllTeam,
   getTeamMember,
   addMemberToTeam,
+  getAllTeamOfUser,
 }
