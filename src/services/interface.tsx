@@ -15,5 +15,6 @@ interface Task {
 interface Team {
   team_id: number
   name: string
+  owner: string
   member: string[]
 }
