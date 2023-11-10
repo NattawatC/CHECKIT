@@ -1,5 +1,5 @@
 interface Task {
-  id: string
+  task_id: number
   title: string
   note: string
   date_start: string
@@ -10,4 +10,10 @@ interface Task {
   role: string[]
   category: string
   status: boolean
+}
+
+interface Team {
+  team_id: number
+  name: string
+  member: string[]
 }
