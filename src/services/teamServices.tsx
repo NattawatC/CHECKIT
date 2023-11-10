@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { convertTeamToDB } from './converter'
 import { getUserEmail } from './userServices'
 
 //create team
@@ -64,14 +65,18 @@ async function getTeamInfo(id: number) {
 async function getAllTeamOfUser() {
   try {
     //get user email
-    const task_info = await axios.get('user/getTeam', {
+    const team_info = await axios.get('user/getTeam', {
       params: { email: getUserEmail() },
     })
-    const member_info = await axios.get('user/team/getTeamUsers', {
-      params: { team_id: task_info.data.team_id },
-    })
-    task_info.data.members = member_info.data
-    return task_info.data
+    // get member of each team
+    for (let i = 0; i < team_info.data.length; i++) {
+      const member_info = await axios.get('user/team/getTeamUsers', {
+        params: { team_id: team_info.data[i].team_id },
+      })
+      // add attribute member to team_info
+      team_info.data[i].members = member_info.data
+    }
+    return team_info.data
   } catch (error) {
     console.log(error)
     return false
@@ -114,12 +119,17 @@ async function addMemberToTeam(team_id: number) {
 }
 
 //edit team  info by id
-//TODO: post data to database
-function editTeamInfo(
-  id: string,
-  team: { name: string; member: [{ name: string; status: string }] }
-) {
-  return true
+async function editTeamInfo(id: string, team: Team) {
+  try {
+    const team_info = convertTeamToDB(team)
+    const respond = await axios.put('user/team/editName', team_info, {
+      params: { team_id: id },
+    })
+    return true
+  } catch (error) {
+    console.log(error)
+    return false
+  }
 }
 
 //delete team by id
@@ -145,4 +155,6 @@ export {
   getTeamMember,
   addMemberToTeam,
   getAllTeamOfUser,
+  editTeamInfo,
+  deleteTeam,
 }
