@@ -67,7 +67,11 @@ async function getAllTeamOfUser() {
     const task_info = await axios.get('user/getTeam', {
       params: { email: getUserEmail() },
     })
-    return task_info
+    const member_info = await axios.get('user/team/getTeamUsers', {
+      params: { team_id: task_info.data.team_id },
+    })
+    task_info.data.members = member_info.data
+    return task_info.data
   } catch (error) {
     console.log(error)
     return false
