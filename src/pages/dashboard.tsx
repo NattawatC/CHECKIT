@@ -3,14 +3,12 @@ import CategoryItem from '@/components/CategoryItem'
 import { UpcomingTask } from '@/components/UpcomingTask'
 import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
-import dataservices from '@/services/dataservices'
 import { NextPage } from 'next'
 import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
-
+import {getUserInfo} from '@/services/userServices'
 // Fetch user information and task data
-const data = new dataservices()
-const taskNum = await data.getUserInfo()
+const taskNum = await getUserInfo()
 
 // Define categories with taskNum properties
 const categories = [
