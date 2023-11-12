@@ -31,7 +31,7 @@ const features = [
 export default function Home() {
   return (
     <>
-      <div className="px-4 py-2 float-right">
+      <div className="px-4 py-2 float-right lg:hidden">
         <Hamburger className="text-custom-white" />
       </div>
       <MainLayout className="bg-custom-black">
