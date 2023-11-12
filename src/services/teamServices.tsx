@@ -64,17 +64,19 @@ async function getTeamInfo(id: number) {
 //get all team of user
 async function getAllTeamOfUser() {
   try {
+    const user_email = getUserEmail()
     //get user email
-    const team_info = await axios.get('user/getTeam', {
-      params: { email: getUserEmail() },
+    const team_info = await axios.get('http://ict11.ce.kmitl.ac.th:9080/user/getTeam', {
+      params: { email: user_email },
     })
     // get member of each team
     for (let i = 0; i < team_info.data.length; i++) {
-      const member_info = await axios.get('user/team/getTeamUsers', {
+      const member_info = await axios.get('http://ict11.ce.kmitl.ac.th:9080/user/team/getTeamUsers', {
         params: { team_id: team_info.data[i].team_id },
       })
       // add attribute member to team_info
       team_info.data[i].members = member_info.data
+      console.log(team_info.data)
     }
     return team_info.data
   } catch (error) {
