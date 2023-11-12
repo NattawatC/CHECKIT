@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
-import dataservices from '@/services/dataservices'
-
-const data = new dataservices()
+import {deleteTask, editTask, getTaskInfo} from '@/services/taskServices'
 
 interface TaskProps {
   priority: string // Create Priority function
-  id: string
+  task_id: number
   title: string
+  category: string
   date_start: string
   date_end: string
   time_start: string
+  role: string[]
   time_end: string
+  status: boolean
   note: string
 }
-
 import {
   Dialog,
   DialogContent,
@@ -26,42 +26,48 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '../ui/input'
+import Personal from '@/pages/personal'
 
 const TaskItem: React.FunctionComponent<TaskProps> = ({
-  id,
+  task_id,
   priority,
   title,
+  category,
   date_start,
   date_end,
   time_start,
+  status = false,
   time_end,
   note,
+  role = [],
 }) => {
   const [isChecked, setIsChecked] = useState(false)
   const priorityContent = getPriorityContent(priority)
 
-  const [selectedPriority, setSelectedPriority] = useState<string>('None')
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [selectedPriority, setSelectedPriority] = useState<string>(priority)
+  const [selectedCategories, setSelectedCategories] = useState<string>(category)
+
+  const send = {
+    task_id: task_id,
+    title: title,
+    priority: selectedPriority,
+    category: selectedCategories,
+    date_start: date_start,
+    date_end: date_end,
+    time_start: time_start,
+    time_end: time_end,
+    status: status,
+    note: note,
+    role: role,
+  }
 
   const handlePriorityClick = (priority: string) => {
     setSelectedPriority(priority)
   }
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategories((prevCategories) => {
-      if (prevCategories.includes(category)) {
-        return prevCategories.filter((c) => c !== category)
-      } else {
-        return [...prevCategories, category]
-      }
-    })
+  const handleCategoryClick = (categories: string) => {
+    setSelectedCategories(categories)
   }
-
-  const isCategorySelected = (category: string) => {
-    return selectedCategories.includes(category)
-  }
-
-  const [dateStart, setDateStart] = useState(date_start);
 
   //Checkbox state
   const toggleCheckbox = () => {
@@ -118,7 +124,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
         <DialogTrigger asChild>
           <Button
             className="px-2 py-1 text-xs h-fit bg-custom-gray text-custom-white"
-            onClick={() => data.getTaskInfo(id)}
+            onClick={() => getTaskInfo(task_id)}
           >
             Edit
           </Button>
@@ -143,14 +149,14 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
               <Input
                 className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg"
                 type="date"
-                defaultValue="2023-09-20"
+                defaultValue={date_start}
               />
               {/* <p className='text-custom-white'> {date_start}</p> */}
               <label className="text-custom-white">_</label>
               <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg"
                 type="date"
-                defaultValue="2023-09-21"
+                defaultValue={date_end}
               />
             </div>
           </div>
@@ -160,13 +166,13 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
               <Input
                 className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg"
                 type="time"
-                defaultValue="10:00"
+                defaultValue={time_start}
               />
               <label className="text-custom-white">_</label>
               <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg"
                 type="time"
-                defaultValue="13:00"
+                defaultValue={time_end}
               />
             </div>
           </div>
@@ -221,49 +227,48 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
             <label className="text-custom-white">Category</label>
             <section className="flex flex-col gap-4">
               <div className="flex flex-row gap-4">
-                <Button
-                  onClick={() => handleCategoryClick('Personal')}
-                  className={
-                    isCategorySelected('Personal')
-                      ? 'bg-custom-orange'
-                      : 'bg-custom-gray'
-                  }
-                >
-                  Personal
-                </Button>
-                <Button
-                  onClick={() => handleCategoryClick('Work')}
-                  className={
-                    isCategorySelected('Work')
-                      ? 'bg-custom-orange'
-                      : 'bg-custom-gray'
-                  }
-                >
-                  Work
-                </Button>
-                <Button
-                  onClick={() => handleCategoryClick('Health')}
-                  className={
-                    isCategorySelected('Health')
-                      ? 'bg-custom-orange'
-                      : 'bg-custom-gray'
-                  }
-                >
-                  Health
-                </Button>
-                s
-              </div>
-              <div className="flex flex-row gap-4">
-                <Button
-                  onClick={() => handleCategoryClick('Others')}
-                  className={`${
-                    isCategorySelected('Others')
-                      ? 'bg-custom-orange'
-                      : 'bg-custom-gray'
-                  }`}
-                >
-                  Others
-                </Button>
+              <Button
+                onClick={() => handleCategoryClick('Personal')}
+                className={`
+                ${
+                  selectedCategories === 'Personal'
+                    ? 'bg-custom-orange hover:bg-none'
+                    : 'bg-custom-gray'
+                } 
+                `}
+              >
+                Personal
+              </Button>
+              <Button
+                onClick={() => handleCategoryClick('Work')}
+                className={
+                  selectedCategories === 'Work'
+                ? 'bg-custom-orange'
+                : 'bg-custom-gray'
+                }
+              >
+                Work
+              </Button>
+              <Button
+                onClick={() => handleCategoryClick('Health')}
+                className={
+                  selectedCategories === 'Health'
+                    ? 'bg-custom-orange'
+                    : 'bg-custom-gray'
+                }
+              >
+                Health
+              </Button>
+              <Button
+                onClick={() => handleCategoryClick('Others')}
+                className={
+                  selectedCategories === 'Others'
+                    ? 'bg-custom-orange'
+                    : 'bg-custom-gray'
+                }
+              >
+                Others
+              </Button>
               </div>
             </section>
           </div>
@@ -271,12 +276,14 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
             <Button
               type="submit"
               className="bg-custom-gray text-custom-white w-full hover:bg-custom-orangeHover "
+              onClick={() => deleteTask(task_id)}
             >
               Delete
             </Button>
             <Button
               type="submit"
               className="bg-custom-purple text-custom-white w-full hover:bg-custom-purpleHover "
+              onClick={() => editTask(task_id,send)}
             >
               Save changes
             </Button>
