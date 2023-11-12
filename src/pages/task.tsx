@@ -2,7 +2,8 @@ import { Footer, NavBar, SearchBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
-import dataservices from '@/services/dataservices'
+import {getAllTaskOfUser} from '@/services/userServices'
+import {getAllTeamOfUser} from '@/services/teamServices'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 
@@ -14,8 +15,8 @@ import {
 } from '@/components/ui/dialog'
 
 //Apply Non's Function
-const data = new dataservices()
-const all_task = data.all_task
+const all_task = await getAllTaskOfUser()
+
 
 export default function Task() {
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
@@ -64,21 +65,24 @@ export default function Task() {
             <SearchBar />
             <div className="flex flex-col justify-center items-center text-custom-white">
               <p className="text-xl">Task</p>
-              <p className="text-base">10 tasks</p>
+              <p className="text-base">{all_task.length}</p>
             </div>
 
             <div className="flex flex-col gap-4 p-4 bg-custom-white rounded-lg">
-              {all_task.map((item, index) => (
+              {all_task.map((item: any, index:any ) => (
                 <TaskItem
                   key={index}
-                  id={item.id}
+                  task_id={item.task_id}
                   priority={item.priority}
+                  category={item.category}
                   title={item.title}
                   date_start={item.date_start}
                   date_end={item.date_end}
                   note={item.note}
                   time_start={item.time_start}
                   time_end={item.time_end}
+                  role={item.role}
+                  status={item.status}
                 />
               ))}
             </div>
