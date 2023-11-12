@@ -2,11 +2,10 @@
 import { Footer, NavBar, SearchBar } from "@/components/common"
 import { MainLayout } from "@/components/layouts"
 import TaskItem from "@/components/taskPage/TaskItem"
-import dataservices from "@/services/dataservices"
+import {filterByCategory} from "@/services/userServices"
 import { NextPage } from "next"
 
-const data = new dataservices()
-const personal_task = data.getAllTaskByCategory('Personal')
+const personal_task = await filterByCategory('Personal')
 
 
 const Personal: NextPage = () => {
@@ -27,16 +26,20 @@ const Personal: NextPage = () => {
                     
                     <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
 
-                        {personal_task.map((item,index) => (
+                        {personal_task.map((item: any,index: any) => (
                             <TaskItem
                             key={index}
+                            task_id={item.task_id}
                             priority={item.priority}
+                            category={item.category}
                             title={item.title}
                             date_start={item.date_start}
                             date_end={item.date_end}
                             note={item.note}
                             time_start={item.time_start}
                             time_end={item.time_end}
+                            role={item.role}
+                            status={item.status}
                             />
                             ))}
                     </div>
