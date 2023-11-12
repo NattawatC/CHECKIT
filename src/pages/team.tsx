@@ -2,7 +2,7 @@ import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import TeamItem from '@/components/teamPage/TeamItem'
 import { Button } from '@/components/ui/button'
-import dataservices from '@/services/dataservices'
+import {getAllTeamOfUser} from '@/services/teamServices'
 import { NextPage } from 'next'
 import { Input } from '@/components/ui/input'
 
@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import MemberItem from '@/components/teamPage/MemberItem'
+import { getUserInfo } from '@/services/userServices'
 
 //hard code the email example (MemberItem)
 const features = [
@@ -33,8 +34,8 @@ const features = [
   },
 ]
 
-const data = new dataservices()
-const team_info = data.getAllTeamOfUser()
+const data = await getUserInfo() 
+const team_info = await getAllTeamOfUser()
 
 const Team: NextPage = () => {
   return (
@@ -43,12 +44,12 @@ const Team: NextPage = () => {
         <div className="flex flex-col gap-8">
           <NavBar />
           <div className="flex flex-col gap-1 text-custom-white font-medium">
-            <p className="text-xs">{data.getUserInfo().date}</p>
+            <p className="text-xs">{data.date}</p>
             <p className="text-xl">See all your Team</p>
           </div>
 
           <div className="flex flex-col gap-4">
-            {team_info.map((item) => (
+            {team_info.map((item:any) => (
               <TeamItem
                 key={item.id}
                 teamName={item.name}
