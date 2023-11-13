@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-const axiosInstance = axios.create({
+const instance = axios.create({
   baseURL: 'http://ict11.ce.kmitl.ac.th:9080/',
+  timeout: 1000,
 })
-
-export default axiosInstance
