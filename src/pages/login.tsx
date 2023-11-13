@@ -1,4 +1,5 @@
 'use client'
+import LoginPage from '@/assets/loginPage.jpg'
 import { Footer, Hamburger } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
@@ -15,6 +16,7 @@ import dataservices from '@/services/dataservices'
 import { loginFormSchema } from '@/types/user/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import router from 'next/router'
 import { useForm } from 'react-hook-form'
@@ -46,50 +48,58 @@ export function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-        <div className="flex flex-col gap-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="">
-                <FormLabel className="text-[18px]">Email</FormLabel>
-                <FormControl className="text-[18px]">
-                  <Input placeholder="John@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-[18px]">Password</FormLabel>
-                <FormControl className="text-[18px]">
-                  <Input placeholder="********" type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <div className="flex flex-col gap-14 lg:gap-8">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-8 lg:gap-8">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel className="text-lg">Email</FormLabel>
+                    <FormControl className="text-lg">
+                      <Input placeholder="John@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg">Password</FormLabel>
+                    <FormControl className="text-lg">
+                      <Input
+                        placeholder="********"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-        <p className="text-right text-sm text-gray-600 mt-2">
-          <Link
-            className="hover:underline hover:text-custom-orangeHover"
-            href=""
+            <p className="text-right text-sm text-gray-600">
+              <Link
+                className="hover:underline hover:text-custom-orangeHover"
+                href=""
+              >
+                Forgot password?{' '}
+              </Link>
+            </p>
+          </div>
+
+          <Button
+            className="py-3 px-4 w-full text-lg inline-flex"
+            type="submit"
           >
-            Forgot password?{' '}
-          </Link>
-        </p>
-
-        <Button
-          className="py-3 px-4 w-full mt-6 text-[18px] inline-flex"
-          type="submit"
-        >
-          Login
-        </Button>
+            Login
+          </Button>
+        </div>
       </form>
     </Form>
   )
@@ -98,36 +108,43 @@ export function LoginForm() {
 const Login: NextPage = () => {
   return (
     <>
-      <div className='px-4 py-2 float-right'>
+      <div className="absolute px-4 py-2 top-0 right-0 lg:left-0">
         <Hamburger className="text-custom-black" />
       </div>
-      <MainLayout className="flex flex-col gap-16">
-        <div className="flex flex-col items-center justify-center">
-          <p className="font-semibold text-[32px]">Welcome Back!</p>
-          <p className="font-normal text-base">Please enter your details</p>
-        </div>
-        <LoginForm />
-        <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
-          {' '}
-          or{' '}
-        </div>
+      <div className="lg:flex lg:flex-row">
+        <MainLayout className="flex flex-col gap-14 lg:gap-8">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <p className="font-semibold text-3xl lg:text-4xl">Welcome Back!</p>
+            <p className="font-normal text-base">Please enter your details</p>
+          </div>
+          <LoginForm />
+          <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
+            {' '}
+            or{' '}
+          </div>
 
-        <p className="text-center text-sm text-gray-600">
-          Don&apos;t have an account?{' '}
-          <Link
-            href={'/register'}
-            className="hover:underline text-custom-orange"
-          >
-            Sign up
-          </Link>
-        </p>
-      </MainLayout>
-      {/* <Image
-        src={loginPic}
-        sizes="(max-width: 100%), (max-width: 100%)"
-        alt="Login Footer Pic"
-      /> */}
-      <Footer className="text-custom-black" />
+          <p className="text-center text-sm text-gray-600">
+            Don&apos;t have an account?{' '}
+            <Link
+              href={'/register'}
+              className="hover:underline text-custom-orange"
+            >
+              Sign up
+            </Link>
+          </p>
+          <div className='hidden lg:block'>
+          <Footer className="text-custom-black" />
+          </div>
+        </MainLayout>
+        <Image
+          src={LoginPage}
+          width={500}
+          height={500}
+          alt="Login Footer Pic"
+          className='hidden lg:block'
+        />
+      </div>
+      <Footer className="text-custom-black" isHidden />
     </>
   )
 }
