@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import dataservices from '@/services/dataservices'
 import { loginFormSchema } from '@/types/user/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
@@ -21,8 +20,6 @@ import Link from 'next/link'
 import router from 'next/router'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-
-const data = new dataservices()
 
 export function LoginForm() {
   // 1. Define your form.
@@ -38,11 +35,11 @@ export function LoginForm() {
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.a
-    let isValid = data.checkLogin(values)
-    if (isValid) {
+    // let isValid = data.checkLogin(values)
+    // if (isValid) {
       // Redirect to /index
-      router.push('/register')
-    }
+      // router.push('/register')
+    // }
   }
 
   return (
@@ -50,7 +47,7 @@ export function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <div className="flex flex-col gap-14 lg:gap-8">
           <div className="flex flex-col gap-2">
-            <div className="flex flex-col gap-8 lg:gap-8">
+            <div className="flex flex-col gap-8">
               <FormField
                 control={form.control}
                 name="email"
@@ -94,7 +91,7 @@ export function LoginForm() {
           </div>
 
           <Button
-            className="py-3 px-4 w-full text-lg inline-flex"
+            className="py-3 px-4 w-full text-lg inline-flex rounded-md hover:bg-custom-blackHover"
             type="submit"
           >
             Login
@@ -123,7 +120,7 @@ const Login: NextPage = () => {
             or{' '}
           </div>
 
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-custom-gray">
             Don&apos;t have an account?{' '}
             <Link
               href={'/register'}
@@ -132,8 +129,8 @@ const Login: NextPage = () => {
               Sign up
             </Link>
           </p>
-          <div className='hidden lg:block'>
-          <Footer className="text-custom-black" />
+          <div className="hidden lg:block">
+            <Footer className="text-custom-black" />
           </div>
         </MainLayout>
         <Image
@@ -141,7 +138,7 @@ const Login: NextPage = () => {
           width={500}
           height={500}
           alt="Login Footer Pic"
-          className='hidden lg:block'
+          className="hidden lg:block"
         />
       </div>
       <Footer className="text-custom-black" isHidden />
