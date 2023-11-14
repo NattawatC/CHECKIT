@@ -10,9 +10,7 @@ async function editTask(id: number, task: Task) {
       info,
       { params: { task_id: id } }
     )
-    if (respond.status === 200) {
-      return true
-    }
+    return true
   } catch (error) {
     console.log(error)
     return false

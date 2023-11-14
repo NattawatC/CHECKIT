@@ -122,6 +122,7 @@ async function getUserInfo() {
 //create task for both personal and team
 async function createUserTask(task: Task) {
   const info = convertTaskToDB(task, 0)
+  info.status = false
   try {
     const task_info = await axios.post(
       'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
@@ -204,7 +205,7 @@ async function filterByDate() {
   return result
 }
 
-async function createTeam(team: { name: string; member: [string] }) {
+async function createTeam(team: Team) {
   const user_info = user_email
   const result = await createUserTeam(team, user_info)
   return result

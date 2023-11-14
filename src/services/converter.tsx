@@ -15,7 +15,7 @@ function convertTaskFromDB(task: any) {
   return result
 }
 
-function convertTaskToDB(task: any, id: number) {
+function convertTaskToDB(task: Task, id: number) {
   const result = {
     title: task.title,
     description: task.note,
@@ -23,7 +23,7 @@ function convertTaskToDB(task: any, id: number) {
     end: formatDateTimeForDB(task.date_end, task.time_end),
     priority: task.priority,
     category: task.category,
-    status: true,
+    status: task.status,
     task_id: id,
   }
   return result
