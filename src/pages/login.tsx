@@ -108,8 +108,8 @@ const Login: NextPage = () => {
       <div className="absolute px-4 py-2 top-0 right-0 lg:left-0">
         <Hamburger className="text-custom-black" />
       </div>
-      <div className="lg:flex lg:flex-row">
-        <MainLayout className="flex flex-col gap-14 lg:gap-8">
+      <div className="lg:flex lg:flex-row lg:min-h-screen">
+        <MainLayout className="flex flex-col lg:gap-8">
           <div className="flex flex-col items-center justify-center gap-2">
             <p className="font-semibold text-3xl lg:text-4xl">Welcome Back!</p>
             <p className="font-normal text-base">Please enter your details</p>

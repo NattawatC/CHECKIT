@@ -39,6 +39,7 @@ const features = [
 export default function Home() {
   return (
     <>
+      {/* Mobile */}
       <div className="px-4 py-2 float-right lg:hidden">
         <Hamburger className="text-custom-white" />
       </div>
@@ -49,6 +50,7 @@ export default function Home() {
           </button>
         </Link>
       </div>
+      {/* Desktop */}
       <div className="bg-custom-black">
         <MainLayout>
           <div className=" flex flex-col lg:justify-center gap-9 lg:gap-14">
@@ -105,7 +107,7 @@ export default function Home() {
             alt="logo mobile"
           />
         </div>
-        {/* Mobile Phone */}
+        {/* Mobile*/}
         <MainLayout className="flex lg:hidden">
           <div className="flex flex-col gap-9 items-center lg:justify-center">
             <p className="flex text-custom-white text-xl lg:text-4xl">
@@ -121,7 +123,7 @@ export default function Home() {
             </p>
           </div>
         </MainLayout>
-        {/* Website */}
+        {/* Desktop */}
         <div className="hidden lg:block px-20 py-14 mx-0 w-full">
           <div className="flex flex-col gap-9 justify-center">
             <p className="flex text-custom-white lg:text-4xl">
