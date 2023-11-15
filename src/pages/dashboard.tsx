@@ -5,11 +5,8 @@ import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { getUserInfo } from '@/services/userServices'
 import { NextPage } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
 import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
-import logoMobile from 'src/assets/logoMobile.png'
 
 //Initialize taskNum
 const userInfo = await getUserInfo()
@@ -77,19 +74,7 @@ const Dashboard: NextPage = () => {
       {/* Desktop */}
       <div className="hidden lg:block min-h-screen">
         <div className="flex flex-row gap-10 py-10">
-          <div className="flex flex-col">
-            <Link href="/register">
-              <Image
-                src={logoMobile}
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="w-full h-auto"
-                alt="logo mobile"
-              />
-              <NavBar />
-            </Link>
-          </div>
+          <NavBar />
           <div className="flex flex-col gap-8 w-full px-10">
             <div className="flex flex-col gap-2 text-custom-white font-medium">
               <p className="text-xl">{userInfo.date}</p>
