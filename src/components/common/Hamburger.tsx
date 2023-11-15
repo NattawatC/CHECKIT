@@ -29,28 +29,28 @@ export const Hamburger: React.FunctionComponent<hamburgerProps> = ({
     <>
       <Sheet>
         <SheetTrigger asChild className={`${className}`}>
-          <RxHamburgerMenu size={30}/>
+          <RxHamburgerMenu size={30} />
         </SheetTrigger>
-          <SheetContent side={'right'} className='flex flex-col gap-4'>
-            <SheetHeader>
-              <SheetTitle>CHECKIT</SheetTitle>
-              <SheetDescription>
-                Make your day more productive with Checkit
-              </SheetDescription>
-            </SheetHeader>
-            <div className="flex flex-col gap-4 justify-center items-center">
-              {hamburgerItems.map((item, index) => (
-                <ul key={index} className=" text-lg">
-                  <Link
-                    className="hover:underline hover:text-custom-orangeHover"
-                    href={item.href}
-                  >
-                    {item.title}
-                  </Link>
-                </ul>
-              ))}
-            </div>
-          </SheetContent>
+        <SheetContent side={'right'} className="flex flex-col gap-4">
+          <SheetHeader className="flex items-center justify-center">
+            <SheetTitle>CHECKIT</SheetTitle>
+            <SheetDescription>
+              Make your day more productive with <span className='text-custom-orange font-bold'>CHECKIT</span>
+            </SheetDescription>
+          </SheetHeader>
+          <div className="flex flex-col gap-4 justify-center items-center">
+            {hamburgerItems.map((item, index) => (
+              <ul key={index} className=" text-lg">
+                <Link
+                  className="hover:underline hover:text-custom-orangeHover"
+                  href={item.href}
+                >
+                  {item.title}
+                </Link>
+              </ul>
+            ))}
+          </div>
+        </SheetContent>
       </Sheet>
     </>
   )
