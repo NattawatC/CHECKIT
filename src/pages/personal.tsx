@@ -4,9 +4,6 @@ import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { filterByCategory } from '@/services/userServices'
 import { NextPage } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
-import logoMobile from 'src/assets/logoMobile.png'
 
 const personal_task = await filterByCategory('personal')
 
@@ -41,23 +38,12 @@ const Personal: NextPage = () => {
             </div>
           </div>
         </MainLayout>
+
         {/* Desktop */}
         <div className="hidden lg:block min-h-screen">
           <div className="flex flex-row gap-10 py-10">
-            <div className="flex flex-col">
-              <Link href="/register">
-                <Image
-                  src={logoMobile}
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  className="w-full h-auto"
-                  alt="logo mobile"
-                />
-                <NavBar />
-              </Link>
-            </div>
-            <div className="flex flex-col w-full px-10 gap-8">
+            <NavBar />
+            <div className="flex flex-col w-full px-52 gap-8">
               <SearchBar />
               <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
                 <p className="text-2xl">Personal</p>
