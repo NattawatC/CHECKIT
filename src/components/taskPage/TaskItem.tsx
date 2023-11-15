@@ -1,21 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
-import dataservices from '@/services/dataservices'
-
-const data = new dataservices()
-
-interface TaskProps {
-  priority: string // Create Priority function
-  id: string
-  title: string
-  date_start: string
-  date_end: string
-  time_start: string
-  time_end: string
-  note: string
-}
-
 import {
   Dialog,
   DialogContent,
@@ -27,8 +12,19 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '../ui/input'
 
+interface TaskProps {
+  priority: string // Create Priority function
+  // id: string
+  title: string
+  date_start: string
+  date_end: string
+  time_start: string
+  time_end: string
+  note: string
+}
+
 const TaskItem: React.FunctionComponent<TaskProps> = ({
-  id,
+  // id,
   priority,
   title,
   date_start,
@@ -118,7 +114,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
         <DialogTrigger asChild>
           <Button
             className="px-2 py-1 text-xs h-fit bg-custom-gray text-custom-white"
-            onClick={() => data.getTaskInfo(id)}
+            // onClick={() => data.getTaskInfo(id)}
           >
             Edit
           </Button>
