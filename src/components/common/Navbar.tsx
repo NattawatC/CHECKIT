@@ -6,6 +6,9 @@ import { BsPersonVcardFill } from 'react-icons/bs'
 import { LuClipboardList } from 'react-icons/lu'
 import { MdTask } from 'react-icons/md'
 import { NavItem } from './NavItem'
+import Link from 'next/link'
+import Image from 'next/image'
+import logoMobile from 'src/assets/logoMobile.png'
 
 const navItems = [
   { icon: LuClipboardList, text: 'Dashboard', href: '/dashboard' },
@@ -58,8 +61,18 @@ export const NavBar: React.FC = () => {
         ))}
       </div>
       {/* Desktop */}
-      <div className="hidden lg:block py-6">
+      <div className="hidden lg:block">
         <div className="flex flex-col gap-6">
+          <Link href="/">
+            <Image
+              src={logoMobile}
+              width="0"
+              height="0"
+              sizes="100vw"
+              className="w-full h-auto pl-6"
+              alt="logo mobile"
+            />
+          </Link>
           {navItems.map((item, index) => (
             <div onClick={() => handleNavItemClick(index)} key={index}>
               <NavItem
