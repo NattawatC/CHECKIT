@@ -1,51 +1,88 @@
 'use client'
-import { Footer, NavBar, SearchBar } from "@/components/common"
-import { MainLayout } from "@/components/layouts"
-import TaskItem from "@/components/taskPage/TaskItem"
-import dataservices from "@/services/dataservices"
-import { NextPage } from "next"
+import { Footer, NavBar, SearchBar } from '@/components/common'
+import { MainLayout } from '@/components/layouts'
+import TaskItem from '@/components/taskPage/TaskItem'
+import { filterByCategory } from '@/services/userServices'
+import { NextPage } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import logoMobile from 'src/assets/logoMobile.png'
 
-const data = new dataservices()
-const personal_task = data.getAllTaskByCategory('Personal')
-
+const personal_task = await filterByCategory('personal')
 
 const Personal: NextPage = () => {
-    return(
-        <>
-        <div className="bg-custom-black">
-            <MainLayout>
-                <div className="flex flex-col gap-4">
-                    <div className="flex flex-col gap-8">
-                        <NavBar />
-                        <SearchBar />
-                    </div>
-                    <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
-                        <p className="text-xl">Personal</p>
-                        <p className="text-base">{personal_task.length} Task</p>
-                    </div>
+  return (
+    <>
+      <div className="bg-custom-black min-h-screen">
+        <MainLayout className="lg:hidden">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-8">
+              <NavBar />
+              <SearchBar />
+            </div>
+            <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
+              <p className="text-xl">Personal</p>
+              <p className="text-base">{personal_task.length} Task</p>
+            </div>
 
-                    
-                    <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
-
-                        {personal_task.map((item,index) => (
-                            <TaskItem
-                            key={index}
-                            priority={item.priority}
-                            title={item.title}
-                            date_start={item.date_start}
-                            date_end={item.date_end}
-                            note={item.note}
-                            time_start={item.time_start}
-                            time_end={item.time_end}
-                            />
-                            ))}
-                    </div>
-                    
-                </div>
-            </MainLayout>
-            <Footer className="text-custom-white"/>
+            <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
+              {personal_task.map((item, index) => (
+                <TaskItem
+                  key={index}
+                  priority={item.priority}
+                  title={item.title}
+                  date_start={item.date_start}
+                  date_end={item.date_end}
+                  note={item.note}
+                  time_start={item.time_start}
+                  time_end={item.time_end}
+                />
+              ))}
+            </div>
+          </div>
+        </MainLayout>
+        {/* Desktop */}
+        <div className="hidden lg:block min-h-screen">
+          <div className="flex flex-row gap-10 py-10">
+            <div className="flex flex-col">
+              <Link href="/register">
+                <Image
+                  src={logoMobile}
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="w-full h-auto"
+                  alt="logo mobile"
+                />
+                <NavBar />
+              </Link>
+            </div>
+            <div className="flex flex-col w-full px-10 gap-8">
+              <SearchBar />
+              <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
+                <p className="text-2xl">Personal</p>
+                <p className="text-xl">{personal_task.length} Task</p>
+              </div>
+              <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
+                {personal_task.map((item, index) => (
+                  <TaskItem
+                    key={index}
+                    priority={item.priority}
+                    title={item.title}
+                    date_start={item.date_start}
+                    date_end={item.date_end}
+                    note={item.note}
+                    time_start={item.time_start}
+                    time_end={item.time_end}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-        </>
-    )
+        <Footer className="text-custom-white" />
+      </div>
+    </>
+  )
 }
-export default Personal    
+export default Personal
