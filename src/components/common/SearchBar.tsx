@@ -12,7 +12,7 @@ export const SearchBar: React.FC = () => {
     setIsFilter(!isFilter)
   }
   return (
-    <div className="flex flex-col gap-4 px-20">
+    <div className="flex flex-col gap-4">
       <div className="relative w-full">
         <AiOutlineSearch className="absolute top-0 bottom-0 w-6 h-6 my-auto text-custom-white left-3" />
         <Input
