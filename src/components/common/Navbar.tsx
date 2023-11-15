@@ -1,13 +1,17 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { BiSolidGroup } from 'react-icons/bi'
+import { BsPersonVcardFill } from 'react-icons/bs'
+import { LuClipboardList } from 'react-icons/lu'
+import { MdTask } from 'react-icons/md'
 import { NavItem } from './NavItem'
 
 const navItems = [
-  { text: 'Dashboard', href: '/dashboard' },
-  { text: 'Task', href: '/task' },
-  { text: 'Team', href: '/team' },
-  { text: 'Profile', href: '/profile' },
+  { icon: LuClipboardList, text: 'Dashboard', href: '/dashboard' },
+  { icon: BiSolidGroup, text: 'Task', href: '/task' },
+  { icon: MdTask, text: 'Team', href: '/team' },
+  { icon: BsPersonVcardFill, text: 'Profile', href: '/profile' },
 ]
 
 export const NavBar: React.FC = () => {
@@ -30,25 +34,53 @@ export const NavBar: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-row justify-between">
-      {navItems.map((item, index) => (
-        <div onClick={() => handleNavItemClick(index)} key={index}>
-          <NavItem
-            href={item.href}
-            text={item.text}
-            active={
-              activeIndex === index ||
-              ((router.pathname === '/personal' ||
-                router.pathname === '/health' ||
-                router.pathname === '/work' ||
-                router.pathname === '/others') &&
-                index === 0)
-                ? 'bg-custom-orange'
-                : 'bg-custom-gray hover:bg-custom-orange'
-            }
-          />
+    <>
+      {/* Mobile */}
+      <div className="flex flex-row justify-between lg:hidden">
+        {navItems.map((item, index) => (
+          <div onClick={() => handleNavItemClick(index)} key={index}>
+            <NavItem
+              Icon={item.icon}
+              href={item.href}
+              text={item.text}
+              active={
+                activeIndex === index ||
+                ((router.pathname === '/personal' ||
+                  router.pathname === '/health' ||
+                  router.pathname === '/work' ||
+                  router.pathname === '/others') &&
+                  index === 0)
+                  ? 'bg-custom-orange'
+                  : 'bg-custom-gray hover:bg-custom-orange'
+              }
+            />
+          </div>
+        ))}
+      </div>
+      {/* Desktop */}
+      <div className="hidden lg:block py-6">
+        <div className="flex flex-col gap-6">
+          {navItems.map((item, index) => (
+            <div onClick={() => handleNavItemClick(index)} key={index}>
+              <NavItem
+                Icon={item.icon}
+                href={item.href}
+                text={item.text}
+                active={
+                  activeIndex === index ||
+                  ((router.pathname === '/personal' ||
+                    router.pathname === '/health' ||
+                    router.pathname === '/work' ||
+                    router.pathname === '/others') &&
+                    index === 0)
+                    ? 'bg-custom-orange'
+                    : 'bg-custom-gray lg:bg-custom-black hover:bg-custom-orange'
+                }
+              />
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   )
 }
