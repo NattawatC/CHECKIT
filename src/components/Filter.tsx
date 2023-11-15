@@ -46,14 +46,14 @@ export const Filter: React.FunctionComponent = () => {
                     checked={isCategoryChecked}
                     onClick={toggleCategory}
                   />
-                  <p className="text-base">{item.name}</p>
+                  <p className="text-base lg:text-xl">{item.name}</p>
                 </div>
                 {isCategoryChecked && (
                   <div className="flex flex-row justify-between mx-2 bg-custom-white">
                     {categoryItems.map((item) => (
                       <div className="flex flex-row items-center justify-center gap-2">
                         <Checkbox className="border-custom-purple data-[state=checked]:bg-custom-purple" />
-                        <p className="text-sm">{item.name}</p>
+                        <p className="text-sm lg:text-lg">{item.name}</p>
                       </div>
                     ))}
                   </div>
@@ -65,7 +65,7 @@ export const Filter: React.FunctionComponent = () => {
                   className="border-custom-purple data-[state=checked]:bg-custom-purple"
                   onClick={(e) => handleFilterItemClick(e, item.name)}
                 />
-                <p className="text-base">{item.name}</p>
+                <p className="text-base lg:text-xl">{item.name}</p>
               </div>
             )
           )}
