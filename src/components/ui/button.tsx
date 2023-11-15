@@ -5,7 +5,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors',
+  'items-center justify-center text-sm font-medium ring-offset-white transition-colors lg:rounded-r-md',
   {
     variants: {
       variant: {
