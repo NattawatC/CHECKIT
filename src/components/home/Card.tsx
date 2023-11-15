@@ -20,7 +20,7 @@ const Card: React.FunctionComponent<CardProps> = ({
       </div>
       {/* Desktop */}
       <div className="hidden lg:block">
-        <div className="flex flex-col items-center py-8 px-4 gap-2 bg-custom-black rounded-2xl w-64 h-66">
+        <div className="flex flex-col items-center py-8 px-4 gap-2 bg-custom-black rounded-2xl w-64 h-full">
           {Icon && <Icon className="text-custom-white" size={50} />}
           <p className="text-custom-white text-center text-2xl">{title}</p>
           <p className="text-custom-white text-center text-base">
