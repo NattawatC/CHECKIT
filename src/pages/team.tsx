@@ -49,7 +49,7 @@ const Team: NextPage = () => {
           </div>
 
           <div className="flex flex-col gap-4">
-            {team_info.map((item: any) => (
+            {team_info.map((item) => (
               <TeamItem
                 key={item.team_id}
                 teamName={item.name}
@@ -115,7 +115,7 @@ const Team: NextPage = () => {
               <p className="text-3xl">See all your Team</p>
             </div>
 
-            <div className="flex flex-col gap-4 px-40 lg:gap-8">
+            <div className="flex flex-col px-40 gap-8">
               {team_info.map((item) => (
                 <TeamItem
                   key={item.team_id}
