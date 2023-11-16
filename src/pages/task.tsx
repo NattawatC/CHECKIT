@@ -3,7 +3,6 @@ import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { getAllTask } from '@/services/taskServices'
 import { useState } from 'react'
 
 import {
