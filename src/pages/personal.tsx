@@ -5,7 +5,7 @@ import TaskItem from '@/components/taskPage/TaskItem'
 import { filterByCategory } from '@/services/userServices'
 import { NextPage } from 'next'
 
-const personal_task = await filterByCategory('personal')
+const personal_task = await filterByCategory('Personal')
 
 const Personal: NextPage = () => {
   return (
@@ -19,7 +19,7 @@ const Personal: NextPage = () => {
             </div>
             <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
               <p className="text-xl">Personal</p>
-              <p className="text-base">{personal_task.length} Task</p>
+              <p className="text-base">{personal_task.length} Tasks</p>
             </div>
 
             <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
