@@ -1,76 +1,132 @@
 'use client'
 import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
-import { Button } from '@/components/ui/button'
-import dataservices from '@/services/dataservices'
+import ChangeEmail from '@/components/profilePage/ChangeEmail'
+import ChangeName from '@/components/profilePage/ChangeName'
+import { getUserInfo } from '@/services/userServices'
+import { useState } from 'react'
 import { IoIosInformationCircle } from 'react-icons/io'
-import React, { useState } from 'react';
-import ChangeName from '@/components/ChangeName'
-import ChangeEmail from '@/components/ChangeEmail'
 
-
-const data = new dataservices()
-
+const user_info = await getUserInfo()
 
 const Profile = () => {
   const [isHovering, setIsHovering] = useState(false)
-  const onMouseEnter = () => setIsHovering(true);
-  const onMouseLeave = () => setIsHovering(false);
+  const onMouseEnter = () => setIsHovering(true)
+  const onMouseLeave = () => setIsHovering(false)
   return (
     <>
-    <div className="flex flex-col bg-custom-black min-h-screen">
-      <MainLayout>
-        <div className="flex flex-col gap-8">
-          <NavBar />
-          <div className="flex flex-col items-start font-medium text-custom-white">
-            <p className="text-xs">{data.getUserInfo().date}</p>
-            <p className="text-xl">See your Profile</p>
-          </div>
+      <div className="flex flex-col bg-custom-black min-h-screen">
+        {/* Mobile */}
+        <MainLayout className="lg:hidden">
+          <div className="flex flex-col gap-8">
+            <NavBar />
+            <div className="flex flex-col items-start font-medium text-custom-white">
+              <p className="text-xs">{user_info.date}</p>
+              <p className="text-xl">See your Profile</p>
+            </div>
 
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row gap-5 text-base text-custom-white">
-              <p>Name:</p>
-              <p>{data.getUserInfo().username}</p>
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-5 text-base text-custom-white">
+                <p>Name:</p>
+                <p>{user_info.username}</p>
+              </div>
+              <ChangeName />
             </div>
-            <ChangeName />
-          </div>
 
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row gap-5 text-base text-custom-white">
-              <p>Email:</p>
-              <p>{data.getUserInfo().email}</p>
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-5 text-base text-custom-white">
+                <p>Email:</p>
+                <p>{user_info.email}</p>
+              </div>
+              <ChangeEmail />
             </div>
-            <ChangeEmail />
-          </div>
-          
 
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-row gap-3 items-center">
-              <p className="text-custom-white text-base font-medium">Done</p>
-              <p className="flex flex-row text-custom-white hover:text-custom-orange cursor-pointer items-center gap-2" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-                <IoIosInformationCircle />
-                {isHovering ? (
-                  <span className="text-xs font-medium">This will be delete after 7 days</span>
-                ):(
-                  <span className="text-custom-black">hidden</span>
-                )}
-              </p>
-              
-            </div>
-            <div className="flex flex-col rounded-lg gap-2 bg-custom-gray text-custom-white p-4">
-              <p>deleted task</p>
-              <p>deleted task</p>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-row gap-3 items-center">
+                <p className="text-custom-white text-base font-medium">
+                  Completed Tasks
+                </p>
+                <p
+                  className="flex flex-row text-custom-white hover:text-custom-orange cursor-pointer items-center gap-2"
+                  onMouseEnter={onMouseEnter}
+                  onMouseLeave={onMouseLeave}
+                >
+                  <IoIosInformationCircle />
+                  {isHovering ? (
+                    <span className="text-xs font-medium">
+                      This will be delete after 7 days
+                    </span>
+                  ) : (
+                    <span className="text-custom-black">hidden</span>
+                  )}
+                </p>
+              </div>
+              <div className="flex flex-col rounded-lg gap-2 bg-custom-gray text-custom-white p-4">
+                <p>deleted task</p>
+                <p>deleted task</p>
+              </div>
             </div>
           </div>
-            
-        
+        </MainLayout>
+        {/* Desktop */}
+        <div className="hidden lg:block min-h-screen">
+          <div className="flex flex-row gap-10 py-10">
+            <NavBar />
+            <div className="flex flex-col gap-8 w-full px-10">
+              <div className="flex flex-col items-start font-medium text-custom-white">
+                <p className="text-xl">{user_info.date}</p>
+                <p className="text-3xl">See your Profile</p>
+              </div>
+              <div className="flex flex-col gap-8 px-40">
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-row gap-5 text-xl text-custom-white">
+                    <p>Name:</p>
+                    <p>{user_info.username}</p>
+                  </div>
+                  <ChangeName />
+                </div>
+
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-row gap-5 text-xl text-custom-white">
+                    <p>Email:</p>
+                    <p>{user_info.email}</p>
+                  </div>
+                  <ChangeEmail />
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-row gap-3 items-center">
+                    <p className="text-custom-white text-xl font-medium">
+                      Completed Tasks
+                    </p>
+                    <p
+                      className="flex flex-row text-custom-white hover:text-custom-orange cursor-pointer items-center gap-2"
+                      onMouseEnter={onMouseEnter}
+                      onMouseLeave={onMouseLeave}
+                    >
+                      <IoIosInformationCircle className="h-5 w-5" />
+                      {isHovering ? (
+                        <span className="text-lg font-medium">
+                          This will be delete after 7 days
+                        </span>
+                      ) : (
+                        <span className="text-custom-black">hidden</span>
+                      )}
+                    </p>
+                  </div>
+                  {/* TODO: Retrive completed task from backend */}
+                  <div className="flex flex-col rounded-lg gap-2 bg-custom-gray text-custom-white p-4 text-xl">
+                    <p>deleted task</p>
+                    <p>deleted task</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-      </MainLayout>
-      <Footer className="text-custom-white"/>
-    </div>
+        <Footer className="text-custom-white" />
+      </div>
     </>
-    
   )
 }
 
