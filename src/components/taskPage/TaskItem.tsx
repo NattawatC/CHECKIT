@@ -266,7 +266,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
               </div>
             </section>
           </div>
-          <DialogFooter className="flex flex-row gap-8 justify-between">
+          <DialogFooter className="flex flex-row gap-8 justify-between lg:gap-4">
             <Button
               type="submit"
               className="bg-custom-gray text-custom-white w-full hover:bg-custom-orangeHover rounded-md lg:text-base"
