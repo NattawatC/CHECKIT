@@ -80,20 +80,22 @@ const Dashboard: NextPage = () => {
               <p className="text-xl">{userInfo.date}</p>
               <p className="text-3xl">Welcome, {userInfo.username}</p>
             </div>
-            <UpcomingTask
-              taskNum={userInfo.upcoming_task.length}
-              href="/upcoming"
-            />
-            <div className="grid grid-cols-4 gap-4 max-w-full">
-              {categories.map((category) => (
-                <CategoryItem
-                  key={category.index}
-                  Icon={category.icon}
-                  title={category.title}
-                  taskNum={category.taskNum}
-                  href={category.href}
-                />
-              ))}
+            <div className="flex flex-col gap-8 w-full px-40">
+              <UpcomingTask
+                taskNum={userInfo.upcoming_task.length}
+                href="/upcoming"
+              />
+              <div className="grid grid-cols-4 gap-4 max-w-full">
+                {categories.map((category) => (
+                  <CategoryItem
+                    key={category.index}
+                    Icon={category.icon}
+                    title={category.title}
+                    taskNum={category.taskNum}
+                    href={category.href}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
