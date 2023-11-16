@@ -12,6 +12,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { getAllTaskOfUser } from '@/services/userServices'
 
 const mockData = [
   {
@@ -57,7 +58,8 @@ const mockData = [
 ]
 
 //Apply Non's Function
-const tasks = await getAllTask()
+const tasks: Task[] = await getAllTaskOfUser()
+
 console.log(tasks)
 
 export default function Task() {
@@ -107,11 +109,11 @@ export default function Task() {
             <SearchBar />
             <div className="flex flex-col justify-center items-center text-custom-white">
               <p className="text-xl">Task</p>
-              <p className="text-base">10 tasks</p>
+              <p className="text-base">{tasks.length} tasks</p>
             </div>
 
             <div className="flex flex-col gap-4 p-4 bg-custom-white rounded-lg">
-              {mockData.map((item, index) => (
+              {tasks.map((item, index) => (
                 <TaskItem
                   key={index}
                   // id={item.id}
@@ -365,11 +367,11 @@ export default function Task() {
               <SearchBar />
               <div className="flex flex-col justify-center items-center text-custom-white">
                 <p className="text-2xl">Task</p>
-                <p className="text-xl">10 tasks</p>
+                <p className="text-xl">{tasks.length} tasks</p>
               </div>
 
               <div className="flex flex-col gap-4 p-4 bg-custom-white rounded-lg">
-                {mockData.map((item, index) => (
+                {tasks.map((item, index) => (
                   <TaskItem
                     key={index}
                     // id={item.id}
