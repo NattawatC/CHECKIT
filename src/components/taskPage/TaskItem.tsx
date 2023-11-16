@@ -11,6 +11,9 @@ import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import { Input } from '../ui/input'
+import { getAllTaskOfUser } from '@/services/userServices'
+
+const data = await getAllTaskOfUser()
 
 interface TaskProps {
   priority: string // Create Priority function
@@ -141,7 +144,6 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
                 type="date"
                 defaultValue="2023-09-20"
               />
-              {/* <p className='text-custom-white'> {date_start}</p> */}
               <label className="text-custom-white lg:text-base">_</label>
               <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg lg:text-base"
