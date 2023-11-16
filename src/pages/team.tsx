@@ -2,20 +2,19 @@ import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import TeamItem from '@/components/teamPage/TeamItem'
 import { Button } from '@/components/ui/button'
-import dataservices from '@/services/dataservices'
-import { NextPage } from 'next'
 import { Input } from '@/components/ui/input'
+import { getAllTeamOfUser } from '@/services/teamServices'
+import { getUserInfo } from '@/services/userServices'
+import { NextPage } from 'next'
 
+import MemberItem from '@/components/teamPage/MemberItem'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import MemberItem from '@/components/teamPage/MemberItem'
 
 //hard code the email example (MemberItem)
 const features = [
@@ -33,24 +32,26 @@ const features = [
   },
 ]
 
-const data = new dataservices()
-const team_info = data.getAllTeamOfUser()
+const user_info = await getUserInfo()
+const team_info: Team[] =  await getAllTeamOfUser()
+console.log(team_info)
 
 const Team: NextPage = () => {
   return (
-    <div className="bg-custom-black h-max-screen">
-      <MainLayout>
+    <div className="bg-custom-black min-h-screen">
+      {/* Mobile */}
+      <MainLayout className="lg:hidden">
         <div className="flex flex-col gap-8">
           <NavBar />
           <div className="flex flex-col gap-1 text-custom-white font-medium">
-            <p className="text-xs">{data.getUserInfo().date}</p>
+            <p className="text-xs">{user_info.date}</p>
             <p className="text-xl">See all your Team</p>
           </div>
 
           <div className="flex flex-col gap-4">
-            {team_info.map((item) => (
+            {team_info.map((item: any) => (
               <TeamItem
-                key={item.id}
+                key={item.team_id}
                 teamName={item.name}
                 members={item.members}
               />
@@ -104,6 +105,28 @@ const Team: NextPage = () => {
           </Dialog>
         </div>
       </MainLayout>
+      {/* Desktop */}
+      <div className="hidden lg:block min-h-screen">
+        <div className="flex flex-row gap-10 py-10">
+          <NavBar />
+          <div className="flex flex-col gap-8 w-full px-10">
+            <div className="flex flex-col gap-2 text-custom-white font-medium">
+              <p className="text-xl">{user_info.date}</p>
+              <p className="text-3xl">See all your Team</p>
+            </div>
+
+            <div className="flex flex-col gap-4 px-40 lg:gap-8">
+              {team_info.map((item) => (
+                <TeamItem
+                  key={item.team_id}
+                  teamName={item.name}
+                  members={item.members}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
       <Footer className="text-custom-white" />
     </div>
   )
