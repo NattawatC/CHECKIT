@@ -143,9 +143,7 @@ async function createUserTask(task: Task) {
   let task_data
   try {
     const task_info = await fetch(
-      `http://ict11.ce.kmitl.ac.th:9080/user/task/create?email=${encodeURIComponent(
-        user_email
-      )}`,
+      `http://ict11.ce.kmitl.ac.th:9080/user/task/create?email=${encodeURIComponent(user_email)}`,
       {
         method: 'POST',
         headers: {
@@ -174,8 +172,8 @@ async function createUserTask(task: Task) {
       }
     }
     return true
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    console.log(error.response.data)
     return false
   }
 }
