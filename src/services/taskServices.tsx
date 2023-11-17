@@ -6,10 +6,17 @@ async function editTask(id: number, task: Task) {
   const info = convertTaskToDB(task, id)
   const json = JSON.stringify(info)
   try {
-    const respond = await axios.put(
-      'http://ict11.ce.kmitl.ac.th:9080/user/task/edit',
-      json,
-      { params: { task_id: id } }
+    const respond = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/task/edit?task_id=${encodeURIComponent(
+        id
+      )}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json,
+      }
     )
     return true
   } catch (error) {
