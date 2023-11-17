@@ -138,9 +138,10 @@ async function addMemberToTeam(team_id: number) {
 async function editTeamInfo(id: string, team: Team) {
   try {
     const team_info = convertTeamToDB(team)
+    const json = JSON.stringify(team_info)
     const respond = await axios.put(
       'http://ict11.ce.kmitl.ac.th:9080/user/team/editName',
-      team_info,
+      json,
       {
         params: { team_id: id },
       }

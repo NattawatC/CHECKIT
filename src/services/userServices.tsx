@@ -123,21 +123,18 @@ async function getUserInfo() {
 }
 //create task for both personal and team
 async function createUserTask(task: Task) {
+  task.status = false
   const info = convertTaskToDB(task, 0)
-  info.status = false
+  const json = JSON.stringify(info)
   try {
     const task_info = await axios.post(
       'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
-      info,
+      json,
       {
         params: { email: user_email },
       }
     )
     if (task.role[0] !== 'Personal') {
-      const team_info = await axios.get(
-        'http://ict11.ce.kmitl.ac.th:9080/user/getTeam',
-        { params: { email: user_email } }
-      )
       // loop task.role array
       for (let i = 0; i < task.role.length; i++) {
         const team_task_info = await axios.post(
@@ -212,6 +209,25 @@ async function createTeam(team: Team) {
   const result = await createUserTeam(team, user_info)
   return result
 }
+
+async function editUserProfile(user: {
+  name: string
+  email: string
+  password: string
+}) {
+  try {
+    const json = JSON.stringify(user)
+    const user_info = await axios.put(
+      'http://ict11.ce.kmitl.ac.th:9080/user/editProfile',
+      json,
+      { params: { email: user_email } }
+    )
+    return true
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
 export {
   checkRegister,
   checkLogin,
@@ -226,4 +242,5 @@ export {
   createTeam,
   getUserEmail,
   getUserName,
+  editUserProfile,
 }
