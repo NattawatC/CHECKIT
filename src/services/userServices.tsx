@@ -127,30 +127,34 @@ async function createUserTask(task: Task) {
   const info = convertTaskToDB(task, 0)
   const json = JSON.stringify(info)
   try {
-    const task_info = await axios.post(
-      'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
-      json,
+    const task_info = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/task/create?email=${encodeURIComponent(user_email)}`,
       {
-        params: { email: user_email },
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json,
       }
     )
-    if (task.role[0] !== 'Personal') {
-      // loop task.role array
-      for (let i = 0; i < task.role.length; i++) {
-        const team_task_info = await axios.post(
-          'http://ict11.ce.kmitl.ac.th:9080/user/team/addTask',
-          {
-            params: {
-              team_id: task.role[i],
-              task_id: task_info.data.task_id,
-            },
-          }
-        )
-      }
-    }
+    //TODO: IDK what to do with this
+    // if (task.role[0] !== 'Personal') {
+    //   // loop task.role array
+    //   for (let i = 0; i < task.role.length; i++) {
+    //     const team_task_info = await axios.post(
+    //       'http://ict11.ce.kmitl.ac.th:9080/user/team/addTask',
+    //       {
+    //         params: {
+    //           team_id: task.role[i],
+    //           task_id: task_info.data.task_id,
+    //         },
+    //       }
+    //     )
+    //   }
+    // }
     return true
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    console.log(error.response.data)
     return false
   }
 }
