@@ -4,25 +4,34 @@ import { getUserEmail } from './userServices'
 
 //create team
 async function createUserTeam(team: Team, user: string) {
+  let data
   try {
-    //send request to create team
-    const create_team = await axios.post(
-      'http://ict11.ce.kmitl.ac.th:9080/user/team/create',
+    const info = convertTeamToDB(team)
+    const json = JSON.stringify(info)
+    const create_team = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/team/create`,
       {
-        params: {
-          name: team.name,
-          owner: user,
-          team_id: 0,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: json,
       }
     )
-    for (const memberEmail of team.member) {
+    if (create_team.ok) {
+      data = await create_team.json()
+    }
+    for (const memberEmail of team.members) {
       //send request to invite member
-      const invite_member = await axios.post(
-        'http://ict11.ce.kmitl.ac.th:9080/user/team/inviteUser',
+      const invite_member = await fetch(
+        `http://ict11.ce.kmitl.ac.th:9080/user/team/inviteUser?email=${encodeURIComponent(
+          memberEmail
+        )}&team_id=${encodeURIComponent(data.team_id)}`,
         {
-          email: memberEmail,
-          team_id: create_team.data.team_id,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
       )
     }
@@ -121,10 +130,15 @@ async function getTeamMember(id: number) {
 //add member to team
 async function addMemberToTeam(team_id: number) {
   try {
-    const invite_member = await axios.put(
-      'http://ict11.ce.kmitl.ac.th:9080/user/team/addUser',
+    const invite_member = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/team/addUser?team_id=${encodeURIComponent(
+        team_id
+      )}&email=${encodeURIComponent(getUserEmail())}`,
       {
-        params: { team_id: team_id, email: getUserEmail() },
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
     )
     return true
@@ -139,11 +153,16 @@ async function editTeamInfo(id: string, team: Team) {
   try {
     const team_info = convertTeamToDB(team)
     const json = JSON.stringify(team_info)
-    const respond = await axios.put(
-      'http://ict11.ce.kmitl.ac.th:9080/user/team/editName',
-      json,
+    const respond = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/team/editName?team_id=${encodeURIComponent(
+        id
+      )}`,
       {
-        params: { team_id: id },
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json,
       }
     )
     return true
@@ -172,11 +191,15 @@ async function deleteTeam(id: number) {
 //invite member to team
 async function inviteMemberToTeam(team_id: number, email: string) {
   try {
-    const respond = await axios.post(
-      'http://ict11.ce.kmitl.ac.th:9080/user/team/inviteUser',
+    const respond = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/team/inviteUser?email=${encodeURIComponent(
+        email
+      )}&team_id=${encodeURIComponent(team_id)}`,
       {
-        email: email,
-        team_id: team_id,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
     )
     return true

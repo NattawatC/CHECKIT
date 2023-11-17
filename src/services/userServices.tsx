@@ -46,11 +46,14 @@ async function checkRegister(user: {
     //check email format
     if (checkMailFormat(user.email)) {
       console.log('Email format is correct')
-      const res = await axios.post(
-        'http://ict11.ce.kmitl.ac.th:9080/register',
-        user
-      )
-      user_email = user.email
+      const res = await fetch('http://ict11.ce.kmitl.ac.th:9080/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      })
+      global.user_email = user.email
       return true
     } else {
       //email format is not correct
@@ -65,18 +68,29 @@ async function checkRegister(user: {
 
 //check user login
 async function checkLogin(user: { email: string; password: string }) {
+  let data
   //check email format
   if (checkMailFormat(user.email)) {
     console.log('Email format is correct')
-    const response = await axios.post(
-      'http://ict11.ce.kmitl.ac.th:9080/login',
-      { params: { username: user.email, password: user.password } }
+    const response = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/login?username=${encodeURIComponent(
+        user.email
+      )}&password=${encodeURIComponent(user.password)}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     )
-    const token = response.data.access_token
+    if (response.ok) {
+      data = await response.json()
+    }
+    const token = data.access_token
 
     //set token to global
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    user_email = user.email
+    global.user_email = user.email
     return true
   } else {
     //email format is not correct
@@ -126,23 +140,34 @@ async function createUserTask(task: Task) {
   task.status = false
   const info = convertTaskToDB(task, 0)
   const json = JSON.stringify(info)
+  let task_data
   try {
-    const task_info = await axios.post(
-      'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
-      json,
+    const task_info = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/task/create?email=${encodeURIComponent(
+        user_email
+      )}`,
       {
-        params: { email: user_email },
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json,
       }
     )
+    if (task_info.ok) {
+      task_data = await task_info.json()
+    }
     if (task.role[0] !== 'Personal') {
       // loop task.role array
       for (let i = 0; i < task.role.length; i++) {
-        const team_task_info = await axios.post(
-          'http://ict11.ce.kmitl.ac.th:9080/user/team/addTask',
+        const team_task_info = await fetch(
+          `http://ict11.ce.kmitl.ac.th:9080/user/team/addTask?team_id=${encodeURIComponent(
+            task.role[i]
+          )}&task_id=${encodeURIComponent(task_data.task_id)}`,
           {
-            params: {
-              team_id: task.role[i],
-              task_id: task_info.data.task_id,
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
             },
           }
         )
@@ -217,10 +242,17 @@ async function editUserProfile(user: {
 }) {
   try {
     const json = JSON.stringify(user)
-    const user_info = await axios.put(
-      'http://ict11.ce.kmitl.ac.th:9080/user/editProfile',
-      json,
-      { params: { email: user_email } }
+    const user_info = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/editProfile?email=${encodeURIComponent(
+        user_email
+      )}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json,
+      }
     )
     return true
   } catch (error) {
