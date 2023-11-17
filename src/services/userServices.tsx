@@ -38,7 +38,7 @@ function checkMailFormat(email: string) {
 
 //check user register
 async function checkRegister(user: {
-  username: string
+  name: string
   email: string
   password: string
 }) {
@@ -50,13 +50,8 @@ async function checkRegister(user: {
         'http://ict11.ce.kmitl.ac.th:9080/register',
         user
       )
-      if (res.status === 201) {
-        user = user
-        return res.data
-      } else if (res.status === 400) {
-        console.log('Email is already exist')
-        return false
-      }
+      user_email = user.email
+      return true
     } else {
       //email format is not correct
       console.log('Email format is not correct')
@@ -69,11 +64,18 @@ async function checkRegister(user: {
 }
 
 //check user login
-//TODO: connect with database
-function checkLogin(user: { email: string; password: string }) {
+async function checkLogin(user: { email: string; password: string }) {
   //check email format
   if (checkMailFormat(user.email)) {
     console.log('Email format is correct')
+    const response = await axios.post(
+      'http://ict11.ce.kmitl.ac.th:9080/login',
+      { params: { username: user.email, password: user.password } }
+    )
+    const token = response.data.access_token
+
+    //set token to global
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     user_email = user.email
     return true
   } else {
