@@ -48,10 +48,10 @@ export default function Task() {
   const [formValues, setFormValues] = useState({
     title: '',
     notes: '',
-    startDate: '0000-00-00',
-    endDate: '0000-00-00',
-    startTime: '00:00',
-    endTime: '00:00',
+    startDate: '2023-09-11',
+    endDate: '2023-10-11',
+    startTime: '9:11',
+    endTime: '10:11',
   })
 
   const handleInputChange = (field: string, value: string) => {
