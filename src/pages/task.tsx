@@ -11,79 +11,24 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { getAllTaskOfUser } from '@/services/userServices'
-
-const mockData = [
-  {
-    id: '1',
-    priority: 'High',
-    title: 'Task 1',
-    date_start: '2021-11-20',
-    date_end: '2021-12-20',
-    time_start: '12:00',
-    time_end: '13:00',
-    note: 'Note 1',
-  },
-  {
-    id: '2',
-    priority: 'Medium',
-    title: 'Task 2',
-    date_start: '2021-11-20',
-    date_end: '2021-12-20',
-    time_start: '12:00',
-    time_end: '13:00',
-    note: 'Note 2',
-  },
-  {
-    id: '3',
-    priority: 'Low',
-    title: 'Task 3',
-    date_start: '2021-11-20',
-    date_end: '2021-12-20',
-    time_start: '12:00',
-    time_end: '13:00',
-    note: 'Note 3',
-  },
-  {
-    id: '4',
-    priority: 'None',
-    title: 'Task 4',
-    date_start: '2021-11-20',
-    date_end: '2021-12-20',
-    time_start: '12:00',
-    time_end: '13:00',
-    note: 'Note 4',
-  },
-]
+import { createUserTask, getAllTaskOfUser } from '@/services/userServices'
 
 //Apply Non's Function
 const tasks: Task[] = await getAllTaskOfUser()
-
 console.log(tasks)
 
 export default function Task() {
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>('None')
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([])
 
   const handlePriorityClick = (priority: string) => {
     setSelectedPriority(priority)
   }
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategories((prevCategories) => {
-      if (prevCategories.includes(category)) {
-        return prevCategories.filter((c) => c !== category)
-      } else {
-        return [...prevCategories, category]
-      }
-    })
+  const handleCategoryClick = (priority: string) => {
+    setSelectedCategory(priority)
   }
-
-  const isCategorySelected = (category: string) => {
-    return selectedCategories.includes(category)
-  }
-
-  const [selectedRoles, setSelectedRoles] = useState<string[]>([])
 
   const handleRoleClick = (role: string) => {
     setSelectedRoles((prevRoles) => {
@@ -97,6 +42,37 @@ export default function Task() {
 
   const isRoleSelected = (role: string) => {
     return selectedRoles.includes(role)
+  }
+
+  // Form Values
+  const [formValues, setFormValues] = useState({
+    title: '',
+    notes: '',
+    startDate: '0000-00-00',
+    endDate: '0000-00-00',
+    startTime: '00:00',
+    endTime: '00:00',
+  })
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormValues((prevValues) => ({ ...prevValues, [field]: value }))
+  }
+
+  const handleSubmit = () => {
+    // Log the input information
+    createUserTask({
+      task_id: 0,
+      title: formValues.title,
+      note: formValues.notes,
+      date_start: formValues.startDate,
+      date_end: formValues.endDate,
+      time_start: formValues.startTime,
+      time_end: formValues.endTime,
+      priority: selectedPriority,
+      category: selectedCategory,
+      role: selectedRoles,
+      status: false,
+    })
   }
 
   return (
@@ -115,7 +91,7 @@ export default function Task() {
               {tasks.map((item, index) => (
                 <TaskItem
                   key={index}
-                  // id={item.id}
+                  task_id={item.task_id}
                   priority={item.priority}
                   title={item.title}
                   date_start={item.date_start}
@@ -140,10 +116,12 @@ export default function Task() {
                   className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white "
                   type="text"
                   placeholder="Title"
+                  onChange={(e) => handleInputChange('title', e.target.value)}
                 />
                 <textarea
                   className="bg-custom-gray p-2 w-full min-h-auto focus:outline-custom-white rounded-lg text-custom-white"
                   placeholder="Notes"
+                  onChange={(e) => handleInputChange('notes', e.target.value)}
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -152,13 +130,13 @@ export default function Task() {
                   <Input
                     className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="date"
-                    defaultValue="2023-11-20"
+                    defaultValue="0000-00-00"
                   />
                   <label className="text-custom-white">_</label>
                   <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg"
                     type="date"
-                    defaultValue="2023-12-20"
+                    defaultValue="0000-00-00"
                   />
                 </div>
               </div>
@@ -168,13 +146,13 @@ export default function Task() {
                   <Input
                     className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="time"
-                    defaultValue="12:00"
+                    defaultValue="00:00"
                   />
                   <label className="text-custom-white">_</label>
                   <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg"
                     type="time"
-                    defaultValue="13:00"
+                    defaultValue="00:00"
                   />
                 </div>
               </div>
@@ -235,7 +213,7 @@ export default function Task() {
                       onClick={() => handleCategoryClick('Personal')}
                       className={`
                       ${
-                        isCategorySelected('Personal')
+                        selectedCategory === 'Personal'
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md`}
@@ -246,7 +224,7 @@ export default function Task() {
                       onClick={() => handleCategoryClick('Work')}
                       className={`
                       ${
-                        isCategorySelected('Work')
+                        selectedCategory === ('Work')
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md`}
@@ -257,7 +235,7 @@ export default function Task() {
                       onClick={() => handleCategoryClick('Health')}
                       className={`
                       ${
-                        isCategorySelected('Health')
+                        selectedCategory === ('Health')
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md`}
@@ -270,7 +248,7 @@ export default function Task() {
                     <Button
                       onClick={() => handleCategoryClick('Others')}
                       className={`${
-                        isCategorySelected('Others')
+                        selectedCategory === ('Others')
                           ? 'bg-custom-orange'
                           : 'bg-custom-gray'
                       } rounded-md`}
@@ -373,7 +351,7 @@ export default function Task() {
                 {tasks.map((item, index) => (
                   <TaskItem
                     key={index}
-                    // id={item.id}
+                    task_id={item.task_id}
                     priority={item.priority}
                     title={item.title}
                     date_start={item.date_start}
@@ -398,10 +376,12 @@ export default function Task() {
                     className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white lg:text-base"
                     type="text"
                     placeholder="Title"
+                    onChange={(e) => handleInputChange('title', e.target.value)}
                   />
                   <textarea
                     className="bg-custom-gray p-2 w-full min-h-auto focus:outline-custom-white rounded-lg text-custom-white"
                     placeholder="Notes"
+                    onChange={(e) => handleInputChange('notes', e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col gap-3">
@@ -411,12 +391,18 @@ export default function Task() {
                       className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                       type="date"
                       defaultValue="2023-11-20"
+                      onChange={(e) =>
+                        handleInputChange('startDate', e.target.value)
+                      }
                     />
                     <label className="text-custom-white">_</label>
                     <Input
                       className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg lg:text-base"
                       type="date"
                       defaultValue="2023-12-20"
+                      onChange={(e) =>
+                        handleInputChange('endDate', e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -427,12 +413,18 @@ export default function Task() {
                       className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                       type="time"
                       defaultValue="12:00"
+                      onChange={(e) =>
+                        handleInputChange('startTime', e.target.value)
+                      }
                     />
                     <label className="text-custom-white">_</label>
                     <Input
                       className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg lg:text-base"
                       type="time"
                       defaultValue="13:00"
+                      onChange={(e) =>
+                        handleInputChange('endTime', e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -497,7 +489,7 @@ export default function Task() {
                         onClick={() => handleCategoryClick('Personal')}
                         className={`
                       ${
-                        isCategorySelected('Personal')
+                        selectedCategory === ('Personal')
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md lg:text-base`}
@@ -508,7 +500,7 @@ export default function Task() {
                         onClick={() => handleCategoryClick('Work')}
                         className={`
                       ${
-                        isCategorySelected('Work')
+                        selectedCategory === ('Work')
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md lg:text-base`}
@@ -519,7 +511,7 @@ export default function Task() {
                         onClick={() => handleCategoryClick('Health')}
                         className={`
                       ${
-                        isCategorySelected('Health')
+                        selectedCategory === ('Health')
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md lg:text-base`}
@@ -532,7 +524,7 @@ export default function Task() {
                       <Button
                         onClick={() => handleCategoryClick('Others')}
                         className={`${
-                          isCategorySelected('Others')
+                          selectedCategory === ('Others')
                             ? 'bg-custom-orange'
                             : 'bg-custom-gray'
                         } rounded-md lg:text-base`}
@@ -610,6 +602,7 @@ export default function Task() {
                   <Button
                     type="submit"
                     className="bg-custom-gray text-custom-white w-full h-auto text-base hover:bg-custom-orangeHover rounded-md lg:text-base"
+                    onClick={handleSubmit}
                   >
                     Add Task
                   </Button>
