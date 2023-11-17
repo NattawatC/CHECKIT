@@ -26,6 +26,7 @@ const Personal: NextPage = () => {
               {personal_task.map((item, index) => (
                 <TaskItem
                   key={index}
+                  task_id={item.task_id}
                   priority={item.priority}
                   title={item.title}
                   date_start={item.date_start}
@@ -53,6 +54,7 @@ const Personal: NextPage = () => {
                 {personal_task.map((item, index) => (
                   <TaskItem
                     key={index}
+                    task_id={item.task_id}
                     priority={item.priority}
                     title={item.title}
                     date_start={item.date_start}
