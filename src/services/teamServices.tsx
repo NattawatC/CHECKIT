@@ -34,7 +34,7 @@ async function createUserTeam(team: Team, user: string) {
 }
 
 //check pending team of user
-async function checkTeamPendingOfUser(team_id: number) {
+async function checkTeamPendingOfUser() {
   try {
     const team_info = await axios.get(
       'http://ict11.ce.kmitl.ac.th:9080/user/getPendingTeam',
@@ -42,7 +42,7 @@ async function checkTeamPendingOfUser(team_id: number) {
         params: { email: getUserEmail() },
       }
     )
-    //TODO: return team in format for front-end
+    return team_info.data
   } catch (error) {
     console.log(error)
     return false
@@ -138,9 +138,10 @@ async function addMemberToTeam(team_id: number) {
 async function editTeamInfo(id: string, team: Team) {
   try {
     const team_info = convertTeamToDB(team)
+    const json = JSON.stringify(team_info)
     const respond = await axios.put(
       'http://ict11.ce.kmitl.ac.th:9080/user/team/editName',
-      team_info,
+      json,
       {
         params: { team_id: id },
       }

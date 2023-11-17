@@ -4,10 +4,11 @@ import { formatDateForDisplay, formatDateTimeFromDB } from './dataTimeServices'
 //edit task by id
 async function editTask(id: number, task: Task) {
   const info = convertTaskToDB(task, id)
+  const json = JSON.stringify(info)
   try {
     const respond = await axios.put(
       'http://ict11.ce.kmitl.ac.th:9080/user/task/edit',
-      info,
+      json,
       { params: { task_id: id } }
     )
     return true

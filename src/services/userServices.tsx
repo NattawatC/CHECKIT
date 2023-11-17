@@ -38,7 +38,7 @@ function checkMailFormat(email: string) {
 
 //check user register
 async function checkRegister(user: {
-  username: string
+  name: string
   email: string
   password: string
 }) {
@@ -50,13 +50,8 @@ async function checkRegister(user: {
         'http://ict11.ce.kmitl.ac.th:9080/register',
         user
       )
-      if (res.status === 201) {
-        user = user
-        return res.data
-      } else if (res.status === 400) {
-        console.log('Email is already exist')
-        return false
-      }
+      user_email = user.email
+      return true
     } else {
       //email format is not correct
       console.log('Email format is not correct')
@@ -69,11 +64,18 @@ async function checkRegister(user: {
 }
 
 //check user login
-//TODO: connect with database
-function checkLogin(user: { email: string; password: string }) {
+async function checkLogin(user: { email: string; password: string }) {
   //check email format
   if (checkMailFormat(user.email)) {
     console.log('Email format is correct')
+    const response = await axios.post(
+      'http://ict11.ce.kmitl.ac.th:9080/login',
+      { params: { username: user.email, password: user.password } }
+    )
+    const token = response.data.access_token
+
+    //set token to global
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     user_email = user.email
     return true
   } else {
@@ -121,21 +123,18 @@ async function getUserInfo() {
 }
 //create task for both personal and team
 async function createUserTask(task: Task) {
+  task.status = false
   const info = convertTaskToDB(task, 0)
-  info.status = false
+  const json = JSON.stringify(info)
   try {
     const task_info = await axios.post(
       'http://ict11.ce.kmitl.ac.th:9080/user/task/create',
-      info,
+      json,
       {
         params: { email: user_email },
       }
     )
     if (task.role[0] !== 'Personal') {
-      const team_info = await axios.get(
-        'http://ict11.ce.kmitl.ac.th:9080/user/getTeam',
-        { params: { email: user_email } }
-      )
       // loop task.role array
       for (let i = 0; i < task.role.length; i++) {
         const team_task_info = await axios.post(
@@ -210,6 +209,25 @@ async function createTeam(team: Team) {
   const result = await createUserTeam(team, user_info)
   return result
 }
+
+async function editUserProfile(user: {
+  name: string
+  email: string
+  password: string
+}) {
+  try {
+    const json = JSON.stringify(user)
+    const user_info = await axios.put(
+      'http://ict11.ce.kmitl.ac.th:9080/user/editProfile',
+      json,
+      { params: { email: user_email } }
+    )
+    return true
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
 export {
   checkRegister,
   checkLogin,
@@ -224,4 +242,5 @@ export {
   createTeam,
   getUserEmail,
   getUserName,
+  editUserProfile,
 }
