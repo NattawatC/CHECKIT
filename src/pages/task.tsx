@@ -15,7 +15,6 @@ import { createUserTask, getAllTaskOfUser } from '@/services/userServices'
 
 //Apply Non's Function
 const tasks: Task[] = await getAllTaskOfUser()
-console.log(tasks)
 
 export default function Task() {
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
@@ -26,8 +25,8 @@ export default function Task() {
     setSelectedPriority(priority)
   }
 
-  const handleCategoryClick = (priority: string) => {
-    setSelectedCategory(priority)
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category)
   }
 
   const handleRoleClick = (role: string) => {
@@ -46,12 +45,12 @@ export default function Task() {
 
   // Form Values
   const [formValues, setFormValues] = useState({
-    title: '',
-    notes: '',
-    startDate: '2023-09-11',
-    endDate: '2023-10-11',
-    startTime: '9:11',
-    endTime: '10:11',
+    title: "",
+    notes: "",
+    startDate: "2023-09-11",
+    endDate: "2023-10-11",
+    startTime: "09:00",
+    endTime: "10:00",
   })
 
   const handleInputChange = (field: string, value: string) => {
@@ -73,6 +72,8 @@ export default function Task() {
       role: selectedRoles,
       status: false,
     })
+    //Cant solve the hydration rendering problem
+    // window.location.reload()
   }
 
   return (
@@ -109,7 +110,7 @@ export default function Task() {
                 Add
               </Button>
             </DialogTrigger>
-            //Add Scroll Area
+            {/* Add Scroll Area */}
             <DialogContent className="w-auto mx-auto max-w-md px-4 pt-16 pb-5 md:pb-5 md:pt-12 flex flex-col gap-8 bg-custom-black h-[700px] overflow-y-auto">
               <div className="flex flex-col items-center gap-4">
                 <Input
@@ -130,13 +131,15 @@ export default function Task() {
                   <Input
                     className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="date"
-                    defaultValue="0000-00-00"
+                    defaultValue="2023-09-11"
+                    onChange={(e) => handleInputChange('startDate', e.target.value)}
                   />
                   <label className="text-custom-white">_</label>
                   <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg"
                     type="date"
-                    defaultValue="0000-00-00"
+                    defaultValue="2023-10-11"
+                    onChange={(e) => handleInputChange('endDate', e.target.value)}
                   />
                 </div>
               </div>
@@ -146,13 +149,15 @@ export default function Task() {
                   <Input
                     className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="time"
-                    defaultValue="00:00"
+                    defaultValue="09:00"
+                    onChange={(e) => handleInputChange('startTime', e.target.value)}
                   />
                   <label className="text-custom-white">_</label>
                   <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg"
                     type="time"
-                    defaultValue="00:00"
+                    defaultValue="10:00"
+                    onChange={(e) => handleInputChange('endTime', e.target.value)}
                   />
                 </div>
               </div>
@@ -326,6 +331,7 @@ export default function Task() {
                 <Button
                   type="submit"
                   className="bg-custom-gray text-custom-white w-full h-auto text-base hover:bg-custom-orangeHover rounded-md"
+                  onClick={handleSubmit}
                 >
                   Add Task
                 </Button>
@@ -369,7 +375,7 @@ export default function Task() {
                   Add
                 </Button>
               </DialogTrigger>
-              //Add Scroll Area
+              {/* Add Scroll Area */}
               <DialogContent className="w-auto mx-auto max-w-md px-4 pt-16 pb-5 md:pb-5 md:pt-12 flex flex-col gap-8 bg-custom-black h-[700px] overflow-y-auto">
                 <div className="flex flex-col items-center gap-4">
                   <Input
@@ -390,7 +396,7 @@ export default function Task() {
                     <Input
                       className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                       type="date"
-                      defaultValue="2023-11-20"
+                      defaultValue="2023-09-11"
                       onChange={(e) =>
                         handleInputChange('startDate', e.target.value)
                       }
@@ -399,7 +405,7 @@ export default function Task() {
                     <Input
                       className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg lg:text-base"
                       type="date"
-                      defaultValue="2023-12-20"
+                      defaultValue="2023-10-11"
                       onChange={(e) =>
                         handleInputChange('endDate', e.target.value)
                       }
@@ -412,7 +418,7 @@ export default function Task() {
                     <Input
                       className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                       type="time"
-                      defaultValue="12:00"
+                      defaultValue="09:00"
                       onChange={(e) =>
                         handleInputChange('startTime', e.target.value)
                       }
@@ -421,7 +427,7 @@ export default function Task() {
                     <Input
                       className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg lg:text-base"
                       type="time"
-                      defaultValue="13:00"
+                      defaultValue="10:00"
                       onChange={(e) =>
                         handleInputChange('endTime', e.target.value)
                       }
