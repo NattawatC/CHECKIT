@@ -1,7 +1,8 @@
 //format date and time for DB
 function formatDateTimeForDB(date: string, time: string) {
   const [year, month, day] = date.split('-').map(Number)
-  const [hours, minutes, seconds] = date.split(':').map(Number)
+  const [hours, minutes] = date.split(':').map(Number)
+  const seconds = 0
 
   const formattedDate = new Date(year, month - 1, day, hours, minutes, seconds)
   const formattedDateTime = `${formattedDate.getFullYear()}-${String(
