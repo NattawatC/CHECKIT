@@ -17,7 +17,7 @@ const data = await getAllTaskOfUser()
 
 interface TaskProps {
   priority: string // Create Priority function
-  // id: string
+  task_id: number
   title: string
   date_start: string
   date_end: string
@@ -27,7 +27,7 @@ interface TaskProps {
 }
 
 const TaskItem: React.FunctionComponent<TaskProps> = ({
-  // id,
+  task_id,
   priority,
   title,
   date_start,
