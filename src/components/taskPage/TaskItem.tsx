@@ -1,19 +1,17 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import React, { useState } from 'react'
+import { editTask } from '@/services/taskServices'
+import { getAllTaskOfUser } from '@/services/userServices'
+import React, { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import { Input } from '../ui/input'
-import { getAllTaskOfUser } from '@/services/userServices'
 
-const data = await getAllTaskOfUser()
+const task: Task[] = await getAllTaskOfUser()
 
 interface TaskProps {
   priority: string // Create Priority function
@@ -38,26 +36,54 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
 }) => {
   const [isChecked, setIsChecked] = useState(false)
   const priorityContent = getPriorityContent(priority)
-
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+
+  const [Id, setId] = useState<number>(0)
+
+  const getTaskbyID = (taskId: number) => {
+    setId(taskId)
+  }
+
+  const [formValues, setFormValues] = useState({
+    title: task[Id].title,
+    notes: task[Id].note,
+    startDate: task[Id].date_start,
+    endDate: task[Id].date_end,
+    startTime: task[Id].time_start,
+    endTime: task[Id].time_end,
+  })
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormValues((prevValues) => ({ ...prevValues, [field]: value }))
+  }
+
+  useEffect(() => {
+    saveTask();
+  }, [Id, formValues, selectedPriority, selectedCategory]);
+
+  const saveTask = () => {
+    editTask(Id, {
+      task_id: Id,
+      title: formValues.title,
+      note: formValues.notes,
+      date_start: formValues.startDate,
+      date_end: formValues.endDate,
+      time_start: formValues.startTime,
+      time_end: formValues.endTime,
+      priority: selectedPriority,
+      category: selectedCategory,
+      role: task[Id].role,
+      status: task[Id].status,
+    })
+  }
 
   const handlePriorityClick = (priority: string) => {
     setSelectedPriority(priority)
   }
 
   const handleCategoryClick = (category: string) => {
-    setSelectedCategories((prevCategories) => {
-      if (prevCategories.includes(category)) {
-        return prevCategories.filter((c) => c !== category)
-      } else {
-        return [...prevCategories, category]
-      }
-    })
-  }
-
-  const isCategorySelected = (category: string) => {
-    return selectedCategories.includes(category)
+    setSelectedCategory(category)
   }
 
   const [dateStart, setDateStart] = useState(date_start)
@@ -117,7 +143,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
         <DialogTrigger asChild>
           <Button
             className="px-2 py-1 text-xs h-fit bg-custom-gray text-custom-white lg:text-base rounded-md "
-            // onClick={() => data.getTaskInfo(id)}
+            onClick={() => getTaskbyID(task_id)}
           >
             Edit
           </Button>
@@ -129,11 +155,13 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
               type="text"
               placeholder="Title"
               defaultValue={title}
+              onChange={(e) => handleInputChange('title', e.target.value)}
             />
             <textarea
               className="bg-custom-gray p-2 w-full min-h-auto focus:outline-custom-white ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg text-custom-white  lg:text-base"
               placeholder="Notes"
               defaultValue={note}
+              onChange={(e) => handleInputChange('notes', e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-3">
@@ -143,12 +171,15 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
                 className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                 type="date"
                 defaultValue="2023-09-20"
+                onChange={(e) => handleInputChange('startDate', e.target.value)}
               />
               <label className="text-custom-white lg:text-base">_</label>
               <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg lg:text-base"
                 type="date"
                 defaultValue="2023-09-21"
+                onChange={(e) => handleInputChange('endDate', e.target.value)}
+
               />
             </div>
           </div>
@@ -159,12 +190,15 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
                 className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                 type="time"
                 defaultValue="10:00"
+                onChange={(e) => handleInputChange('startTime', e.target.value)}
+
               />
               <label className="text-custom-white">_</label>
               <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg lg:text-base"
                 type="time"
                 defaultValue="13:00"
+                onChange={(e) => handleInputChange('endTime', e.target.value)}
               />
             </div>
           </div>
@@ -223,7 +257,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
                 <Button
                   onClick={() => handleCategoryClick('Personal')}
                   className={`${
-                    isCategorySelected('Personal')
+                    selectedCategory === 'Personal'
                       ? 'bg-custom-orange'
                       : 'bg-custom-gray'
                   } rounded-md lg:text-base`}
@@ -233,7 +267,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
                 <Button
                   onClick={() => handleCategoryClick('Work')}
                   className={`${
-                    isCategorySelected('Work')
+                    selectedCategory === 'Work'
                       ? 'bg-custom-orange'
                       : 'bg-custom-gray'
                   } rounded-md lg:text-base`}
@@ -243,7 +277,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
                 <Button
                   onClick={() => handleCategoryClick('Health')}
                   className={`${
-                    isCategorySelected('Health')
+                    selectedCategory === 'Health'
                       ? 'bg-custom-orange'
                       : 'bg-custom-gray'
                   } rounded-md lg:text-base`}
@@ -256,7 +290,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
                 <Button
                   onClick={() => handleCategoryClick('Others')}
                   className={`${
-                    isCategorySelected('Others')
+                    selectedCategory === 'Others'
                       ? 'bg-custom-orange'
                       : 'bg-custom-gray'
                   } rounded-md lg:text-base`}
@@ -276,6 +310,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
             <Button
               type="submit"
               className="bg-custom-purple text-custom-white w-full hover:bg-custom-purpleHover rounded-md lg:text-base"
+              onClick={saveTask}
             >
               Save changes
             </Button>
