@@ -3,7 +3,7 @@ import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
   Dialog,
@@ -11,7 +11,8 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { createUserTask, getAllTaskOfUser } from '@/services/userServices'
+import { createUserTask, filterByDate, getAllTaskOfUser, filterByPriority, filterByCategory } from '@/services/userServices'
+import { set } from 'zod'
 
 //Apply Non's Function
 const tasks: Task[] = await getAllTaskOfUser()
@@ -20,6 +21,13 @@ export default function Task() {
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
   const [selectedCategory, setSelectedCategory] = useState<string>('None')
   const [selectedRoles, setSelectedRoles] = useState<string[]>([])
+  const [allTasks, setAllTasks] = useState<Task[]>([]);
+  const [dateTasks, setDateTasks] = useState<any>([]);
+  const [priorityTasks, setPriorityTasks] = useState<Task[]>([]);
+  const [personalTasks, setPersonalTasks] = useState<Task[]>([]);
+  const [workTasks, setWorkTasks] = useState<Task[]>([]);
+  const [healthTasks, setHealthTasks] = useState<Task[]>([]);
+  const [othersTasks, setOthersTasks] = useState<Task[]>([]);
 
   const handlePriorityClick = (priority: string) => {
     setSelectedPriority(priority)
@@ -45,12 +53,12 @@ export default function Task() {
 
   // Form Values
   const [formValues, setFormValues] = useState({
-    title: "",
-    notes: "",
-    startDate: "2023-09-11",
-    endDate: "2023-10-11",
-    startTime: "09:00",
-    endTime: "10:00",
+    title: '',
+    notes: '',
+    startDate: '2023-09-11',
+    endDate: '2023-10-11',
+    startTime: '09:00',
+    endTime: '10:00',
   })
 
   const handleInputChange = (field: string, value: string) => {
@@ -76,20 +84,68 @@ export default function Task() {
     // window.location.reload()
   }
 
+  useEffect(() => {
+    // Fetch tasks and update state variables
+    const fetchTasks = async () => {
+      const tasksData = await getAllTaskOfUser();
+      const filteredDateTasks = await filterByDate();
+      const filteredPriorityTasks = await filterByPriority();
+      const filteredPersonalTasks = await filterByCategory('Personal');
+      const filteredWorkTasks = await filterByCategory('Work');
+      const filteredHealthTasks = await filterByCategory('Health');
+      const filteredOthersTasks = await filterByCategory('Others');
+      setAllTasks(tasksData);
+      // You may filter tasks for dateTasks and priorityTasks here initially
+      // based on your requirements
+      setDateTasks(filteredDateTasks);
+      setPriorityTasks(filteredPriorityTasks);
+      setPersonalTasks(filteredPersonalTasks);
+      setWorkTasks(filteredWorkTasks);
+      setHealthTasks(filteredHealthTasks);
+      setOthersTasks(filteredOthersTasks);
+    };
+    fetchTasks();
+  }, []);
+
+  //Get the Filter Data
+  const handleCheckboxToggle = (itemName: string) => {
+    if (itemName === '') {
+      setAllTasks(tasks)
+    }
+    else if (itemName === 'Date') {
+      setAllTasks(dateTasks)
+    }
+    else if (itemName === 'Priority') {
+      setAllTasks(priorityTasks)
+    }
+    else if (itemName === 'Personal') {
+      setAllTasks(personalTasks)
+    }
+    else if (itemName === 'Work') {
+      setAllTasks(workTasks)
+    }
+    else if (itemName === 'Health') {
+      setAllTasks(healthTasks)
+    }
+    else if (itemName === 'Others') {
+      setAllTasks(othersTasks)
+    }
+  }
+
   return (
     <div className="bg-custom-black h-max-screen">
       <MainLayout className="lg:hidden">
         <div className="flex flex-col gap-9">
           <NavBar />
           <div className="flex flex-col gap-6">
-            <SearchBar />
+            <SearchBar onCheckboxToggle={handleCheckboxToggle}/>
             <div className="flex flex-col justify-center items-center text-custom-white">
               <p className="text-xl">Task</p>
-              <p className="text-base">{tasks.length} tasks</p>
+              <p className="text-base">{allTasks.length} tasks</p>
             </div>
 
             <div className="flex flex-col gap-4 p-4 bg-custom-white rounded-lg">
-              {tasks.map((item, index) => (
+              {allTasks.map((item, index) => (
                 <TaskItem
                   key={index}
                   task_id={item.task_id}
@@ -132,14 +188,18 @@ export default function Task() {
                     className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="date"
                     defaultValue="2023-09-11"
-                    onChange={(e) => handleInputChange('startDate', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('startDate', e.target.value)
+                    }
                   />
                   <label className="text-custom-white">_</label>
                   <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg"
                     type="date"
                     defaultValue="2023-10-11"
-                    onChange={(e) => handleInputChange('endDate', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('endDate', e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -150,14 +210,18 @@ export default function Task() {
                     className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg"
                     type="time"
                     defaultValue="09:00"
-                    onChange={(e) => handleInputChange('startTime', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('startTime', e.target.value)
+                    }
                   />
                   <label className="text-custom-white">_</label>
                   <Input
                     className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg"
                     type="time"
                     defaultValue="10:00"
-                    onChange={(e) => handleInputChange('endTime', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('endTime', e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -229,7 +293,7 @@ export default function Task() {
                       onClick={() => handleCategoryClick('Work')}
                       className={`
                       ${
-                        selectedCategory === ('Work')
+                        selectedCategory === 'Work'
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md`}
@@ -240,7 +304,7 @@ export default function Task() {
                       onClick={() => handleCategoryClick('Health')}
                       className={`
                       ${
-                        selectedCategory === ('Health')
+                        selectedCategory === 'Health'
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md`}
@@ -253,7 +317,7 @@ export default function Task() {
                     <Button
                       onClick={() => handleCategoryClick('Others')}
                       className={`${
-                        selectedCategory === ('Others')
+                        selectedCategory === 'Others'
                           ? 'bg-custom-orange'
                           : 'bg-custom-gray'
                       } rounded-md`}
@@ -347,14 +411,14 @@ export default function Task() {
           <NavBar />
           <div className="flex flex-col gap-6 w-full px-52">
             <div className="flex flex-col gap-6">
-              <SearchBar />
+              <SearchBar onCheckboxToggle={handleCheckboxToggle}/>
               <div className="flex flex-col justify-center items-center text-custom-white">
                 <p className="text-2xl">Task</p>
-                <p className="text-xl">{tasks.length} tasks</p>
+                <p className="text-xl">{allTasks.length} tasks</p>
               </div>
 
               <div className="flex flex-col gap-4 p-4 bg-custom-white rounded-lg">
-                {tasks.map((item, index) => (
+                {allTasks.map((item, index) => (
                   <TaskItem
                     key={index}
                     task_id={item.task_id}
@@ -495,7 +559,7 @@ export default function Task() {
                         onClick={() => handleCategoryClick('Personal')}
                         className={`
                       ${
-                        selectedCategory === ('Personal')
+                        selectedCategory === 'Personal'
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md lg:text-base`}
@@ -506,7 +570,7 @@ export default function Task() {
                         onClick={() => handleCategoryClick('Work')}
                         className={`
                       ${
-                        selectedCategory === ('Work')
+                        selectedCategory === 'Work'
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md lg:text-base`}
@@ -517,7 +581,7 @@ export default function Task() {
                         onClick={() => handleCategoryClick('Health')}
                         className={`
                       ${
-                        selectedCategory === ('Health')
+                        selectedCategory === 'Health'
                           ? 'bg-custom-orange hover:bg-none'
                           : 'bg-custom-gray'
                       } rounded-md lg:text-base`}
@@ -530,7 +594,7 @@ export default function Task() {
                       <Button
                         onClick={() => handleCategoryClick('Others')}
                         className={`${
-                          selectedCategory === ('Others')
+                          selectedCategory === 'Others'
                             ? 'bg-custom-orange'
                             : 'bg-custom-gray'
                         } rounded-md lg:text-base`}
