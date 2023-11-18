@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { convertTaskFromDB, convertTaskToDB } from './converter'
-import { formatDateForDisplay, formatDateTimeFromDB } from './dataTimeServices'
 //edit task by id
 async function editTask(id: number, task: Task) {
   const info = convertTaskToDB(task, id)
@@ -132,16 +131,16 @@ async function deleteTask(id: number) {
 //   }
 // }
 //filter by date
-async function filterUserTaskByDate(task: any) {
-  const date = formatDateForDisplay(new Date())
-  const task_info = task
-  if (Array.isArray(task_info)) {
-    const filteredTasks = task_info.filter((task) => {
-      const taskDate = formatDateTimeFromDB(task.end).date
-      //filter from today to future
-      return taskDate >= date
-    })
-    return filteredTasks
-  }
-}
-export { editTask, getTaskInfo, getAllTask, deleteTask, filterUserTaskByDate }
+// async function filterUserTaskByDate(task: any) {
+//   const date = formatDateForDisplay(new Date())
+//   const task_info = task
+//   if (Array.isArray(task_info)) {
+//     const filteredTasks = task_info.filter((task) => {
+//       const taskDate = formatDateTimeFromDB(task.end).date
+//       //filter from today to future
+//       return taskDate >= date
+//     })
+//     return filteredTasks
+//   }
+// }
+export { editTask, getTaskInfo, getAllTask, deleteTask }
