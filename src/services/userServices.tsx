@@ -1,12 +1,6 @@
 import axios from 'axios'
 import { convertTaskFromDB, convertTaskToDB } from './converter'
-import {
-  filterUserTaskByCategory,
-  filterUserTaskByDate,
-  filterUserTaskByPriority,
-  getUserTaskByPriority,
-  searchUserTask,
-} from './taskServices'
+import { filterUserTaskByDate } from './taskServices'
 import { createUserTeam } from './teamServices'
 
 declare global {
@@ -196,29 +190,67 @@ async function getAllTaskOfUser() {
 }
 //getAllTask of User by priority
 async function getAllTaskByPriority(priority: string) {
+  let result = []
   const task_info = await getAllTaskOfUser()
-  const result = await getUserTaskByPriority(priority, task_info)
-  return result
+  if (Array.isArray(task_info)) {
+    const filteredTasks = task_info.filter((task) => task.priority === priority)
+    for (let i = 0; i < filteredTasks.length; i++) {
+      result[i] = convertTaskFromDB(filteredTasks[i])
+    }
+    return filteredTasks
+  } else {
+    return []
+  }
 }
 //filter by priority hight-> medium -> low
 async function filterByPriority() {
   const task_info = await getAllTaskOfUser()
-  const result = await filterUserTaskByPriority(task_info)
+  const result = []
+  if (Array.isArray(task_info)) {
+    const filteredTasksHigh = task_info.filter((task) => {
+      return task.priority === 'high'
+    })
+    convertTaskFromDB(filteredTasksHigh)
+    const filteredTasksMedium = task_info.filter((task) => {
+      return task.priority === 'medium'
+    })
+    convertTaskFromDB(filteredTasksMedium)
+    const filteredTasksLow = task_info.filter((task) => {
+      return task.priority === 'low'
+    })
+    convertTaskFromDB(filteredTasksLow)
+    result.push(
+      ...filteredTasksHigh,
+      ...filteredTasksMedium,
+      ...filteredTasksLow
+    )
+  }
   return result
 }
 
 //filter by category
 async function filterByCategory(category: string) {
   const task_info = await getAllTaskOfUser()
-  const result = await filterUserTaskByCategory(category, task_info)
-  return result
+  if (Array.isArray(task_info)) {
+    const filteredTasks = task_info.filter((task) => task.category === category)
+    return filteredTasks
+  } else {
+    return []
+  }
 }
 
 //searchParam task by title
 async function searchTask(searchParam: string) {
   const task_info = await getAllTaskOfUser()
-  const result = await searchUserTask(searchParam, task_info)
-  return result
+  if (Array.isArray(task_info)) {
+    const filteredTasks = task_info.filter((task) => {
+      const taskTitle = task.title
+      return taskTitle.toLowerCase().startsWith(searchParam.toLowerCase())
+    })
+    return filteredTasks
+  } else {
+    return []
+  }
 }
 //filter by date
 async function filterByDate() {

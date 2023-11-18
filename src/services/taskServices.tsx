@@ -69,68 +69,68 @@ async function deleteTask(id: number) {
   }
 }
 //getAllTask of User by priority
-async function getUserTaskByPriority(priority: string, task: any) {
-  const response = task
-  if (Array.isArray(response)) {
-    const filteredTasks = response.filter((task) => task.priority === priority)
-    for (let i = 0; i < filteredTasks.length; i++) {
-      filteredTasks[i] = convertTaskFromDB(filteredTasks[i])
-    }
-    return filteredTasks
-  } else {
-    return []
-  }
-}
+// async function getUserTaskByPriority(priority: string, task: any) {
+//   const response = task
+//   if (Array.isArray(response)) {
+//     const filteredTasks = response.filter((task) => task.priority === priority)
+//     for (let i = 0; i < filteredTasks.length; i++) {
+//       filteredTasks[i] = convertTaskFromDB(filteredTasks[i])
+//     }
+//     return filteredTasks
+//   } else {
+//     return []
+//   }
+// }
 //filter by priority hight-> medium -> low
-async function filterUserTaskByPriority(task: any) {
-  const task_info = task
-  const result = []
-  if (Array.isArray(task_info)) {
-    const filteredTasksHigh = task_info.filter((task) => {
-      return task.priority === 'high'
-    })
-    convertTaskFromDB(filteredTasksHigh)
-    const filteredTasksMedium = task_info.filter((task) => {
-      return task.priority === 'medium'
-    })
-    convertTaskFromDB(filteredTasksMedium)
-    const filteredTasksLow = task_info.filter((task) => {
-      return task.priority === 'low'
-    })
-    convertTaskFromDB(filteredTasksLow)
-    result.push(
-      ...filteredTasksHigh,
-      ...filteredTasksMedium,
-      ...filteredTasksLow
-    )
-  }
-  return result
-}
+// async function filterUserTaskByPriority(task: any) {
+//   const task_info = task
+//   const result = []
+//   if (Array.isArray(task_info)) {
+//     const filteredTasksHigh = task_info.filter((task) => {
+//       return task.priority === 'high'
+//     })
+//     convertTaskFromDB(filteredTasksHigh)
+//     const filteredTasksMedium = task_info.filter((task) => {
+//       return task.priority === 'medium'
+//     })
+//     convertTaskFromDB(filteredTasksMedium)
+//     const filteredTasksLow = task_info.filter((task) => {
+//       return task.priority === 'low'
+//     })
+//     convertTaskFromDB(filteredTasksLow)
+//     result.push(
+//       ...filteredTasksHigh,
+//       ...filteredTasksMedium,
+//       ...filteredTasksLow
+//     )
+//   }
+//   return result
+// }
 
 //filter by category
-async function filterUserTaskByCategory(category: string, task: any) {
-  const response = task
-  if (Array.isArray(response)) {
-    const filteredTasks = response.filter((task) => task.category === category)
-    return filteredTasks
-  } else {
-    return []
-  }
-}
+// async function filterUserTaskByCategory(category: string, task: any) {
+//   const response = task
+//   if (Array.isArray(response)) {
+//     const filteredTasks = response.filter((task) => task.category === category)
+//     return filteredTasks
+//   } else {
+//     return []
+//   }
+// }
 
 //searchParam task by title
-async function searchUserTask(searchParam: string, task: any) {
-  const task_info = task
-  if (Array.isArray(task_info)) {
-    const filteredTasks = task_info.filter((task) => {
-      const taskTitle = task.title
-      return taskTitle.toLowerCase().startsWith(searchParam.toLowerCase())
-    })
-    return filteredTasks
-  } else {
-    return []
-  }
-}
+// async function searchUserTask(searchParam: string, task: any) {
+//   const task_info = task
+//   if (Array.isArray(task_info)) {
+//     const filteredTasks = task_info.filter((task) => {
+//       const taskTitle = task.title
+//       return taskTitle.toLowerCase().startsWith(searchParam.toLowerCase())
+//     })
+//     return filteredTasks
+//   } else {
+//     return []
+//   }
+// }
 //filter by date
 async function filterUserTaskByDate(task: any) {
   const date = formatDateForDisplay(new Date())
@@ -144,14 +144,4 @@ async function filterUserTaskByDate(task: any) {
     return filteredTasks
   }
 }
-export {
-  editTask,
-  getTaskInfo,
-  getAllTask,
-  deleteTask,
-  getUserTaskByPriority,
-  filterUserTaskByPriority,
-  filterUserTaskByCategory,
-  searchUserTask,
-  filterUserTaskByDate,
-}
+export { editTask, getTaskInfo, getAllTask, deleteTask, filterUserTaskByDate }
