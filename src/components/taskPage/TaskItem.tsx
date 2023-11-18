@@ -4,7 +4,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { editTask } from '@/services/taskServices'
+import { editTask, deleteTask } from '@/services/taskServices'
 import { getAllTaskOfUser } from '@/services/userServices'
 import React, { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
@@ -78,6 +78,14 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
     })
   }
 
+  useEffect(() => {
+    deleteATask()
+  }, [Id])
+
+  const deleteATask = () => {
+    deleteTask(Id)
+  }
+
   const handlePriorityClick = (priority: string) => {
     setSelectedPriority(priority)
   }
@@ -85,8 +93,6 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category)
   }
-
-  const [dateStart, setDateStart] = useState(date_start)
 
   //Checkbox state
   const toggleCheckbox = () => {
@@ -304,6 +310,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
             <Button
               type="submit"
               className="bg-custom-gray text-custom-white w-full hover:bg-custom-orangeHover rounded-md lg:text-base"
+              onClick={deleteATask}
             >
               Delete
             </Button>
