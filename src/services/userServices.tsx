@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { convertTaskFromDB, convertTaskToDB } from './converter'
-import { formatDateForDisplay, formatDateTimeFromDB } from './dataTimeServices'
 import { createUserTeam } from './teamServices'
 
 declare global {
@@ -255,44 +254,14 @@ async function searchTask(searchParam: string) {
   }
 }
 //filter by date
-// async function filterByDate() {
-//   const task_info = await getAllTaskOfUser()
-//   const date = formatDateForDisplay(new Date())
-//   if (Array.isArray(task_info)) {
-//     const filteredTasks = task_info.filter((task) => {
-//       const taskDate = formatDateTimeFromDB(task.end).date
-//       //filter from today to future
-//       return taskDate >= date
-//     })
-//     return filteredTasks
-//   }
-// }
 async function filterByDate() {
-  try {
-    const result = []
-    const task_info = await getAllTaskOfUser()
-    const date = formatDateForDisplay(new Date())
-    if (Array.isArray(task_info)) {
-      const filteredTasks = task_info
-        .filter((task) => {
-          const taskDate = formatDateTimeFromDB(task.end).date
-          return taskDate >= date
-        })
-        .sort((taskA, taskB) => {
-          const dateA = new Date(formatDateTimeFromDB(taskA.end).date)
-          const dateB = new Date(formatDateTimeFromDB(taskB.end).date)
-
-          // Compare dates for sorting in ascending order
-          return dateA.getTime() - dateB.getTime()
-        })
-
-      result.push(...filteredTasks)
-    }
-
-    return result
-  } catch (error) {
-    console.error(error)
-    return false
+  const task_info = await getAllTaskOfUser()
+  if (Array.isArray(task_info)) {
+    task_info.sort((a, b): any => {
+      let compare = Date.parse(a.date_start) - Date.parse(b.date_start)
+      return compare
+    })
+    return task_info
   }
 }
 
