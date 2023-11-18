@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { convertTaskFromDB, convertTaskToDB } from './converter'
-import { filterUserTaskByDate } from './taskServices'
+import { formatDateForDisplay, formatDateTimeFromDB } from './dataTimeServices'
 import { createUserTeam } from './teamServices'
 
 declare global {
@@ -137,7 +137,9 @@ async function createUserTask(task: Task) {
   let task_data
   try {
     const task_info = await fetch(
-      `http://ict11.ce.kmitl.ac.th:9080/user/task/create?email=${encodeURIComponent(user_email)}`,
+      `http://ict11.ce.kmitl.ac.th:9080/user/task/create?email=${encodeURIComponent(
+        user_email
+      )}`,
       {
         method: 'POST',
         headers: {
@@ -253,10 +255,45 @@ async function searchTask(searchParam: string) {
   }
 }
 //filter by date
+// async function filterByDate() {
+//   const task_info = await getAllTaskOfUser()
+//   const date = formatDateForDisplay(new Date())
+//   if (Array.isArray(task_info)) {
+//     const filteredTasks = task_info.filter((task) => {
+//       const taskDate = formatDateTimeFromDB(task.end).date
+//       //filter from today to future
+//       return taskDate >= date
+//     })
+//     return filteredTasks
+//   }
+// }
 async function filterByDate() {
-  const task_info = await getAllTaskOfUser()
-  const result = await filterUserTaskByDate(task_info)
-  return result
+  try {
+    const result = []
+    const task_info = await getAllTaskOfUser()
+    const date = formatDateForDisplay(new Date())
+    if (Array.isArray(task_info)) {
+      const filteredTasks = task_info
+        .filter((task) => {
+          const taskDate = formatDateTimeFromDB(task.end).date
+          return taskDate >= date
+        })
+        .sort((taskA, taskB) => {
+          const dateA = new Date(formatDateTimeFromDB(taskA.end).date)
+          const dateB = new Date(formatDateTimeFromDB(taskB.end).date)
+
+          // Compare dates for sorting in ascending order
+          return dateA.getTime() - dateB.getTime()
+        })
+
+      result.push(...filteredTasks)
+    }
+
+    return result
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }
 
 async function createTeam(team: Team) {
