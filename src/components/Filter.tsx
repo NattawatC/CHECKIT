@@ -2,36 +2,55 @@ import { useState } from 'react'
 import { Checkbox } from './ui/checkbox'
 
 const filterItems = [
-  { name: 'Date' },
-  { name: 'Priority' },
-  { name: 'Category' },
+  { id: 'date', name: 'Date' },
+  { id: 'priority', name: 'Priority' },
+  { id: 'category', name: 'Category' },
 ]
 
 const categoryItems = [
-  { name: 'Work' },
-  { name: 'Personal' },
-  { name: 'Health' },
-  { name: 'Others' },
+  { id: 'work', name: 'Work' },
+  { id: 'personal', name: 'Personal' },
+  { id: 'health', name: 'Health' },
+  { id: 'others', name: 'Others' },
 ]
 
-export const Filter: React.FunctionComponent = () => {
-  const [isCategoryChecked, setIsCategoryChecked] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
+interface FilterProps {
+  onCheckboxToggle: (itemName: string) => void
+}
 
-  const toggleCategory = () => {
-    setIsCategoryChecked(!isCategoryChecked)
+export const Filter: React.FunctionComponent<FilterProps> = ({
+  onCheckboxToggle,
+}) => {
+  const [isOpenCategoryChecked, setOpenIsCategoryChecked] = useState(true)
+  const [isChecked, setIsChecked] = useState(true)
+  const [isCategoryChecked, setCategoryIsChecked] = useState(true)
+
+  const openCategoryBox = () => {
+    setOpenIsCategoryChecked(!isOpenCategoryChecked)
+    console.log(isOpenCategoryChecked)
+  }
+
+  const toggleCategory = (itemName: string) => {
+    setCategoryIsChecked(!isCategoryChecked)
+    if (isCategoryChecked) {
+      onCheckboxToggle(itemName)
+    }
+    else{
+      onCheckboxToggle('')
+    }
+  }
+
+  const toggle = (itemName: string) => {
+    setIsChecked(!isChecked)
+    if (isChecked) {
+      onCheckboxToggle(itemName)
+    }
+    else{
+      onCheckboxToggle('')
+    }
   }
 
   //Function to sent the filter data to the backend
-  const handleFilterItemClick = (event: any, itemName: string) => {
-    console.log(event.target.checked)
-    // if (event.target.checked) {
-    // console.log(`Filter Item Clicked: ${itemName}`);
-    // }
-    // else{
-    // console.log(`Filter Item Unchecked: ${itemName}`);
-    // }
-  }
 
   return (
     <>
@@ -40,19 +59,28 @@ export const Filter: React.FunctionComponent = () => {
           {filterItems.map((item) =>
             item.name === 'Category' ? (
               <>
-                <div className="flex flex-row items-center justify-left gap-3">
+                <div
+                  className="flex flex-row items-center justify-left gap-3"
+                  key={item.id}
+                >
                   <Checkbox
                     className="border-custom-purple data-[state=checked]:bg-custom-purple"
-                    checked={isCategoryChecked}
-                    onClick={toggleCategory}
+                    checked={isOpenCategoryChecked}
+                    onClick={openCategoryBox}
                   />
                   <p className="text-base lg:text-xl">{item.name}</p>
                 </div>
-                {isCategoryChecked && (
+                {isOpenCategoryChecked && (
                   <div className="flex flex-row justify-between mx-2 bg-custom-white">
                     {categoryItems.map((item) => (
-                      <div className="flex flex-row items-center justify-center gap-2">
-                        <Checkbox className="border-custom-purple data-[state=checked]:bg-custom-purple" />
+                      <div
+                        className="flex flex-row items-center justify-center gap-2"
+                        key={item.id}
+                      >
+                        <Checkbox
+                          className="border-custom-purple data-[state=checked]:bg-custom-purple"
+                          onClick={() => toggleCategory(item.name)}
+                        />
                         <p className="text-sm lg:text-lg">{item.name}</p>
                       </div>
                     ))}
@@ -60,10 +88,13 @@ export const Filter: React.FunctionComponent = () => {
                 )}
               </>
             ) : (
-              <div className="flex flex-row items-center justify-left gap-3">
+              <div
+                className="flex flex-row items-center justify-left gap-3"
+                key={item.id}
+              >
                 <Checkbox
                   className="border-custom-purple data-[state=checked]:bg-custom-purple"
-                  onClick={(e) => handleFilterItemClick(e, item.name)}
+                  onClick={() => toggle(item.name)}
                 />
                 <p className="text-base lg:text-xl">{item.name}</p>
               </div>
