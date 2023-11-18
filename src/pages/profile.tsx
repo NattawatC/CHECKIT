@@ -38,7 +38,6 @@ const Profile = () => {
                 <p>Email:</p>
                 <p>{user_info.email}</p>
               </div>
-              <ChangeEmail />
             </div>
 
             <div className="flex flex-col gap-3">
@@ -91,7 +90,6 @@ const Profile = () => {
                     <p>Email:</p>
                     <p>{user_info.email}</p>
                   </div>
-                  <ChangeEmail />
                 </div>
 
                 <div className="flex flex-col gap-3">
