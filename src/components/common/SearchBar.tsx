@@ -5,12 +5,17 @@ import { useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { IoFilter } from 'react-icons/io5'
 
-export const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  onCheckboxToggle: (itemName: string) => void;
+}
+
+export const SearchBar:  React.FC<SearchBarProps> = ({ onCheckboxToggle }) => {
   const [isFilter, setIsFilter] = useState(false)
 
   const toggleFilter = () => {
     setIsFilter(!isFilter)
   }
+  
   return (
     <div className="flex flex-col gap-4">
       <div className="relative w-full">
@@ -29,7 +34,7 @@ export const SearchBar: React.FC = () => {
       </div>
       {isFilter && (
         <div>
-          <Filter />
+          <Filter onCheckboxToggle={onCheckboxToggle}/>
         </div>
       )}
     </div>
