@@ -4,14 +4,11 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { editTask, deleteTask } from '@/services/taskServices'
-import { getAllTaskOfUser } from '@/services/userServices'
-import React, { useState, useEffect } from 'react'
+import { deleteTask, editTask } from '@/services/taskServices'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import { Input } from '../ui/input'
-
-const task: Task[] = await getAllTaskOfUser()
 
 interface TaskProps {
   priority: string // Create Priority function
@@ -38,29 +35,28 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
   const priorityContent = getPriorityContent(priority)
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-
   const [Id, setId] = useState<number>(0)
 
   const getTaskbyID = (taskId: number) => {
     setId(taskId)
   }
 
+  // useEffect(() => {
+  console.log(Id)
+  // }, [Id])
+
   const [formValues, setFormValues] = useState({
-    title: task[Id].title,
-    notes: task[Id].note,
-    startDate: task[Id].date_start,
-    endDate: task[Id].date_end,
-    startTime: task[Id].time_start,
-    endTime: task[Id].time_end,
+    title,
+    notes: note,
+    startDate: date_start,
+    endDate: date_end,
+    startTime: time_start,
+    endTime: time_end,
   })
 
   const handleInputChange = (field: string, value: string) => {
     setFormValues((prevValues) => ({ ...prevValues, [field]: value }))
   }
-
-  useEffect(() => {
-    saveTask();
-  }, [Id, formValues, selectedPriority, selectedCategory]);
 
   const saveTask = () => {
     editTask(Id, {
@@ -73,17 +69,20 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
       time_end: formValues.endTime,
       priority: selectedPriority,
       category: selectedCategory,
-      role: task[Id].role,
-      status: task[Id].status,
+      role: [],
+      status: false,
     })
+
+    window.location.reload()
   }
 
-  useEffect(() => {
-    deleteATask()
-  }, [Id])
+  // useEffect(() => {
+  //   deleteATask()
+  // }, [Id])
 
   const deleteATask = () => {
     deleteTask(Id)
+    window.location.reload()
   }
 
   const handlePriorityClick = (priority: string) => {
@@ -97,6 +96,9 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
   //Checkbox state
   const toggleCheckbox = () => {
     setIsChecked(!isChecked)
+    if (!isChecked) {
+      console.log(title)
+    }
   }
 
   // Determine the content to display for the priority
@@ -157,7 +159,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
         <DialogContent className="w-auto mx-auto max-w-md px-4 pt-16 pb-5 md:pb-5 md:pt-12 flex flex-col gap-5 bg-custom-black">
           <div className="flex flex-col items-center gap-4">
             <Input
-              className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white  lg:text-base"
+              className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white  text-base"
               type="text"
               placeholder="Title"
               defaultValue={title}
@@ -176,16 +178,15 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
               <Input
                 className="bg-custom-gray px-4 py-2 h-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                 type="date"
-                defaultValue="2023-09-20"
+                defaultValue={date_start}
                 onChange={(e) => handleInputChange('startDate', e.target.value)}
               />
               <label className="text-custom-white lg:text-base">_</label>
               <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto focus:outline-custom-white rounded-lg lg:text-base"
                 type="date"
-                defaultValue="2023-09-21"
+                defaultValue={date_end}
                 onChange={(e) => handleInputChange('endDate', e.target.value)}
-
               />
             </div>
           </div>
@@ -195,15 +196,14 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
               <Input
                 className="bg-custom-gray px-4 py-2 h-auto w-auto text-custom-white focus:outline-custom-white rounded-lg lg:text-base"
                 type="time"
-                defaultValue="10:00"
+                defaultValue={time_start}
                 onChange={(e) => handleInputChange('startTime', e.target.value)}
-
               />
               <label className="text-custom-white">_</label>
               <Input
                 className="bg-custom-gray px-4 py-2 text-custom-white h-auto w-auto focus:outline-custom-white rounded-lg lg:text-base"
                 type="time"
-                defaultValue="13:00"
+                defaultValue={time_end}
                 onChange={(e) => handleInputChange('endTime', e.target.value)}
               />
             </div>
