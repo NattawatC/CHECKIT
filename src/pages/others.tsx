@@ -15,7 +15,7 @@ const Others: NextPage = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-8">
               <NavBar />
-              <SearchBar />
+              {/* <SearchBar /> */}
             </div>
 
             <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
@@ -46,7 +46,7 @@ const Others: NextPage = () => {
           <div className="flex flex-row gap-10 py-10">
             <NavBar />
             <div className="flex flex-col w-full px-52 gap-8">
-              <SearchBar />
+              {/* <SearchBar /> */}
               <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
                 <p className="text-2xl">Others</p>
                 <p className="text-xl">{others_task.length} Task</p>

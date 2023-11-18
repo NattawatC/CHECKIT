@@ -2,10 +2,10 @@
 import { Footer, NavBar, SearchBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
-import { filterByCategory } from '@/services/userServices'
+import { getAllTaskByPriority, getAllTaskOfUser } from '@/services/userServices'
 import { NextPage } from 'next'
 
-const upcoming_task = await filterByCategory('High')
+const userInfo: Task[] = await getAllTaskByPriority("High")
 
 const Upcoming: NextPage = () => {
   return (
@@ -15,17 +15,18 @@ const Upcoming: NextPage = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-8">
               <NavBar />
-              <SearchBar />
+              {/* <SearchBar /> */}
             </div>
             <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
               <p className="text-xl">Upcoming</p>
-              <p className="text-base">{upcoming_task.length} Tasks</p>
+              <p className="text-base">{userInfo.length} Tasks</p>
             </div>
 
             <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
-              {upcoming_task.map((item, index) => (
+              {userInfo.map((item, index) => (
                 <TaskItem
                   key={index}
+                  task_id={item.task_id}
                   priority={item.priority}
                   title={item.title}
                   date_start={item.date_start}
@@ -44,15 +45,16 @@ const Upcoming: NextPage = () => {
           <div className="flex flex-row gap-10 py-10">
             <NavBar />
             <div className="flex flex-col w-full px-52 gap-8">
-              <SearchBar />
+              {/* <SearchBar /> */}
               <div className="gap-1 items-center flex flex-col text-custom-white font-medium">
                 <p className="text-2xl">Upcoming</p>
-                <p className="text-xl">{upcoming_task.length} Task</p>
+                <p className="text-xl">{userInfo.length} Task</p>
               </div>
               <div className="flex flex-col gap-4 bg-custom-white rounded-lg p-4">
-                {upcoming_task.map((item, index) => (
+                {userInfo.map((item, index) => (
                   <TaskItem
                     key={index}
+                    task_id={item.task_id}
                     priority={item.priority}
                     title={item.title}
                     date_start={item.date_start}
