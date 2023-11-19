@@ -199,7 +199,11 @@ async function getAllTaskOfUser(user_email: string) {
     for (let i = 0; i < task_info.data.length; i++) {
       task_info.data[i] = convertTaskFromDB(task_info.data[i])
     }
-    return task_info.data
+    // check task status == false
+    const filteredTasks = task_info.data.filter(
+      (task: any) => task.status === false
+    )
+    return filteredTasks
   } catch (error) {
     console.log(error)
     return false
