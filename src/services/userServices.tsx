@@ -6,8 +6,6 @@ declare global {
   var user_email: string
   var user_username: string
 }
-global.user_email = ''
-global.user_username = ''
 
 function getUserEmail() {
   return global.user_email
