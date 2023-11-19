@@ -189,7 +189,7 @@ async function createUserTask(task: Task, user_email: string) {
   }
 }
 //get all task of user
-async function getAllTaskOfUser(user_email: string) {
+async function getAllTaskOfUser(user_email: string, status: number) {
   try {
     //get user email
     const task_info = await axios.get(
@@ -200,7 +200,7 @@ async function getAllTaskOfUser(user_email: string) {
       task_info.data[i] = convertTaskFromDB(task_info.data[i])
     }
     if (Array.isArray(task_info.data)) {
-      const filterTasks = task_info.data.filter((task) => task.status == 0)
+      const filterTasks = task_info.data.filter((task) => task.status == status)
       return filterTasks
     }
   } catch (error) {
@@ -211,7 +211,7 @@ async function getAllTaskOfUser(user_email: string) {
 //getAllTask of User by priority
 async function getAllTaskByPriority(priority: string, user_email: string) {
   let result = []
-  const task_info = await getAllTaskOfUser(user_email)
+  const task_info = await getAllTaskOfUser(user_email, 0)
   if (Array.isArray(task_info)) {
     const filteredTasks = task_info.filter((task) => task.priority === priority)
     for (let i = 0; i < filteredTasks.length; i++) {
@@ -224,7 +224,7 @@ async function getAllTaskByPriority(priority: string, user_email: string) {
 }
 //filter by priority hight-> medium -> low
 async function filterByPriority(user_email: string) {
-  const task_info = await getAllTaskOfUser(user_email)
+  const task_info = await getAllTaskOfUser(user_email, 0)
   const result = []
   if (Array.isArray(task_info)) {
     const filteredTasksHigh = task_info.filter((task) => {
@@ -250,7 +250,7 @@ async function filterByPriority(user_email: string) {
 
 //filter by category
 async function filterByCategory(category: string, user_email: string) {
-  const task_info = await getAllTaskOfUser(user_email)
+  const task_info = await getAllTaskOfUser(user_email, 0)
   if (Array.isArray(task_info)) {
     const filteredTasks = task_info.filter((task) => task.category === category)
     return filteredTasks
@@ -261,7 +261,7 @@ async function filterByCategory(category: string, user_email: string) {
 
 //searchParam task by title
 async function searchTask(searchParam: string, user_email: string) {
-  const task_info = await getAllTaskOfUser(user_email)
+  const task_info = await getAllTaskOfUser(user_email, 0)
   if (Array.isArray(task_info)) {
     const filteredTasks = task_info.filter((task) => {
       const taskTitle = task.title
@@ -274,7 +274,7 @@ async function searchTask(searchParam: string, user_email: string) {
 }
 //filter by date
 async function filterByDate(user_email: string) {
-  const task_info = await getAllTaskOfUser(user_email)
+  const task_info = await getAllTaskOfUser(user_email, 0)
   if (Array.isArray(task_info)) {
     task_info.sort((a, b): any => {
       let compare = Date.parse(a.date_end) - Date.parse(b.date_end)
@@ -336,15 +336,12 @@ async function editUserProfile(name: string, user_email: string) {
     return false
   }
 }
+
 export {
   checkLogin,
   checkRegister,
   createTeam,
   createUserTask,
-  // getUserEmail,
-  // setUserEmail,
-  // getUserName,
-  // setUserName,
   editUserProfile,
   filterByCategory,
   filterByDate,
