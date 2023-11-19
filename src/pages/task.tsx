@@ -3,7 +3,7 @@ import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Dialog,
@@ -11,23 +11,28 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { createUserTask, filterByDate, getAllTaskOfUser, filterByPriority, filterByCategory } from '@/services/userServices'
-import { set } from 'zod'
+import {
+  createUserTask,
+  filterByCategory,
+  filterByDate,
+  filterByPriority,
+  getAllTaskOfUser,
+} from '@/services/userServices'
 
 //Apply Non's Function
-const tasks: Task[] = await getAllTaskOfUser()
+// const tasks: Task[] = await getAllTaskOfUser()
 
 export default function Task() {
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
   const [selectedCategory, setSelectedCategory] = useState<string>('None')
   const [selectedRoles, setSelectedRoles] = useState<string[]>([])
-  const [allTasks, setAllTasks] = useState<Task[]>([]);
-  const [dateTasks, setDateTasks] = useState<any>([]);
-  const [priorityTasks, setPriorityTasks] = useState<Task[]>([]);
-  const [personalTasks, setPersonalTasks] = useState<Task[]>([]);
-  const [workTasks, setWorkTasks] = useState<Task[]>([]);
-  const [healthTasks, setHealthTasks] = useState<Task[]>([]);
-  const [othersTasks, setOthersTasks] = useState<Task[]>([]);
+  const [allTasks, setAllTasks] = useState<Task[]>([])
+  const [dateTasks, setDateTasks] = useState<any>([])
+  const [priorityTasks, setPriorityTasks] = useState<Task[]>([])
+  const [personalTasks, setPersonalTasks] = useState<Task[]>([])
+  const [workTasks, setWorkTasks] = useState<Task[]>([])
+  const [healthTasks, setHealthTasks] = useState<Task[]>([])
+  const [othersTasks, setOthersTasks] = useState<Task[]>([])
 
   const handlePriorityClick = (priority: string) => {
     setSelectedPriority(priority)
@@ -64,29 +69,32 @@ export default function Task() {
   const handleInputChange = (field: string, value: string) => {
     setFormValues((prevValues) => ({ ...prevValues, [field]: value }))
   }
-
-  const handleSubmit = () => {
-    // Log the input information
-    createUserTask({
-      task_id: 0,
-      title: formValues.title,
-      note: formValues.notes,
-      date_start: formValues.startDate,
-      date_end: formValues.endDate,
-      time_start: formValues.startTime,
-      time_end: formValues.endTime,
-      priority: selectedPriority,
-      category: selectedCategory,
-      role: selectedRoles,
-      status: false,
-    })
-    //Cant solve the hydration rendering problem
-    // window.location.reload()
+  const handleSubmit = async () => {
+    try {
+      await createUserTask({
+        task_id: 0,
+        title: formValues.title,
+        note: formValues.notes,
+        date_start: formValues.startDate,
+        date_end: formValues.endDate,
+        time_start: formValues.startTime,
+        time_end: formValues.endTime,
+        priority: selectedPriority,
+        category: selectedCategory,
+        role: selectedRoles,
+        status: false,
+      });
+      // After adding the task, you can fetch tasks again
+      fetchTasks();
+      window.location.reload();
+    } catch (error) {
+      console.error('Error creating user task:', error);
+    }
   }
 
-  useEffect(() => {
-    // Fetch tasks and update state variables
-    const fetchTasks = async () => {
+  // Fetch tasks and update state variables
+  const fetchTasks = async () => {
+    try {
       const tasksData = await getAllTaskOfUser();
       const filteredDateTasks = await filterByDate();
       const filteredPriorityTasks = await filterByPriority();
@@ -95,40 +103,37 @@ export default function Task() {
       const filteredHealthTasks = await filterByCategory('Health');
       const filteredOthersTasks = await filterByCategory('Others');
       setAllTasks(tasksData);
-      // You may filter tasks for dateTasks and priorityTasks here initially
-      // based on your requirements
       setDateTasks(filteredDateTasks);
       setPriorityTasks(filteredPriorityTasks);
       setPersonalTasks(filteredPersonalTasks);
       setWorkTasks(filteredWorkTasks);
       setHealthTasks(filteredHealthTasks);
       setOthersTasks(filteredOthersTasks);
-    };
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchTasks();
   }, []);
 
   //Get the Filter Data
   const handleCheckboxToggle = (itemName: string) => {
     if (itemName === '') {
-      setAllTasks(tasks)
-    }
-    else if (itemName === 'Date') {
-      setAllTasks(dateTasks)
-    }
-    else if (itemName === 'Priority') {
-      setAllTasks(priorityTasks)
-    }
-    else if (itemName === 'Personal') {
-      setAllTasks(personalTasks)
-    }
-    else if (itemName === 'Work') {
-      setAllTasks(workTasks)
-    }
-    else if (itemName === 'Health') {
-      setAllTasks(healthTasks)
-    }
-    else if (itemName === 'Others') {
-      setAllTasks(othersTasks)
+      return allTasks;
+    } else if (itemName === 'Date') {
+      return dateTasks;
+    } else if (itemName === 'Priority') {
+      return priorityTasks;
+    } else if (itemName === 'Personal') {
+      return personalTasks;
+    } else if (itemName === 'Work') {
+      return workTasks;
+    } else if (itemName === 'Health') {
+      return healthTasks;
+    } else if (itemName === 'Others') {
+      return othersTasks;
     }
   }
 
@@ -138,7 +143,7 @@ export default function Task() {
         <div className="flex flex-col gap-9">
           <NavBar />
           <div className="flex flex-col gap-6">
-            <SearchBar onCheckboxToggle={handleCheckboxToggle}/>
+            <SearchBar onCheckboxToggle={handleCheckboxToggle} />
             <div className="flex flex-col justify-center items-center text-custom-white">
               <p className="text-xl">Task</p>
               <p className="text-base">{allTasks.length} tasks</p>
@@ -170,7 +175,7 @@ export default function Task() {
             <DialogContent className="w-auto mx-auto max-w-md px-4 pt-16 pb-5 md:pb-5 md:pt-12 flex flex-col gap-8 bg-custom-black h-[700px] overflow-y-auto">
               <div className="flex flex-col items-center gap-4">
                 <Input
-                  className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white "
+                  className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white text-base"
                   type="text"
                   placeholder="Title"
                   onChange={(e) => handleInputChange('title', e.target.value)}
@@ -411,7 +416,7 @@ export default function Task() {
           <NavBar />
           <div className="flex flex-col gap-6 w-full px-52">
             <div className="flex flex-col gap-6">
-              <SearchBar onCheckboxToggle={handleCheckboxToggle}/>
+              <SearchBar onCheckboxToggle={handleCheckboxToggle} />
               <div className="flex flex-col justify-center items-center text-custom-white">
                 <p className="text-2xl">Task</p>
                 <p className="text-xl">{allTasks.length} tasks</p>
@@ -443,7 +448,7 @@ export default function Task() {
               <DialogContent className="w-auto mx-auto max-w-md px-4 pt-16 pb-5 md:pb-5 md:pt-12 flex flex-col gap-8 bg-custom-black h-[700px] overflow-y-auto">
                 <div className="flex flex-col items-center gap-4">
                   <Input
-                    className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white lg:text-base"
+                    className="bg-custom-gray p-2 w-full h-auto focus:outline-custom-white rounded-lg text-custom-white lg:text-lg"
                     type="text"
                     placeholder="Title"
                     onChange={(e) => handleInputChange('title', e.target.value)}

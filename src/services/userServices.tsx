@@ -86,9 +86,8 @@ async function checkLogin(user: { email: string; password: string }) {
       data = await response.json()
     }
     const token = data.access_token
-
-    //set token to global
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    // //set token to global
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     global.user_email = user.email
     return true
   } else {
@@ -264,7 +263,7 @@ async function filterByDate() {
   const task_info = await getAllTaskOfUser()
   if (Array.isArray(task_info)) {
     task_info.sort((a, b): any => {
-      let compare = Date.parse(a.date_start) - Date.parse(b.date_start)
+      let compare = Date.parse(a.date_end) - Date.parse(b.date_end)
       return compare
     })
     return task_info
