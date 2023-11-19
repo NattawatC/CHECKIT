@@ -1,18 +1,49 @@
 'use client'
 import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
-import ChangeEmail from '@/components/profilePage/ChangeEmail'
 import ChangeName from '@/components/profilePage/ChangeName'
-import { getUserInfo } from '@/services/userServices'
-import { useState } from 'react'
+import { editUserProfile, getUserInfo } from '@/services/userServices'
+import { useEffect, useState } from 'react'
 import { IoIosInformationCircle } from 'react-icons/io'
-
-const user_info = await getUserInfo()
 
 const Profile = () => {
   const [isHovering, setIsHovering] = useState(false)
+  const [user_info, setUser_info] = useState({
+    username: '',
+    email: '',
+    date: '',
+  })
   const onMouseEnter = () => setIsHovering(true)
   const onMouseLeave = () => setIsHovering(false)
+
+  const fetchUserInfo = async () => {
+    try{
+      const res = await getUserInfo()
+      setUser_info({
+        username: res.username,
+        email: res.email,
+        date: res.date,
+        })
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchUserInfo()
+  }, [])
+
+  const handleSaveName = async (newName: string) => {
+    try{
+      await editUserProfile(newName)
+      setUser_info({...user_info, username: newName})
+    }
+    catch(err){
+      console.log(err)
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col bg-custom-black min-h-screen">
@@ -30,7 +61,7 @@ const Profile = () => {
                 <p>Name:</p>
                 <p>{user_info.username}</p>
               </div>
-              <ChangeName />
+              <ChangeName onSaveName={handleSaveName}/>
             </div>
 
             <div className="flex flex-row justify-between">
@@ -82,7 +113,7 @@ const Profile = () => {
                     <p>Name:</p>
                     <p>{user_info.username}</p>
                   </div>
-                  <ChangeName />
+                  <ChangeName onSaveName={handleSaveName}/>
                 </div>
 
                 <div className="flex flex-row justify-between">
