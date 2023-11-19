@@ -79,21 +79,27 @@ async function checkLogin(user: { email: string; password: string }) {
       user.password
     )}&scope=&client_id=&client_secret=`
 
-    const response = await fetch('http://ict11.ce.kmitl.ac.th:9080/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: requestBody,
-    })
-    if (response.ok) {
-      data = await response.json()
-      setUserEmail(user.email)
-      return true
+    try {
+      const response = await fetch('http://ict11.ce.kmitl.ac.th:9080/login', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: requestBody,
+      })
+      if (response.ok) {
+        data = await response.json()
+        setUserEmail(user.email)
+        return true
+      }
+      // const token = data.access_token
+      // //set token to global
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    } catch (error) {
+      console.log(error)
+      return false
     }
-    // const token = data.access_token
-    // //set token to global
-    // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   } else {
     //email format is not correct
     console.log('Email format is not correct')
