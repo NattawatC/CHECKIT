@@ -17,9 +17,9 @@ interface DialogChangeNameProps {
 export function DialogChangeName({ onSaveName }: DialogChangeNameProps) {
   const [name, setName] = useState('');
 
+  // Sent username back to the Profile page
   const handleUsername = () => {
-    console.log(name);
-    onSaveName(name); // Pass the entered name to the parent component
+    onSaveName(name);
   };
 
   return (

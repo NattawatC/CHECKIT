@@ -5,47 +5,81 @@ import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { getUserInfo } from '@/services/userServices'
 import { NextPage } from 'next'
+import { useEffect, useState } from 'react'
 import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
+import { useEmail } from '@/components/EmailContext'
 
-//Initialize taskNum
-const userInfo = await getUserInfo()
-
-// Define categories with taskNum properties
-const categories = [
-  {
-    index: 0,
-    icon: BsPerson,
-    title: 'Personal',
-    taskNum: userInfo.personal_task.length,
-    href: '/personal',
-  },
-  {
-    index: 1,
-    icon: PiSuitcaseSimpleLight,
-    title: 'Work',
-    taskNum: userInfo.work_task.length,
-    href: '/work',
-  },
-  {
-    index: 2,
-    icon: BsHeartPulse,
-    title: 'Health',
-    taskNum: userInfo.health_task.length,
-    href: '/health',
-  },
-  {
-    index: 3,
-    icon: PiDotsThreeCircleLight,
-    title: 'Others',
-    taskNum: userInfo.others_task.length,
-    href: '/others',
-  },
-]
 
 const Dashboard: NextPage = () => {
+  const { email } = useEmail();
+  const [userInfo, setUserInfo] = useState({
+    username: '',
+    email: '',
+    date: '',
+    upcomingTaskLength: 0,
+    personalTaskLength: 0,
+    workTaskLength: 0,
+    healthTaskLength: 0,
+    othersTaskLength: 0,
+  })
+
+  // Define categories with taskNum properties
+  const categories = [
+    {
+      index: 0,
+      icon: BsPerson,
+      title: 'Personal',
+      taskNum: userInfo.personalTaskLength,
+      href: '/personal',
+    },
+    {
+      index: 1,
+      icon: PiSuitcaseSimpleLight,
+      title: 'Work',
+      taskNum: userInfo.workTaskLength,
+      href: '/work',
+    },
+    {
+      index: 2,
+      icon: BsHeartPulse,
+      title: 'Health',
+      taskNum: userInfo.healthTaskLength,
+      href: '/health',
+    },
+    {
+      index: 3,
+      icon: PiDotsThreeCircleLight,
+      title: 'Others',
+      taskNum: userInfo.othersTaskLength,
+      href: '/others',
+    },
+  ]
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await getUserInfo(email)
+      setUserInfo({
+        username: res.username,
+        email: res.email,
+        date: res.date,
+        upcomingTaskLength: res.upcoming_task.length,
+        personalTaskLength: res.personal_task.length,
+        workTaskLength: res.work_task.length,
+        healthTaskLength: res.health_task.length,
+        othersTaskLength: res.others_task.length,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchUserInfo()
+  }, [])
+
   return (
-    <div className="bg-custom-black">
+    <div className="bg-custom-black min-h-screen">
       <MainLayout className="lg:hidden">
         <div className="flex-col flex gap-8">
           <NavBar />
@@ -54,7 +88,7 @@ const Dashboard: NextPage = () => {
             <p className="text-xl">Welcome, {userInfo.username}</p>
           </div>
           <UpcomingTask
-            taskNum={userInfo.upcoming_task.length}
+            taskNum={userInfo.upcomingTaskLength}
             href="/upcoming"
           />
           {/* Mobile */}
@@ -82,7 +116,7 @@ const Dashboard: NextPage = () => {
             </div>
             <div className="flex flex-col gap-8 w-full px-40">
               <UpcomingTask
-                taskNum={userInfo.upcoming_task.length}
+                taskNum={userInfo.upcomingTaskLength}
                 href="/upcoming"
               />
               <div className="grid grid-cols-4 gap-4 max-w-full">

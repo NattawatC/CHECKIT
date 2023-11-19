@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { convertTeamToDB } from './converter'
-import { getUserEmail } from './userServices'
+// import { getUserEmail } from './userServices'
 
 //create team
 async function createUserTeam(team: Team, user: string) {
@@ -43,12 +43,12 @@ async function createUserTeam(team: Team, user: string) {
 }
 
 //check pending team of user
-async function checkTeamPendingOfUser() {
+async function checkTeamPendingOfUser(user_email: string) {
   try {
     const team_info = await axios.get(
       'http://ict11.ce.kmitl.ac.th:9080/user/getPendingTeam',
       {
-        params: { email: getUserEmail() },
+        params: { email: user_email },
       }
     )
     return team_info.data
@@ -77,13 +77,13 @@ async function getTeamInfo(id: number) {
 }
 
 //get all team of user
-async function getAllTeamOfUser() {
+async function getAllTeamOfUser(user_email: string) {
   try {
     //get user email
     const team_info = await axios.get(
       'http://ict11.ce.kmitl.ac.th:9080/user/getTeam',
       {
-        params: { email: getUserEmail() },
+        params: { email: user_email },
       }
     )
     // get member of each team
@@ -119,8 +119,8 @@ async function getAllTeam() {
 }
 
 //get team member by id
-async function getTeamMember(id: number) {
-  const team_info = getAllTeamOfUser()
+async function getTeamMember(id: number, user_email: string) {
+  const team_info = getAllTeamOfUser(user_email)
   if (Array.isArray(team_info)) {
     const result = team_info.find((team_data) => team_data.id === id)
     return result?.members
@@ -128,12 +128,12 @@ async function getTeamMember(id: number) {
 }
 
 //add member to team
-async function addMemberToTeam(team_id: number) {
+async function addMemberToTeam(team_id: number, user_email: string) {
   try {
     const invite_member = await fetch(
       `http://ict11.ce.kmitl.ac.th:9080/user/team/addUser?team_id=${encodeURIComponent(
         team_id
-      )}&email=${encodeURIComponent(getUserEmail())}`,
+      )}&email=${encodeURIComponent(user_email)}`,
       {
         method: 'PUT',
         headers: {

@@ -5,8 +5,12 @@ import ChangeName from '@/components/profilePage/ChangeName'
 import { editUserProfile, getUserInfo } from '@/services/userServices'
 import { useEffect, useState } from 'react'
 import { IoIosInformationCircle } from 'react-icons/io'
+import { useEmail } from '@/components/EmailContext'
+import { useRouter } from 'next/router'
 
 const Profile = () => {
+  const router = useRouter()
+  const { email } = useEmail()
   const [isHovering, setIsHovering] = useState(false)
   const [user_info, setUser_info] = useState({
     username: '',
@@ -18,7 +22,7 @@ const Profile = () => {
 
   const fetchUserInfo = async () => {
     try{
-      const res = await getUserInfo()
+      const res = await getUserInfo(email)
       setUser_info({
         username: res.username,
         email: res.email,
@@ -36,8 +40,9 @@ const Profile = () => {
 
   const handleSaveName = async (newName: string) => {
     try{
-      await editUserProfile(newName)
+      await editUserProfile(newName, email)
       setUser_info({...user_info, username: newName})
+      router.reload()
     }
     catch(err){
       console.log(err)
