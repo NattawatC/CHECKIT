@@ -35,7 +35,6 @@ async function getTaskInfo(id: number) {
     }
   } catch (error) {
     console.log(error)
-    return false
   }
 }
 
@@ -66,6 +65,27 @@ async function deleteTask(id: number) {
     console.log(error)
     return false
   }
+}
+
+//complete task by id
+async function completeTask(id: number) {
+  const task_info = await getTaskInfo(id)
+  const task = convertTaskFromDB(task_info)
+  const result = {
+    title: task.title,
+    note: task.note,
+    date_start: task.date_start,
+    date_end: task.date_end,
+    time_start: task.time_start,
+    time_end: task.time_end,
+    priority: task.priority,
+    category: task.category,
+    status: true,
+    task_id: id,
+    role: [],
+  }
+  const respond = await editTask(id, result)
+  return respond
 }
 //getAllTask of User by priority
 // async function getUserTaskByPriority(priority: string, task: any) {
@@ -143,4 +163,4 @@ async function deleteTask(id: number) {
 //     return filteredTasks
 //   }
 // }
-export { editTask, getTaskInfo, getAllTask, deleteTask }
+export { editTask, getTaskInfo, getAllTask, deleteTask, completeTask }
