@@ -281,7 +281,15 @@ async function filterByDate(user_email: string) {
   }
 }
 
-async function createTeam(team: Team, user_email: string) {
+async function createTeam(
+  team: {
+    team_id: number
+    name: string
+    owner: string
+    members: { email: string }[]
+  },
+  user_email: string
+) {
   const user_info = user_email
   const result = await createUserTeam(team, user_info)
   return result
@@ -326,21 +334,21 @@ async function editUserProfile(name: string, user_email: string) {
   }
 }
 export {
-  checkRegister,
   checkLogin,
-  getUserInfo,
-  createUserTask,
-  getAllTaskOfUser,
-  getAllTaskByPriority,
-  filterByPriority,
-  filterByCategory,
-  searchTask,
-  filterByDate,
+  checkRegister,
   createTeam,
+  createUserTask,
   // getUserEmail,
   // setUserEmail,
   // getUserName,
   // setUserName,
   editUserProfile,
+  filterByCategory,
+  filterByDate,
+  filterByPriority,
+  getAllTaskByPriority,
+  getAllTaskOfUser,
+  getUserInfo,
   getUserProfile,
+  searchTask,
 }
