@@ -1,5 +1,6 @@
 'use client'
 import LoginPage from '@/assets/loginPage.jpg'
+import { useEmail } from '@/components/EmailContext'
 import { Footer, Hamburger } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { Button } from '@/components/ui/button'
@@ -12,17 +13,20 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { checkLogin } from '@/services/userServices'
 import { loginFormSchema } from '@/types/user/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { checkLogin } from '@/services/userServices'
 
 export function LoginForm() {
+  const { setEmail } = useEmail()
+  const router = useRouter()
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -37,6 +41,7 @@ export function LoginForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.a
     const isValid = await checkLogin(values)
+    setEmail(values.email)
     if (isValid) {
       // Redirect to /index
       router.push('/dashboard')
