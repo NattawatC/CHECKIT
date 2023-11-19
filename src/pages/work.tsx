@@ -1,13 +1,28 @@
 'use client'
-import { Footer, NavBar, SearchBar } from '@/components/common'
+import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { filterByCategory } from '@/services/userServices'
 import { NextPage } from 'next'
-
-const work_task = await filterByCategory('Work')
+import { useEffect, useState } from 'react'
+import { useEmail } from '@/components/EmailContext'
 
 const Work: NextPage = () => {
+  const { email } = useEmail()
+  const [work_task, setWork_task] = useState<Task[]>([])
+
+  const fetchHealthTask = async () => {
+    try {
+      const work_task = await filterByCategory('Personal', email)
+      setWork_task(work_task)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchHealthTask()
+  }, [])
   return (
     <>
       <div className="bg-custom-black min-h-screen">

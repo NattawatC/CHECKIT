@@ -4,10 +4,26 @@ import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { filterByCategory } from '@/services/userServices'
 import { NextPage } from 'next'
-
-const health_task = await filterByCategory('Health')
+import { useEffect, useState } from 'react'
+import { useEmail } from '@/components/EmailContext'
 
 const Health: NextPage = () => {
+  const {email} = useEmail()
+  const [health_task, setHealth_task] = useState<Task[]>([])
+
+  const fetchHealthTask = async () => {
+    try {
+      const health_task = await filterByCategory('Health', email)
+      setHealth_task(health_task)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchHealthTask()
+  }, [])
+
   return (
     <>
       <div className="bg-custom-black min-h-screen">
