@@ -73,21 +73,18 @@ async function checkLogin(user: { email: string; password: string }) {
   if (checkMailFormat(user.email)) {
     console.log('Email format is correct')
     // Prepare the request body
-    const requestBody = {
-      username: user.email,
-      password: user.password,
-      grant_type: '',
-      scope: '',
-      client_id: '',
-      client_secret: '',
-    }
+    const requestBody = `grant_type=&username=${encodeURIComponent(
+      user.email
+    )}&password=${encodeURIComponent(
+      user.password
+    )}&scope=&client_id=&client_secret=`
 
     const response = await fetch('http://ict11.ce.kmitl.ac.th:9080/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody),
+      body: requestBody,
     })
     if (response.ok) {
       data = await response.json()
@@ -303,8 +300,8 @@ async function getUserProfile() {
 async function editUserProfile(name: string) {
   try {
     const info = await getUserProfile()
-    info.data.name = name
-    const json = JSON.stringify(info.data)
+    info.name = name
+    const json = JSON.stringify(info)
     const user_info = await fetch(
       `http://ict11.ce.kmitl.ac.th:9080/user/editProfile?email=${encodeURIComponent(
         global.user_email
