@@ -273,13 +273,16 @@ async function createTeam(team: Team) {
   return result
 }
 
-async function editUserProfile(user: {
-  name: string
-  email: string
-  password: string
-}) {
+async function editUserProfile(name: string) {
   try {
-    const json = JSON.stringify(user)
+    const info = await axios.get(
+      'http://ict11.ce.kmitl.ac.th:9080/user/profile',
+      {
+        params: { email: user_email },
+      }
+    )
+    info.data.name = name
+    const json = JSON.stringify(info.data)
     const user_info = await fetch(
       `http://ict11.ce.kmitl.ac.th:9080/user/editProfile?email=${encodeURIComponent(
         user_email
