@@ -169,6 +169,30 @@ async function editTeamInfo(
   }
 ) {
   try {
+    const team_member = await axios.get(
+      'http://ict11.ce.kmitl.ac.th:9080/user/team/getTeamUsers',
+      {
+        params: { team_id: id },
+      }
+    )
+    const member_email = team_member.data.map((member: any) => member.email)
+    const memberEmails = team.members.map((member) => member.email)
+    for (const memberEmail of memberEmails) {
+      if (!member_email.includes(memberEmail)) {
+        //send request to invite member
+        const invite_member = await fetch(
+          `http://ict11.ce.kmitl.ac.th:9080/user/team/inviteUser?email=${encodeURIComponent(
+            memberEmail
+          )}&team_id=${encodeURIComponent(id)}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+      }
+    }
     const team_info = convertTeamToDB(team)
     const json = JSON.stringify(team_info)
     const respond = await fetch(
@@ -183,6 +207,7 @@ async function editTeamInfo(
         body: json,
       }
     )
+
     return true
   } catch (error) {
     console.log(error)
