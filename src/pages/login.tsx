@@ -43,6 +43,19 @@ export function LoginForm() {
     }
   }
 
+  // const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+  //   try{
+  //     console.log(values)
+  //     const isValid = await checkLogin(values)
+  //     if (isValid) {
+  //       router.push('/dashboard')
+  //     }
+  //   }
+  //   catch(err){
+  //     console.log(err)
+  //   }
+  // }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
