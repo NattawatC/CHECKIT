@@ -5,11 +5,14 @@ import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import { getUserInfo } from '@/services/userServices'
 import { NextPage } from 'next'
+import { useEffect, useState } from 'react'
 import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
-import { useEffect, useState } from 'react'
+import { useEmail } from '@/components/EmailContext'
+
 
 const Dashboard: NextPage = () => {
+  const { email } = useEmail();
   const [userInfo, setUserInfo] = useState({
     username: '',
     email: '',
@@ -55,7 +58,7 @@ const Dashboard: NextPage = () => {
 
   const fetchUserInfo = async () => {
     try {
-      const res = await getUserInfo()
+      const res = await getUserInfo(email)
       setUserInfo({
         username: res.username,
         email: res.email,
