@@ -38,6 +38,7 @@ const Profile = () => {
     try{
       await editUserProfile(newName)
       setUser_info({...user_info, username: newName})
+      window.location.reload()
     }
     catch(err){
       console.log(err)
