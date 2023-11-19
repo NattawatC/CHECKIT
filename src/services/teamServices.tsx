@@ -3,7 +3,15 @@ import { convertTeamToDB } from './converter'
 // import { getUserEmail } from './userServices'
 
 //create team
-async function createUserTeam(team: Team, user: string) {
+async function createUserTeam(
+  team: {
+    team_id: number
+    name: string
+    owner: string
+    members: { email: string }[]
+  },
+  user: string
+) {
   let data
   try {
     const info = convertTeamToDB(team)
@@ -18,10 +26,12 @@ async function createUserTeam(team: Team, user: string) {
         body: json,
       }
     )
-    if (create_team.ok) {
-      data = await create_team.json()
+    const all_team = await getAllTeamOfUser(user)
+    if (Array.isArray(all_team)) {
+      data = all_team.find((team_data) => team_data.name === team.name)
     }
-    for (const memberEmail of team.members) {
+    const memberEmails = team.members.map((member) => member.email)
+    for (const memberEmail of memberEmails) {
       //send request to invite member
       const invite_member = await fetch(
         `http://ict11.ce.kmitl.ac.th:9080/user/team/inviteUser?email=${encodeURIComponent(
@@ -149,7 +159,15 @@ async function addMemberToTeam(team_id: number, user_email: string) {
 }
 
 //edit team  info by id
-async function editTeamInfo(id: number, team: Team) {
+async function editTeamInfo(
+  id: number,
+  team: {
+    team_id: number
+    name: string
+    owner: string
+    members: { email: string }[]
+  }
+) {
   try {
     const team_info = convertTeamToDB(team)
     const json = JSON.stringify(team_info)
@@ -210,14 +228,14 @@ async function inviteMemberToTeam(team_id: number, email: string) {
 }
 
 export {
-  createUserTeam,
-  getTeamInfo,
-  getAllTeam,
-  getTeamMember,
   addMemberToTeam,
-  getAllTeamOfUser,
-  editTeamInfo,
-  deleteTeam,
   checkTeamPendingOfUser,
+  createUserTeam,
+  deleteTeam,
+  editTeamInfo,
+  getAllTeam,
+  getAllTeamOfUser,
+  getTeamInfo,
+  getTeamMember,
   inviteMemberToTeam,
 }
