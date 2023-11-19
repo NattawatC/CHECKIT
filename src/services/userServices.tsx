@@ -200,8 +200,7 @@ async function getAllTaskOfUser(user_email: string) {
       task_info.data[i] = convertTaskFromDB(task_info.data[i])
     }
     if (Array.isArray(task_info.data)) {
-      const filterTasks = task_info.data.filter((task) => task.status === false)
-      console.log(filterTasks)
+      const filterTasks = task_info.data.filter((task) => task.status == 0)
       return filterTasks
     }
   } catch (error) {
