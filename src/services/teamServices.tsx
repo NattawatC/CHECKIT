@@ -252,6 +252,26 @@ async function inviteMemberToTeam(team_id: number, email: string) {
   }
 }
 
+// remove member from team
+async function removeMemberFromTeam(team_id: number, email: string) {
+  try {
+    const respond = await fetch(
+      `http://ict11.ce.kmitl.ac.th:9080/user/team/removeUser?email=${encodeURIComponent(
+        email
+      )}&team_id=${encodeURIComponent(team_id)}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    return true
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
 export {
   addMemberToTeam,
   checkTeamPendingOfUser,
@@ -263,4 +283,5 @@ export {
   getTeamInfo,
   getTeamMember,
   inviteMemberToTeam,
+  removeMemberFromTeam,
 }
