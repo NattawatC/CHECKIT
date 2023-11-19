@@ -84,12 +84,12 @@ async function checkLogin(user: { email: string; password: string }) {
     })
     if (response.ok) {
       data = await response.json()
+      global.user_email = user.email
+      return true
     }
-    const token = data.access_token
+    // const token = data.access_token
     // //set token to global
     // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    global.user_email = user.email
-    return true
   } else {
     //email format is not correct
     console.log('Email format is not correct')
@@ -276,7 +276,7 @@ async function createTeam(team: Team) {
   return result
 }
 
-async function editUserProfile(name: string) {
+async function getUserProfile() {
   try {
     const info = await axios.get(
       'http://ict11.ce.kmitl.ac.th:9080/user/profile',
@@ -284,6 +284,16 @@ async function editUserProfile(name: string) {
         params: { email: user_email },
       }
     )
+    return info.data
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
+
+async function editUserProfile(name: string) {
+  try {
+    const info = await getUserProfile()
     info.data.name = name
     const json = JSON.stringify(info.data)
     const user_info = await fetch(
@@ -319,4 +329,5 @@ export {
   getUserEmail,
   getUserName,
   editUserProfile,
+  getUserProfile,
 }
