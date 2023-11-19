@@ -90,12 +90,12 @@ async function checkLogin(user: { email: string; password: string }) {
       })
       if (response.ok) {
         data = await response.json()
+        const token = data.access_token
+        //set token to global
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         setUserEmail(user.email)
         return true
       }
-      // const token = data.access_token
-      // //set token to global
-      // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     } catch (error) {
       console.log(error)
       return false
