@@ -10,11 +10,17 @@ global.user_email = 'example@gmail.com'
 global.user_username = 'example'
 
 function getUserEmail() {
-  return user_email
+  return global.user_email
 }
 
 function getUserName() {
-  return user_username
+  return global.user_username
+}
+function setUserEmail(email: string) {
+  return (global.user_email = email)
+}
+function setUserName(name: string) {
+  return (global.user_username = name)
 }
 //check email format
 function checkMailFormat(email: string) {
@@ -46,7 +52,8 @@ async function checkRegister(user: {
         },
         body: JSON.stringify(user),
       })
-      global.user_email = user.email
+      setUserEmail(user.email)
+      setUserName(user.name)
       return true
     } else {
       //email format is not correct
@@ -84,7 +91,7 @@ async function checkLogin(user: { email: string; password: string }) {
     })
     if (response.ok) {
       data = await response.json()
-      global.user_email = user.email
+      setUserEmail(user.email)
       return true
     }
     // const token = data.access_token
@@ -100,14 +107,16 @@ async function checkLogin(user: { email: string; password: string }) {
 //get user info
 async function getUserInfo() {
   try {
+    const user_info = await getUserProfile()
+    setUserName(user_info.name)
     const current_date = new Date().toLocaleDateString('en-US', {
       weekday: 'long',
       month: 'short',
       day: 'numeric',
     })
     const result = {
-      username: user_username,
-      email: user_email,
+      username: user_info.name,
+      email: global.user_email,
       date: current_date,
       time: 'this.time',
       upcoming_task: await getAllTaskByPriority('High'),
@@ -142,7 +151,7 @@ async function createUserTask(task: Task) {
   try {
     const task_info = await fetch(
       `http://ict11.ce.kmitl.ac.th:9080/user/task/create?email=${encodeURIComponent(
-        user_email
+        global.user_email
       )}`,
       {
         method: 'POST',
@@ -183,7 +192,7 @@ async function getAllTaskOfUser() {
     //get user email
     const task_info = await axios.get(
       'http://ict11.ce.kmitl.ac.th:9080/user/task/getAllTasksForUser',
-      { params: { email: user_email } }
+      { params: { email: global.user_email } }
     )
     for (let i = 0; i < task_info.data.length; i++) {
       task_info.data[i] = convertTaskFromDB(task_info.data[i])
@@ -271,7 +280,7 @@ async function filterByDate() {
 }
 
 async function createTeam(team: Team) {
-  const user_info = user_email
+  const user_info = global.user_email
   const result = await createUserTeam(team, user_info)
   return result
 }
@@ -281,7 +290,7 @@ async function getUserProfile() {
     const info = await axios.get(
       'http://ict11.ce.kmitl.ac.th:9080/user/profile',
       {
-        params: { email: user_email },
+        params: { email: global.user_email },
       }
     )
     return info.data
@@ -298,7 +307,7 @@ async function editUserProfile(name: string) {
     const json = JSON.stringify(info.data)
     const user_info = await fetch(
       `http://ict11.ce.kmitl.ac.th:9080/user/editProfile?email=${encodeURIComponent(
-        user_email
+        global.user_email
       )}`,
       {
         method: 'PUT',
@@ -308,6 +317,7 @@ async function editUserProfile(name: string) {
         body: json,
       }
     )
+    setUserName(name)
     return true
   } catch (error) {
     console.log(error)
@@ -327,7 +337,9 @@ export {
   filterByDate,
   createTeam,
   getUserEmail,
+  setUserEmail,
   getUserName,
+  setUserName,
   editUserProfile,
   getUserProfile,
 }
