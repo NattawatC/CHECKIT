@@ -65,19 +65,23 @@ async function checkLogin(user: { email: string; password: string }) {
   //check email format
   if (checkMailFormat(user.email)) {
     console.log('Email format is correct')
-    const response = await fetch(
-      `http://ict11.ce.kmitl.ac.th:9080/login?grant_type=&username=${encodeURIComponent(
-        user.email
-      )}&password=${encodeURIComponent(
-        user.password
-      )}&scope=&client_id=&client_secret=`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    // Prepare the request body
+    const requestBody = {
+      username: user.email,
+      password: user.password,
+      grant_type: '',
+      scope: '',
+      client_id: '',
+      client_secret: '',
+    }
+
+    const response = await fetch('http://ict11.ce.kmitl.ac.th:9080/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
     if (response.ok) {
       data = await response.json()
     }
