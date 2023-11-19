@@ -149,7 +149,7 @@ async function addMemberToTeam(team_id: number, user_email: string) {
 }
 
 //edit team  info by id
-async function editTeamInfo(id: string, team: Team) {
+async function editTeamInfo(id: number, team: Team) {
   try {
     const team_info = convertTeamToDB(team)
     const json = JSON.stringify(team_info)
