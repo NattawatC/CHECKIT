@@ -4,6 +4,7 @@ import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 import {
   Dialog,
@@ -18,11 +19,11 @@ import {
   filterByPriority,
   getAllTaskOfUser,
 } from '@/services/userServices'
-
-//Apply Non's Function
-// const tasks: Task[] = await getAllTaskOfUser()
+import { useEmail } from '@/components/EmailContext'
 
 export default function Task() {
+  const router = useRouter()
+  const { email } = useEmail()
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
   const [selectedCategory, setSelectedCategory] = useState<string>('None')
   const [selectedRoles, setSelectedRoles] = useState<string[]>([])
@@ -69,6 +70,7 @@ export default function Task() {
   const handleInputChange = (field: string, value: string) => {
     setFormValues((prevValues) => ({ ...prevValues, [field]: value }))
   }
+  
   const handleSubmit = async () => {
     try {
       await createUserTask({
@@ -83,10 +85,10 @@ export default function Task() {
         category: selectedCategory,
         role: selectedRoles,
         status: false,
-      });
+      }, email);
       // After adding the task, you can fetch tasks again
       fetchTasks();
-      window.location.reload();
+      router.reload()
     } catch (error) {
       console.error('Error creating user task:', error);
     }
@@ -95,13 +97,13 @@ export default function Task() {
   // Fetch tasks and update state variables
   const fetchTasks = async () => {
     try {
-      const tasksData = await getAllTaskOfUser();
-      const filteredDateTasks = await filterByDate();
-      const filteredPriorityTasks = await filterByPriority();
-      const filteredPersonalTasks = await filterByCategory('Personal');
-      const filteredWorkTasks = await filterByCategory('Work');
-      const filteredHealthTasks = await filterByCategory('Health');
-      const filteredOthersTasks = await filterByCategory('Others');
+      const tasksData = await getAllTaskOfUser(email, 0);
+      const filteredDateTasks = await filterByDate(email);
+      const filteredPriorityTasks = await filterByPriority(email);
+      const filteredPersonalTasks = await filterByCategory('Personal', email);
+      const filteredWorkTasks = await filterByCategory('Work', email);
+      const filteredHealthTasks = await filterByCategory('Health', email);
+      const filteredOthersTasks = await filterByCategory('Others', email);
       setAllTasks(tasksData);
       setDateTasks(filteredDateTasks);
       setPriorityTasks(filteredPriorityTasks);
@@ -120,25 +122,26 @@ export default function Task() {
 
   //Get the Filter Data
   const handleCheckboxToggle = (itemName: string) => {
+    console.log(itemName)
     if (itemName === '') {
-      return allTasks;
+      router.reload()
     } else if (itemName === 'Date') {
-      return dateTasks;
+      setAllTasks(dateTasks);
     } else if (itemName === 'Priority') {
-      return priorityTasks;
+      setAllTasks(priorityTasks);
     } else if (itemName === 'Personal') {
-      return personalTasks;
+      setAllTasks(personalTasks);
     } else if (itemName === 'Work') {
-      return workTasks;
+      setAllTasks(workTasks);
     } else if (itemName === 'Health') {
-      return healthTasks;
+      setAllTasks(healthTasks);
     } else if (itemName === 'Others') {
-      return othersTasks;
+      setAllTasks(othersTasks);
     }
   }
 
   return (
-    <div className="bg-custom-black h-max-screen">
+    <div className="bg-custom-black min-h-screen">
       <MainLayout className="lg:hidden">
         <div className="flex flex-col gap-9">
           <NavBar />
