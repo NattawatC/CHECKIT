@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { checkRegister } from '@/services/userServices'
 import { registerFormSchema } from '@/types/user/registerForm'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
@@ -19,6 +20,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import router from 'next/router'
 
 export function RegisterForm() {
   //1. Define your form.
@@ -32,8 +34,12 @@ export function RegisterForm() {
   })
 
   //2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof registerFormSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    const isValid = await checkRegister(values)
+    if (isValid) {
+      // Redirect to /index
+      router.push('/login')
+    }
   }
 
   return (
