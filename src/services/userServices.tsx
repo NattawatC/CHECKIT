@@ -228,15 +228,15 @@ async function filterByPriority(user_email: string) {
   const result = []
   if (Array.isArray(task_info)) {
     const filteredTasksHigh = task_info.filter((task) => {
-      return task.priority === 'high'
+      return task.priority === 'High'
     })
     convertTaskFromDB(filteredTasksHigh)
     const filteredTasksMedium = task_info.filter((task) => {
-      return task.priority === 'medium'
+      return task.priority === 'Medium'
     })
     convertTaskFromDB(filteredTasksMedium)
     const filteredTasksLow = task_info.filter((task) => {
-      return task.priority === 'low'
+      return task.priority === 'Low'
     })
     convertTaskFromDB(filteredTasksLow)
     result.push(
