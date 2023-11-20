@@ -1,25 +1,25 @@
+import { useEmail } from '@/components/EmailContext'
 import { Footer, NavBar, SearchBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import TaskItem from '@/components/taskPage/TaskItem'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
 import {
   createUserTask,
   filterByCategory,
   filterByDate,
   filterByPriority,
   getAllTaskOfUser,
+  searchTask,
 } from '@/services/userServices'
-import { useEmail } from '@/components/EmailContext'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 export default function Task() {
   const router = useRouter()
@@ -70,73 +70,92 @@ export default function Task() {
   const handleInputChange = (field: string, value: string) => {
     setFormValues((prevValues) => ({ ...prevValues, [field]: value }))
   }
-  
+
   const handleSubmit = async () => {
     try {
-      await createUserTask({
-        task_id: 0,
-        title: formValues.title,
-        note: formValues.notes,
-        date_start: formValues.startDate,
-        date_end: formValues.endDate,
-        time_start: formValues.startTime,
-        time_end: formValues.endTime,
-        priority: selectedPriority,
-        category: selectedCategory,
-        role: selectedRoles,
-        status: false,
-      }, email);
+      await createUserTask(
+        {
+          task_id: 0,
+          title: formValues.title,
+          note: formValues.notes,
+          date_start: formValues.startDate,
+          date_end: formValues.endDate,
+          time_start: formValues.startTime,
+          time_end: formValues.endTime,
+          priority: selectedPriority,
+          category: selectedCategory,
+          role: selectedRoles,
+          status: false,
+        },
+        email
+      )
       // After adding the task, you can fetch tasks again
-      fetchTasks();
+      fetchTasks()
       router.reload()
     } catch (error) {
-      console.error('Error creating user task:', error);
+      console.error('Error creating user task:', error)
     }
   }
 
   // Fetch tasks and update state variables
   const fetchTasks = async () => {
     try {
-      const tasksData = await getAllTaskOfUser(email, 0);
-      const filteredDateTasks = await filterByDate(email);
-      const filteredPriorityTasks = await filterByPriority(email);
-      const filteredPersonalTasks = await filterByCategory('Personal', email);
-      const filteredWorkTasks = await filterByCategory('Work', email);
-      const filteredHealthTasks = await filterByCategory('Health', email);
-      const filteredOthersTasks = await filterByCategory('Others', email);
-      setAllTasks(tasksData);
-      setDateTasks(filteredDateTasks);
-      setPriorityTasks(filteredPriorityTasks);
-      setPersonalTasks(filteredPersonalTasks);
-      setWorkTasks(filteredWorkTasks);
-      setHealthTasks(filteredHealthTasks);
-      setOthersTasks(filteredOthersTasks);
+      const tasksData = await getAllTaskOfUser(email, 0)
+      const filteredDateTasks = await filterByDate(email)
+      const filteredPriorityTasks = await filterByPriority(email)
+      const filteredPersonalTasks = await filterByCategory('Personal', email)
+      const filteredWorkTasks = await filterByCategory('Work', email)
+      const filteredHealthTasks = await filterByCategory('Health', email)
+      const filteredOthersTasks = await filterByCategory('Others', email)
+      setAllTasks(tasksData)
+      setDateTasks(filteredDateTasks)
+      setPriorityTasks(filteredPriorityTasks)
+      setPersonalTasks(filteredPersonalTasks)
+      setWorkTasks(filteredWorkTasks)
+      setHealthTasks(filteredHealthTasks)
+      setOthersTasks(filteredOthersTasks)
     } catch (error) {
-      console.error('Error fetching tasks:', error);
+      console.error('Error fetching tasks:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    fetchTasks()
+  }, [])
 
   //Get the Filter Data
   const handleCheckboxToggle = (itemName: string) => {
     if (itemName === '') {
       router.reload()
     } else if (itemName === 'Date') {
-      setAllTasks(dateTasks);
+      setAllTasks(dateTasks)
     } else if (itemName === 'Priority') {
-      setAllTasks(priorityTasks);
+      setAllTasks(priorityTasks)
     } else if (itemName === 'Personal') {
-      setAllTasks(personalTasks);
+      setAllTasks(personalTasks)
     } else if (itemName === 'Work') {
-      setAllTasks(workTasks);
+      setAllTasks(workTasks)
     } else if (itemName === 'Health') {
-      setAllTasks(healthTasks);
+      setAllTasks(healthTasks)
     } else if (itemName === 'Others') {
-      setAllTasks(othersTasks);
+      setAllTasks(othersTasks)
     }
+  }
+
+  // Search task
+  const handleSearch = async (searchQuery: string) => {
+    // Log the search query in the console
+    try {
+      await searchTask(searchQuery, email)
+    } catch (error) {
+      console.error('Error searching task:', error)
+    }
+    // You can implement further logic here, such as filtering tasks based on the search query.
+    // For simplicity, I'm logging the query for demonstration purposes.
+  }
+
+  const updateTasks = (newTasks: Task[]) => {
+    setAllTasks(newTasks)
   }
 
   return (
@@ -145,7 +164,11 @@ export default function Task() {
         <div className="flex flex-col gap-9">
           <NavBar />
           <div className="flex flex-col gap-6">
-            <SearchBar onCheckboxToggle={handleCheckboxToggle} />
+            <SearchBar
+              onCheckboxToggle={handleCheckboxToggle}
+              onSearch={handleSearch}
+              updateTasks={updateTasks}
+            />
             <div className="flex flex-col justify-center items-center text-custom-white">
               <p className="text-xl">Task</p>
               <p className="text-base">{allTasks.length} tasks</p>
@@ -418,7 +441,11 @@ export default function Task() {
           <NavBar />
           <div className="flex flex-col gap-6 w-full px-52">
             <div className="flex flex-col gap-6">
-              <SearchBar onCheckboxToggle={handleCheckboxToggle} />
+              <SearchBar
+                onCheckboxToggle={handleCheckboxToggle}
+                onSearch={handleSearch}
+                updateTasks={updateTasks}
+              />
               <div className="flex flex-col justify-center items-center text-custom-white">
                 <p className="text-2xl">Task</p>
                 <p className="text-xl">{allTasks.length} tasks</p>
