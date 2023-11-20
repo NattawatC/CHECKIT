@@ -78,7 +78,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn('flex flex-col', className)} {...props} />
+      <div ref={ref} className={className} {...props} />
     </FormItemContext.Provider>
   )
 })
@@ -91,7 +91,7 @@ const FormLabel = React.forwardRef<
   const { error, formItemId } = useFormField()
 
   return (
-    <Label ref={ref} className={cn('mb-5', className)} htmlFor={formItemId} {...props} />
+    <Label ref={ref} className={className} htmlFor={formItemId} {...props} />
   )
 })
 FormLabel.displayName = 'FormLabel'
@@ -113,6 +113,7 @@ const FormControl = React.forwardRef<
       }
       aria-invalid={!!error}
       {...props}
+      className={'mt-5'}
     />
   )
 })
