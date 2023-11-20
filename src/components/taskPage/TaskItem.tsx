@@ -9,6 +9,8 @@ import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import { Input } from '../ui/input'
+import { useRouter } from 'next/router'
+import { completeTask } from '@/services/taskServices'
 
 interface TaskProps {
   priority: string // Create Priority function
@@ -31,6 +33,7 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
   time_end,
   note,
 }) => {
+  const router = useRouter()
   const [isChecked, setIsChecked] = useState(false)
   const priorityContent = getPriorityContent(priority)
   const [selectedPriority, setSelectedPriority] = useState<string>('None')
@@ -40,10 +43,6 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
   const getTaskbyID = (taskId: number) => {
     setId(taskId)
   }
-
-  // useEffect(() => {
-  console.log(Id)
-  // }, [Id])
 
   const [formValues, setFormValues] = useState({
     title,
@@ -58,8 +57,9 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
     setFormValues((prevValues) => ({ ...prevValues, [field]: value }))
   }
 
-  const saveTask = () => {
-    editTask(Id, {
+  const saveTask = async () => {
+    try{
+    await editTask(Id, {
       task_id: Id,
       title: formValues.title,
       note: formValues.notes,
@@ -71,17 +71,15 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
       category: selectedCategory,
       role: [],
       status: false,
-    })
-
-    window.location.reload()
+    })}
+    catch(error){
+      console.log(error)
+    }
+    router.reload()
   }
 
-  // useEffect(() => {
-  //   deleteATask()
-  // }, [Id])
-
-  const deleteATask = () => {
-    deleteTask(Id)
+  const deleteATask = async () => {
+    await deleteTask(Id)
     window.location.reload()
   }
 
@@ -94,10 +92,16 @@ const TaskItem: React.FunctionComponent<TaskProps> = ({
   }
 
   //Checkbox state
-  const toggleCheckbox = () => {
+  const toggleCheckbox = async () => {
     setIsChecked(!isChecked)
     if (!isChecked) {
-      console.log(title)
+      try{
+        await completeTask(task_id)
+        router.reload()
+      }
+      catch(error){
+        console.log(error)
+      }
     }
   }
 
