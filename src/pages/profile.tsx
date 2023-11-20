@@ -1,16 +1,21 @@
 'use client'
+import { useEmail } from '@/components/EmailContext'
 import { Footer, NavBar } from '@/components/common'
 import { MainLayout } from '@/components/layouts'
 import ChangeName from '@/components/profilePage/ChangeName'
-import { editUserProfile, getUserInfo } from '@/services/userServices'
+import {
+  editUserProfile,
+  getAllTaskOfUser,
+  getUserInfo,
+} from '@/services/userServices'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { IoIosInformationCircle } from 'react-icons/io'
-import { useEmail } from '@/components/EmailContext'
-import { useRouter } from 'next/router'
 
 const Profile = () => {
   const router = useRouter()
   const { email } = useEmail()
+  const [completedTasks, setCompletedTasks] = useState<Task[]>([])
   const [isHovering, setIsHovering] = useState(false)
   const [user_info, setUser_info] = useState({
     username: '',
@@ -21,15 +26,14 @@ const Profile = () => {
   const onMouseLeave = () => setIsHovering(false)
 
   const fetchUserInfo = async () => {
-    try{
+    try {
       const res = await getUserInfo(email)
       setUser_info({
         username: res.username,
         email: res.email,
         date: res.date,
-        })
-    }
-    catch(err){
+      })
+    } catch (err) {
       console.log(err)
     }
   }
@@ -39,15 +43,27 @@ const Profile = () => {
   }, [])
 
   const handleSaveName = async (newName: string) => {
-    try{
+    try {
       await editUserProfile(newName, email)
-      setUser_info({...user_info, username: newName})
+      setUser_info({ ...user_info, username: newName })
       router.reload()
-    }
-    catch(err){
+    } catch (err) {
       console.log(err)
     }
-  };
+  }
+
+  const fetchAllTasks = async () => {
+    try {
+      const completedTasks = await getAllTaskOfUser(email, 1)
+      setCompletedTasks(completedTasks)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchAllTasks()
+  }, [])
 
   return (
     <>
@@ -66,7 +82,7 @@ const Profile = () => {
                 <p>Name:</p>
                 <p>{user_info.username}</p>
               </div>
-              <ChangeName onSaveName={handleSaveName}/>
+              <ChangeName onSaveName={handleSaveName} />
             </div>
 
             <div className="flex flex-row justify-between">
@@ -97,8 +113,9 @@ const Profile = () => {
                 </p>
               </div>
               <div className="flex flex-col rounded-lg gap-2 bg-custom-gray text-custom-white p-4">
-                <p>deleted task</p>
-                <p>deleted task</p>
+                {completedTasks.map((task, index) => (
+                  <p key={index}>{task.title}</p>
+                ))}
               </div>
             </div>
           </div>
@@ -118,7 +135,7 @@ const Profile = () => {
                     <p>Name:</p>
                     <p>{user_info.username}</p>
                   </div>
-                  <ChangeName onSaveName={handleSaveName}/>
+                  <ChangeName onSaveName={handleSaveName} />
                 </div>
 
                 <div className="flex flex-row justify-between">
@@ -150,8 +167,9 @@ const Profile = () => {
                   </div>
                   {/* TODO: Retrive completed task from backend */}
                   <div className="flex flex-col rounded-lg gap-2 bg-custom-gray text-custom-white p-4 text-xl">
-                    <p>deleted task</p>
-                    <p>deleted task</p>
+                    {completedTasks.map((task, index) => (
+                      <p key={index}>{task.title}</p>
+                    ))}
                   </div>
                 </div>
               </div>
