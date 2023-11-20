@@ -122,7 +122,6 @@ export default function Task() {
 
   //Get the Filter Data
   const handleCheckboxToggle = (itemName: string) => {
-    console.log(itemName)
     if (itemName === '') {
       router.reload()
     } else if (itemName === 'Date') {
