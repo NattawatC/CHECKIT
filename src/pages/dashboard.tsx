@@ -1,18 +1,18 @@
 'use client'
 import CategoryItem from '@/components/CategoryItem'
+import { useEmail } from '@/components/EmailContext'
 import { UpcomingTask } from '@/components/UpcomingTask'
 import { Footer, NavBar } from '@/components/common'
+import { Notification } from '@/components/home/Notification'
 import { MainLayout } from '@/components/layouts'
 import { getUserInfo } from '@/services/userServices'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { BsHeartPulse, BsPerson } from 'react-icons/bs'
 import { PiDotsThreeCircleLight, PiSuitcaseSimpleLight } from 'react-icons/pi'
-import { useEmail } from '@/components/EmailContext'
-
 
 const Dashboard: NextPage = () => {
-  const { email } = useEmail();
+  const { email } = useEmail()
   const [userInfo, setUserInfo] = useState({
     username: '',
     email: '',
@@ -85,7 +85,10 @@ const Dashboard: NextPage = () => {
           <NavBar />
           <div className="flex flex-col gap-1 text-custom-white font-medium">
             <p className="text-xs">{userInfo.date}</p>
-            <p className="text-xl">Welcome, {userInfo.username}</p>
+            <div className="flex flex-row justify justify-between">
+              <p className="text-xl">Welcome, {userInfo.username}</p>
+              <Notification />
+            </div>
           </div>
           <UpcomingTask
             taskNum={userInfo.upcomingTaskLength}
@@ -111,8 +114,13 @@ const Dashboard: NextPage = () => {
           <NavBar />
           <div className="flex flex-col gap-8 w-full px-10">
             <div className="flex flex-col gap-2 text-custom-white font-medium">
-              <p className="text-xl">{userInfo.date}</p>
-              <p className="text-3xl">Welcome, {userInfo.username}</p>
+              <div className='flex flex-row justify-between pr-40'>
+                <div>
+                  <p className="text-xl">{userInfo.date}</p>
+                  <p className="text-3xl">Welcome, {userInfo.username}</p>
+                </div>
+                <Notification />
+              </div>
             </div>
             <div className="flex flex-col gap-8 w-full px-40">
               <UpcomingTask
