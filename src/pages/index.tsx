@@ -63,12 +63,10 @@ export default function Home() {
               alt="logo mobile"
             />
             <p className="text-custom-white text-center text-base lg:text-xl">
-              Gorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus. Class aptent taciti sociosqu ad litora torquent
-              per conubia nostra,
+              Checkit is your go-to task manager for streamlined organization
+              and enhanced efficiency. Effortlessly create, prioritize, and
+              track tasks with our user-friendly interface. Experience the
+              simplicity of Checkit and elevate your productivity today!
             </p>
             <Link href="/register">
               <Button className="py-3 px-4 w-full inline-flex bg-custom-orange text-custom-white text-base rounded-md lg:text-2xl hover:bg-custom-orangeHover">
@@ -114,12 +112,13 @@ export default function Home() {
               How does it work?
             </p>
             <p className="text-custom-white text-center text-base lg:text-justify lg:text-xl">
-              Qorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus. Class aptent taciti sociosqu ad litora torquent
-              per conubia nostra.
+              Elevate your productivity effortlessly with Checkit. Our intuitive
+              task manager lets you create, prioritize, and track tasks
+              seamlessly. Collaborate with ease, set deadlines, and monitor
+              progress—all within a sleek, user-friendly interface. Tailor
+              Checkit to your unique workflow with customizable settings.
+              Revolutionize the way you work and stay on top of your
+              commitments. Experience the simplicity of Checkit today!
             </p>
           </div>
         </MainLayout>
@@ -130,12 +129,13 @@ export default function Home() {
               How does it work?
             </p>
             <p className="text-custom-white lg:text-justify lg:text-xl">
-              Qorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus. Class aptent taciti sociosqu ad litora torquent
-              per conubia nostra.
+              Elevate your productivity effortlessly with Checkit. Our intuitive
+              task manager lets you create, prioritize, and track tasks
+              seamlessly. Collaborate with ease, set deadlines, and monitor
+              progress—all within a sleek, user-friendly interface. Tailor
+              Checkit to your unique workflow with customizable settings.
+              Revolutionize the way you work and stay on top of your
+              commitments. Experience the simplicity of Checkit today!
             </p>
           </div>
         </div>
