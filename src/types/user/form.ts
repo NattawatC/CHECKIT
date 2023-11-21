@@ -9,7 +9,8 @@ export const loginFormSchema = z.object({
   //   // to see if the email is valid.
   //   return await checkIfEmailIsValid(e);
   // }, "This email is not in our database")
-  
+  // FIXME: this is not working, it's not waiting for the async function to finish
+
   password: z
     .string()
     .min(1, 'Password is required')
