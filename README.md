@@ -1,38 +1,51 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📝 CheckIt
 
-## Getting Started
+A responsive task manager website that provides you with several features such as task creation, task viewing, and the collaborative power to create teams with your friends.
 
-First, run the development server:
+## 📄 Pages
+- Login
+- Register
+- Dashboard
+- Task
+- Team
+- Profile
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+### 🖋️ Login
+![Readme1]()
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ✏️ Register
+![Readme2]()
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 📌 Dashboard
+Explore a comprehensive overview of your tasks on this page, thoughtfully categorized into Personal, Work, Health, and Others. Additionally, effortlessly stay ahead by previewing upcoming high-priority tasks for a streamlined and organized task management experience.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+![Readme3]()
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### 📝 Task
+The task page is where you not only have the ability to seamlessly view all tasks but can also create new tasks with customizable titles, dates, and more. Elevate your task management experience further by effortlessly editing tasks, allowing you to set new dates or assign them to different categories with ease. Effortlessly confirm task completion by checking off accomplished items in your list.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![Readme4]()
 
-## Learn More
+### 🤝🏻 Team
+Effortlessly form teams by naming them and inviting members via email. Edit your team composition on-the-go by adding or removing members as needed.
 
-To learn more about Next.js, take a look at the following resources:
+![Readme5]()
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 👤 Profile
+Personalize your profile by editing your display name and conveniently check the email associated with your login. Additionally, track your daily achievements by reviewing the completed tasks throughout the day.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![Readme6]()
 
-## Deploy on Vercel
+## 💻 Technology
+### FrontEnd 
+The application is developed using NextJS, TailwindCSS, and Shadcn.
+### BackEnd
+The application is developed using FastAPI, SQLAlchemy, and SQLite.\
+Git Repo: https://github.com/thammanant/checkit_backend
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 🎓 Group
+64011366 [Chananon Kanunghet](https://github.com/chananon-n)\
+64011397 [Jade Chuapakdee](https://github.com/jimmy666k)\
+64011478 [Nattawat Chaokraisith](https://github.com/NattawatC)\
+64011594 [Putthipat Udompholpattanaporn](https://github.com/Puttiphat-M)\
+64011658 [Thammanant Thamtaranon](https://github.com/thammanant)
